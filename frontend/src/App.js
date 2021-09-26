@@ -123,6 +123,12 @@ class App extends React.Component {
 
                   </ul>
                 </div>
+                <Row >
+                  <p style={{ color: 'white', paddingTop: '20px' }}>About</p>
+                  <p style={{ color: 'white', paddingLeft: '20px', paddingRight: '30px', paddingTop: '20px' }}>Contact</p>
+                  <img class="rounded-circle article-img" src="https://media.istockphoto.com/photos/middle-age-man-portrait-picture-id1285124274?b=1&k=20&m=1285124274&s=170667a&w=0&h=tdCWjbu8NxR_vhU3Tri7mZcfUH6WdcYWS1aurF4bbKI=" id="img" width="70"
+                    height="60"></img>
+                </Row>
               </div>
             </nav>
 

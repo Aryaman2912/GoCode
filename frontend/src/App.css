@@ -13,9 +13,16 @@
 } */
 .navbar-custom {
   background-color: rgb(20%, 20%, 20%);
-  
+ 
   
 }
+
+/* .navbar {
+  background-color: #333;
+} */
+/* .navbar .navbar-brand {
+  color: #ecf0f1;
+} */
 
 nav .navbar-custom li a{
   color: white !important;
