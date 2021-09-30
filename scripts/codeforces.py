@@ -2,9 +2,11 @@
 import pymongo
 import requests
 from bs4 import BeautifulSoup
+import os
 
 # Connect to MongoDB Atlas and get the database and collection
-client = pymongo.MongoClient("mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/GoCode?retryWrites=true&w=majority")
+# https://askubuntu.com/questions/58814/how-do-i-add-environment-variables
+client = pymongo.MongoClient(os.environ['GOCODE_URI'])
 db = client.get_database('GoCode')
 coll = db.ProblemSet
 
