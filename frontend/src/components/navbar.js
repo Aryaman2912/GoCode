@@ -1,36 +1,24 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
+import { Navbar, Container, Nav} from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
 const NavBar = (props) => {
     return (
-        <nav className="navbar navbar-custom">
-            <div className="container">
-            <h1 style={{ color: 'white' }}>GoCoDe</h1>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse " id="navbarResponsive">
-                  <ul className="navbar-nav ml-auto navbar-left">
-
-                    <li className="nav-item">
-                      <a className="nav-link" href="/about">About</a>
-                    </li>
-
-                    <li className="nav-item">
-                      <a className="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <img className="rounded-circle article-img" src={ props.imageURL } id="img" width="70"
-                      height="60"></img>
-
-                  </ul>
-                </div>
-                <Row >
-                  <p style={{ color: 'white', paddingTop: '20px' }}>About</p>
-                  <p style={{ color: 'white', paddingLeft: '20px', paddingRight: '30px', paddingTop: '20px' }}>Contact</p>
-                  <img className="rounded-circle article-img" src={ props.imageURL } id="img" width="70" height="60"></img>
-                </Row>
-              </div>
-            </nav>
+        <Navbar bg="dark" variant="dark" expand="lg">
+          <Container>
+            <Navbar.Brand href="#home">GoCode</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="#home">Home</Nav.Link>
+                <Nav.Link href="#link">About</Nav.Link>
+                <Nav.Link href="#link">Contact</Nav.Link>
+                <Nav.Link href="/auth">Login</Nav.Link>
+                <Nav.Link href="/signup">Sign Up</Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
     )
 }
 
