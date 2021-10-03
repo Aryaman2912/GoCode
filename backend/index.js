@@ -6,13 +6,14 @@ const ProblemSet = require('./models/problemSet')
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}))
 
 mongoose.connect(process.env.GOCODE_URI, (err) => {
     console.log("Connected to the database");
 })
 
 const corsOptions ={
-   origin: '*',
+   origin: 'http://localhost:3000' || '*',
    credentials: true,
    optionSuccessStatus: 200,
 }
@@ -27,6 +28,45 @@ app.get("/api/problems", (req, res) => {
             })
         } else {
             res.send(problems)
+        }
+    })
+})
+
+
+// MathJax Library used in the frontend doesn't need $$$ to know that the equation is in tex. (react-mathjax package)
+// Also the text needs to be enclosed in \text{} otherwise MathJax removes all the whitespaces 
+const convertStatement = (str) => {
+    let strarr = str.split('$$$')
+
+    let ans = '';
+    for(let i = 0; i < strarr.length; i++) {
+        if(i%2 == 0) {
+            ans += ' \\text{' + strarr[i] + '} '
+        } else {
+            ans += strarr[i]
+        }
+    }
+    console.log(ans);
+    return ans;
+}
+
+
+
+
+app.get("/api/problem", (req, res) => {
+    const problemID = req.query.problemID;
+    ProblemSet.findById(problemID, (err, problem) => {
+        if(err) {
+            res.json({
+                status: "failure"
+            })
+        } else {
+            // const obj = problem.toObject(); // used for react-mathjax package
+            // let str = obj.statement;
+            // // console.log(str)
+            // const response = {...obj, statement: convertStatement(str) };
+            // res.send(response);
+            res.send(problem);
         }
     })
 })
