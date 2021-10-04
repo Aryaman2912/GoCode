@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { Navbar, Container, Nav} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Provider, useDispatch } from 'react-redux';
-import {createStore } from 'redux';
-import authReducer from './reducers/auth';
-import * as actionType from './constants/actionTypes'
+import { createStore } from 'redux';
+import authReducer from '../reducers/auth';
+import * as actionType from '../constants/actionTypes'
 const NavBarWrapper = () => {
   const store = createStore(authReducer);
 
   return (
-    <Provider store={store}> 
-      <NavBar /> 
+    <Provider store={store}>
+      <NavBar />
     </Provider>
   )
 }
@@ -20,7 +20,7 @@ const NavBar = (props) => {
   const history = useHistory();
   const location = useLocation();
   const logout = () => {
-    dispatch({type:actionType.LOGOUT});
+    dispatch({ type: actionType.LOGOUT });
 
     history.push('/auth');
 
@@ -29,36 +29,36 @@ const NavBar = (props) => {
   useEffect(() => {
     // const token = user?.token;
     setUser(JSON.parse(localStorage.getItem('profile')));
-  },[location]);
-    return (
-        <Navbar bg="dark" variant="dark" expand="lg">
-          <Container>
-            <Navbar.Brand href="/">GoCode</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="#link">About</Nav.Link>
-                <Nav.Link href="#link">Contact</Nav.Link>
-                {console.log(user?.result)}
-                {user?.result ? (
-                  <>
-                  <Nav.Link href="#profile">{user?.result.name}</Nav.Link>
-                  <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>
-                  </>
+  }, [location]);
+  return (
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand href="/">GoCode</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="#link">About</Nav.Link>
+            <Nav.Link href="#link">Contact</Nav.Link>
+            {console.log(user?.result)}
+            {user?.result ? (
+              <>
+                <Nav.Link href="#profile">{user?.result.name}</Nav.Link>
+                <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>
+              </>
 
-                ):(
-                  <>
-                  <Nav.Link href="/auth">Login</Nav.Link>
-                  <Nav.Link href="/signup">Sign Up</Nav.Link>
-                  </>
-                )}
-                
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-    )
+            ) : (
+              <>
+                <Nav.Link href="/auth">Login</Nav.Link>
+                <Nav.Link href="/signup">Sign Up</Nav.Link>
+              </>
+            )}
+
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  )
 }
 
 export default NavBarWrapper;
