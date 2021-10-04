@@ -8,8 +8,9 @@ import useStyles from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input';
 import Icon from './icon';
-import { AUTH } from '../constants/actionTypes';
-import authReducer from '../reducers/auth';
+import { AUTH } from '../../constants/actionTypes';
+import authReducer from '../../reducers/auth';
+import {signin, signup } from '../../actions/auth'
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const AuthWrapper = () => {
@@ -29,13 +30,14 @@ const Auth = () => {
   const history = useHistory();
   const classes = useStyles();
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    console.log(form);
+    e.preventDefault();
 
-    // if (isSignup) {
-    //   dispatch(signup(form, history));
-    // } else {
-    //   dispatch(signin(form, history));
-    // }
+    if (isSignup) {
+      dispatch(signup(form, history));
+    } else {
+      dispatch(signin(form, history));
+    }
   };
 
 const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
