@@ -1,7 +1,7 @@
 /* Shrinking the sidebar from 250px to 80px and center aligining its content*/
 
 body{
-  background-color: #212121;
+  background-color: #212121 !important;
 }
 #sidebar.active {
   min-width: 80px;

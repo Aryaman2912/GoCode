@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import MathJax from 'mathjax3-react';
 import ReactLoading from 'react-loading';
 import { Typography } from '@material-ui/core';
+import './problem.css'
 
 
 const Problem = (props) => {
@@ -61,11 +62,15 @@ const Problem = (props) => {
                         url="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
                         options={{
                             tex: {
-                                inlineMath: [['$$$', '$$'], ['$$$', '$$$']]
+                                inlineMath: [['$$$', '$$$'], ['$$$', '$$$']]
                             }
                         }}
+
+
                     >
-                        <MathJax.Html html={problem.statement} />
+
+
+                        <div className='class-div'> <MathJax.Html html={problem.statement} /> </div>
                     </MathJax.Provider>
                     <br></br>
                     <Typography variant='h4' style={{
