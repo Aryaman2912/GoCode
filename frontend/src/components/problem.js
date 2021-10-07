@@ -58,7 +58,6 @@ const Problem = (props) => {
                     tc.push([data.input[i], data.output[i]])
                 }
                 setTestcases(tc)
-                // console.log(data);
             })
     }, [])
     const loadingOptions = {
