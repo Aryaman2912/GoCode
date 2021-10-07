@@ -1,19 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Navbar, Container, Nav} from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Provider, useDispatch } from 'react-redux';
-import {createStore } from 'redux';
-import authReducer from './reducers/auth';
-import * as actionType from './constants/actionTypes'
-const NavBarWrapper = () => {
-  const store = createStore(authReducer);
+import { useDispatch } from 'react-redux';
+import * as actionType from '../constants/actionTypes'
 
-  return (
-    <Provider store={store}> 
-      <NavBar /> 
-    </Provider>
-  )
-}
 const NavBar = (props) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
@@ -61,4 +51,4 @@ const NavBar = (props) => {
     )
 }
 
-export default NavBarWrapper;
+export default NavBar;
