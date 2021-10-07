@@ -230,7 +230,7 @@ export default function MiniDrawer(props) {
                 <MailIcon />
               </Badge>
             </IconButton> */}
-            <Button variant="outlined" style={{color:'white'}}>Login</Button>
+            <a href="/auth"><Button variant="outlined" style={{color:'white'} }>Login</Button></a>
             <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
