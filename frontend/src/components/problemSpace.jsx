@@ -5,12 +5,13 @@ import ReactLoading from 'react-loading';
 import ProblemCard from './ProblemCard';
 import { Paper, Typography } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import { lightBlue } from '@material-ui/core/colors';
 
 const ProblemSpace = () => {
 
     const [problems, setProblems] = useState([])
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     useEffect(() => {
         fetch('http://localhost:5000/api/problems')
