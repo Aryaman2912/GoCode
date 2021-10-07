@@ -17,7 +17,7 @@ const ProblemSpace = () => {
         fetch('http://localhost:5000/api/problems')
             .then((data) => data.json())
             .then(data => {
-                console.log('finalData');
+             //   console.log('finalData');
                 let tags = [];
                 data.forEach(problem => {
                     problem.tags.forEach(tag => {
@@ -35,10 +35,10 @@ const ProblemSpace = () => {
 
 
                 })
-                console.log(finalData);
+              //  console.log(finalData);
                 setProblems(finalData);
                 setLoading(false)
-                console.log(data);
+              //  console.log(data);
             })
     }, [])
 
@@ -76,7 +76,8 @@ const ProblemSpace = () => {
                     color:'white'
                 }}>{problem[0]}</Typography>
                {
-                   problem[1].filter((item,i)=>i<=3).map((problem,i)=><ProblemCard  problem={problem} i={i}/>)
+                //    problem[1].filter((item,i)=>i<=3).map((problem,i)=><ProblemCard  problem={problem} i={i}/>)
+                 problem[1].map((problem,i)=><ProblemCard  problem={problem} i={i}/>)
                }
                <div style={
                    {

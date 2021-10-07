@@ -34,7 +34,7 @@ function ProblemCard({problem,i}) {
                     </Typography>
                 {
                     problem.tags.map((p)=>{
-                        console.log(p);
+                       // console.log(p);
                        return   <Chip size="small" label={p} style={{
                            padding:'10px',
                            margin:'5px',

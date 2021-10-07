@@ -23,11 +23,11 @@ const Problem = (props) => {
                 setLoading(false);
                 const tc = []
                 for (let i = 0; i < data.input.length; i++) {
-                    console.log(data.input[i])
+                    // console.log(data.input[i])
                     tc.push([data.input[i], data.output[i]])
                 }
                 setTestcases(tc)
-                console.log(data);
+                //console.log(data);
             })
     }, [])
     const loadingOptions = {
