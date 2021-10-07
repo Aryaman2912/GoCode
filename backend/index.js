@@ -5,6 +5,9 @@ import cors from "cors";
 import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
+import compileRouter from './routes/compile.js';
+
+
 app.use(json());
 app.use(urlencoded({extended: true}));
 
@@ -21,6 +24,7 @@ const corsOptions ={
 app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
+app.use("/compile", compileRouter)
 
 app.get("/api/problems", (req, res) => {
     ProblemSet.find({}, (err, problems) => {
@@ -53,7 +57,9 @@ const convertStatement = (str) => {
 }
 
 
-
+app.post('/compile/submit', (req, res) => {
+    console.log(req.body)
+})
 
 app.get("/api/problem", (req, res) => {
     const problemID = req.query.problemID;

@@ -17,7 +17,7 @@ const ProblemSpace = () => {
         fetch('http://localhost:5000/api/problems')
             .then((data) => data.json())
             .then(data => {
-             //   console.log('finalData');
+
                 let tags = [];
                 data.forEach(problem => {
                     problem.tags.forEach(tag => {
@@ -35,10 +35,11 @@ const ProblemSpace = () => {
 
 
                 })
+
               //  console.log(finalData);
                 setProblems(finalData);
                 setLoading(false)
-              //  console.log(data);
+              //  console.log(data)
             })
     }, [])
 

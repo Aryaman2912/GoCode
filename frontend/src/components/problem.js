@@ -5,14 +5,45 @@ import MathJax from 'mathjax3-react';
 import ReactLoading from 'react-loading';
 import { Typography } from '@material-ui/core';
 import './problem.css'
-
+import Editor from './Editor'
+import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import axios from 'axios';
+import { API } from '../api/index';
 
 const Problem = (props) => {
 
     const [problem, setProblem] = useState({})
     const [loading, setLoading] = useState(true)
     const [testcases, setTestcases] = useState([])
-    // const { problem_id } = useParams();
+    const [code, setCode] = useState('')
+    const [language, setLanguage] = useState('')
+    const [output, setOutput] = useState('')
+
+    const languageOptions = {
+        "cpp": "clike",
+        "java": "clike",
+        "c": "clike",
+        "javascript": "javascript",
+        "pyton": "python"
+    }
+
+    const arr = [
+        "cpp", "clike",
+        "java", "clike",
+        "c", "clike",
+        "javascript", "javascript",
+        "pyton", "python"
+    ]
+
+    const handleProblemSubmit = () => {
+        API.post('/compile/submit', {"code": code, "language": language})
+        .then( (res) => {
+            console.log(res);
+        })
+    }
+
+
+
     const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
     // console.log(problemURL)
     useEffect(() => {
@@ -27,7 +58,6 @@ const Problem = (props) => {
                     tc.push([data.input[i], data.output[i]])
                 }
                 setTestcases(tc)
-                //console.log(data);
             })
     }, [])
     const loadingOptions = {
@@ -65,16 +95,12 @@ const Problem = (props) => {
                                 inlineMath: [['$$$', '$$$'], ['$$$', '$$$']]
                             }
                         }}
-
-
                     >
 
-
-                        <div className='class-div'> <MathJax.Html html={problem.statement} /> </div>
+                    <div className='class-div'> <MathJax.Html html={problem.statement} /> </div>
                     </MathJax.Provider>
                     <br></br>
                     <Typography variant='h4' style={{
-
                         color: 'white'
                     }}>Sample testcases</Typography>
 
@@ -96,6 +122,12 @@ const Problem = (props) => {
                             )
                         })}
                     </div>
+                    <DropdownButton id="dropdown-basic-button" title="Language">
+                        {Object.keys(languageOptions).map( (key, index) => {
+                            return (<Dropdown.Item href='#' onClick={() => setLanguage(languageOptions[key])}>{key}</Dropdown.Item>)
+                        })}
+                    </DropdownButton>
+                    <Editor code={code} language={language} onChange={setCode} handleSubmit={handleProblemSubmit}/>
                 </>
             }
         </>
