@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Sidebar from './sidebar'
+
 import ReactLoading from 'react-loading';
 
 import ProblemBox from './ProblemBox';
@@ -17,7 +16,6 @@ const ProblemSpace = () => {
         fetch('http://localhost:5000/api/problems')
             .then((data) => data.json())
             .then(data => {
-                console.log('finalData');
                 let tags = [];
                 data.forEach(problem => {
                     problem.tags.forEach(tag => {
@@ -35,10 +33,11 @@ const ProblemSpace = () => {
 
 
                 })
-                console.log(finalData);
+
+              //  console.log(finalData);
                 setProblems(finalData);
                 setLoading(false)
-                console.log(data);
+              //  console.log(data)
             })
     }, [])
 
