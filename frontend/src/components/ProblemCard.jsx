@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'
 
 const problemURL = '/problem/';
 
-function ProblemCard({problem,i}) {
+function ProblemCard({problem}) {
+    console.log('problem##########')
+    console.log(problem)
     return (
         <Paper style={
             {
@@ -34,7 +36,7 @@ function ProblemCard({problem,i}) {
                     </Typography>
                 {
                     problem.tags.map((p)=>{
-
+                       // console.log(p);
                        return   <Chip size="small" label={p} style={{
                            padding:'10px',
                            margin:'5px',
