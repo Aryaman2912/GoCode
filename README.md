@@ -45,11 +45,13 @@ install node
 ### frontend
 $ npm i
 $ npm start
+->if failed
 $ Delete node modules and try again
 
 ### backend
 $ npm i
 $ npm start
+->if failed
 $ Delete node modules and try again
 ```
 
@@ -69,24 +71,3 @@ $ npm run start:production
 
 - [React](https://reactjs.org/)
 
-
-
-### Code Formatter
-
-- Add a `.vscode` directory
-- Create a file `settings.json` inside `.vscode`
-- Install Prettier - Code formatter in VSCode
-- Add the following snippet:  
-
-```json
-
-    {
-      "editor.formatOnSave": true,
-      "prettier.singleQuote": true,
-      "prettier.arrowParens": "avoid",
-      "prettier.jsxSingleQuote": true,
-      "prettier.trailingComma": "none",
-      "javascript.preferences.quoteStyle": "single",
-    }
-
-```
