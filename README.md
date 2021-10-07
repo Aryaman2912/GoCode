@@ -2,7 +2,8 @@
 
 ## Description
 
-ADD
+There are only 2 major Competitive coding websites for a user base of more than a million, so obviously this particular market is yet to be completely utilized. GoCode is built with the exact same intention of exploiting this user base. Along with the orthodox features of solving coding problems we plan on adding some cool features which we hope to attract the existing coders as well as the beginners.
+
 
 
 * features:
@@ -68,7 +69,6 @@ $ npm run start:production
 
 - [React](https://reactjs.org/)
 
-- [Webpack](https://webpack.js.org/)
 
 
 ### Code Formatter
