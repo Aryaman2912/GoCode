@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'
 
 const problemURL = '/problem/';
 
-function ProblemCard({problem,i}) {
+function ProblemCard({problem}) {
+    console.log('problem##########')
+    console.log(problem)
     return (
         <Paper style={
             {
