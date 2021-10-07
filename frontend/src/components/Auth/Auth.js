@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {Provider, useDispatch} from 'react-redux';
-import {createStore } from 'redux';
+import {useDispatch} from 'react-redux';
 import { useHistory } from 'react-router';
 import { GoogleLogin } from 'react-google-login';
 import { Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core';
@@ -9,19 +8,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input';
 import Icon from './icon';
 import { AUTH } from '../../constants/actionTypes';
-import authReducer from '../../reducers/auth';
-import {signin, signup } from '../../actions/auth'
+import { signin, signup } from '../../actions/auth'
+
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
-const AuthWrapper = () => {
-  const store = createStore(authReducer);
-
-  return (
-    <Provider store={store}> 
-      <Auth /> 
-    </Provider>
-  )
-}
 const Auth = () => {
 
   const [form, setForm] = useState(initialState);
@@ -29,8 +19,17 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => setShowPassword(!showPassword);
+
+  const switchMode = () => {
+    setForm(initialState);  
+    setIsSignup((prevIsSignup) => !prevIsSignup);
+    setShowPassword(false);
+  };
+
   const handleSubmit = (e) => {
-    console.log(form);
     e.preventDefault();
 
     if (isSignup) {
@@ -38,16 +37,6 @@ const Auth = () => {
     } else {
       dispatch(signin(form, history));
     }
-  };
-
-const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-const [showPassword, setShowPassword] = useState(false);
-const handleShowPassword = () => setShowPassword(!showPassword);
-
-const switchMode = () => {
-    setForm(initialState);  
-    setIsSignup((prevIsSignup) => !prevIsSignup);
-    setShowPassword(false);
   };
 
   const googleSuccess = async (res) => {
@@ -62,10 +51,15 @@ const switchMode = () => {
       console.log(error);
     }
   };
-    const googleError = (err) => {
-      console.log("Google Sign In was unsuccessful. Try again later")
-    }
-//   const googleError = () => alert('Google Sign In was unsuccessful. Try again later');
+
+  const googleError = (err) => alert("Google Sign In was unsuccessful. Try again later");
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+
+
+  
+    
     return (
         <Container component="main" maxWidth="xs">
             <Paper className={classes.paper} elevation={3}>
@@ -88,12 +82,7 @@ const switchMode = () => {
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             { isSignup ? 'Sign Up' : 'Sign In' }
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
-              </Button>
-              <GoogleLogin
+          <GoogleLogin
             clientId="230273820459-r55a4ovaogkbmsnac01kaotucj0au6c0.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
@@ -104,12 +93,17 @@ const switchMode = () => {
             onFailure={googleError}
             cookiePolicy="single_host_origin"
           />
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Button onClick={switchMode}>
+                { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
+              </Button> 
             </Grid>
           </Grid>
-          </form>
-            </Paper>
-        </Container>
-    )
-}
+        </form>
+      </Paper>
+    </Container>
+  );
+};
 
-export default AuthWrapper
+export default Auth;
