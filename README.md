@@ -9,7 +9,7 @@ There are only 2 major Competitive coding websites for a user base of more than 
 * features:
   * Problem Space
   * Contest Space
-  * PDA
+  * Personal Development Space
   * Coding Space
   * Playlist space
   * User Space
