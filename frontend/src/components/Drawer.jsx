@@ -32,7 +32,7 @@ import Profile from './Profile';
 import Problem from './problem';
 import Auth from './Auth/Auth';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import ContestSpace from './contestSpace';
+import ContestSpace from './ContestSpace/ContestSpace';
 import { useHistory } from 'react-router';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
@@ -329,7 +329,7 @@ export default function MiniDrawer(props) {
               <ListItemIcon>  <Assignment /></ListItemIcon>
               <ListItemText primary='Problem Space' />
             </ListItem>
-            <ListItem button key={'Contest Space'} onClick={()=>history.push('/contest')}>
+            <ListItem button key={'Contest Space'} onClick={()=>history.push('/contests')}>
               <ListItemIcon><SupervisorAccountIcon /></ListItemIcon>
               <ListItemText primary='Contest Space' />
             </ListItem>
@@ -372,7 +372,7 @@ export default function MiniDrawer(props) {
             <Profile />
           </Route>
 
-          <Route exact path='/contest'>
+          <Route exact path='/contests' component={ContestSpace}>
             <ContestSpace />
           </Route>
           <Route path='/problem/:id' component={Problem} />

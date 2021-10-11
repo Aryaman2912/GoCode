@@ -6,7 +6,7 @@ import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
-
+import Contests from './models/contest.js'
 
 app.use(json());
 app.use(urlencoded({extended: true}));
@@ -25,6 +25,18 @@ app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
 app.use("/compile", compileRouter)
+
+app.get("/api/contests", (req, res) => {
+    Contests.find({}, (err, contests) => {
+        if(err) {
+            res.json({
+                status: "failure"
+            })
+        } else {
+            res.send(contests)
+        }
+    })
+})
 
 app.get("/api/problems", (req, res) => {
     ProblemSet.find({}, (err, problems) => {
