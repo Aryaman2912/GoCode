@@ -10,6 +10,10 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import { Typography } from '@material-ui/core';
+import ContestList from './ContestList';
+import ReactLoading from 'react-loading';
+import Contest from './Contest';
 
 
 function Table({columns, data}){
@@ -69,14 +73,16 @@ const ContestSpace = () => {
                     tempcontests.push(contest);
                 }
             });
-            // console.log(tempcontests);
+          //  console.log(tempcontests);
             // console.log("tempcontests");
-            setContests(tempcontests);
+          setContests(tempcontests);
             setLoading(false);
-            console.log(contests);
+            // console.log(contests);
         });
         
     }, [])
+
+    console.log(contests);
 
     const columns = [
         {
@@ -96,9 +102,24 @@ const ContestSpace = () => {
             accessor: "Date"
         },
     ]
+    const loadingOptions = {
+      type: "spin",
+      color: "#347deb",
+  }
     return (
+      <>
+      {/* TODO --------------------------------->>> Need to design and put tags and stuff */}
+      {loading ? <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '90vh'
+
+      }}><ReactLoading type={loadingOptions.type} color={loadingOptions.color} height={100} width={100} /></div> :
+          <>
+     
         <div>
-            <Card>
+            {/* <Card>
                 <Card.Body>
                     <Card.Title>Public Contests</Card.Title>
                     <br/>
@@ -106,9 +127,22 @@ const ContestSpace = () => {
                     <CssBaseline />
                     <Table columns={columns} data={contests}/></Card.Text>
                 </Card.Body>
-            </Card>
+            </Card> */}
+            <Typography
+           variant='h4' style={{
+           
+            color: 'white'}}
+            >
+              Public Contests
+            </Typography>
+            <Contest  data={contests}/>
         </div>
+        </>
+         }
+         </>
+
     );
+         
 }
 
 export default ContestSpace;
