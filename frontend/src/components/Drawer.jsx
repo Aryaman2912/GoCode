@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
+import {useLocation} from 'react-router-dom';
+import decode from 'jwt-decode';
 import clsx from 'clsx';
 import { makeStyles, useTheme,alpha } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -30,11 +32,14 @@ import Profile from './Profile';
 import Problem from './problem';
 import Auth from './Auth/Auth';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import ContestSpace from './contestSpace';
+import ContestSpace from './ContestSpace/ContestSpace';
 import { useHistory } from 'react-router';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import { useDispatch } from 'react-redux';
+import * as actionType from '../constants/actionTypes';
+
 
 const drawerWidth = 300;
 
@@ -161,12 +166,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
+  console.log('hgey i am working');
   const history=useHistory();
+  const dispatch = useDispatch();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-  console.log(props);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  user!=null?
+  console.log(user['result']['name']):console.log('no user');
+  
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -183,6 +193,26 @@ export default function MiniDrawer(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const logout = () => {
+    dispatch({ type: actionType.LOGOUT });
+
+    history.push('/auth');
+
+    setUser(null);
+  };
+  const location=useLocation();
+  useEffect(() => {
+    const token = user?.token;
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
+
+    setUser(JSON.parse(localStorage.getItem('profile')));
+  }, [location]);
+
 
   return (
     
@@ -230,7 +260,15 @@ export default function MiniDrawer(props) {
                 <MailIcon />
               </Badge>
             </IconButton> */}
-            <a href="/auth"><Button variant="outlined" style={{color:'white'} }>Login</Button></a>
+             {user!=null ? (
+               
+          // <Typography variant="h6">{user?.result.name}</Typography>
+          <Button variant="outlined" style={{color:'white'} } onClick={logout}>Logout </Button>
+        ) : (
+          <a href="/auth"><Button variant="outlined" style={{color:'white'} }>Login </Button></a>
+        )}
+            
+            {/* {user['result']['name']!=null ?<Button variant="outlined" style={{color:'white'} } onClick={logout}>Logout </Button>:<a href="/auth"><Button variant="outlined" style={{color:'white'} }>Login </Button></a>} */}
             <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
@@ -291,7 +329,7 @@ export default function MiniDrawer(props) {
               <ListItemIcon>  <Assignment /></ListItemIcon>
               <ListItemText primary='Problem Space' />
             </ListItem>
-            <ListItem button key={'Contest Space'} onClick={()=>history.push('/contest')}>
+            <ListItem button key={'Contest Space'} onClick={()=>history.push('/contests')}>
               <ListItemIcon><SupervisorAccountIcon /></ListItemIcon>
               <ListItemText primary='Contest Space' />
             </ListItem>
@@ -334,7 +372,7 @@ export default function MiniDrawer(props) {
             <Profile />
           </Route>
 
-          <Route exact path='/contest'>
+          <Route exact path='/contests' component={ContestSpace}>
             <ContestSpace />
           </Route>
           <Route path='/problem/:id' component={Problem} />
