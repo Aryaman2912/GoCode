@@ -6,11 +6,14 @@ import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
-import d from 'dotenv';
+<<<<<<< HEAD
+//import d from 'dotenv';
+//d.config();
 
-d.config();
 
-
+=======
+import Contests from './models/contest.js'
+>>>>>>> c6d56ec41c42ee402886aa1eea34617805722690
 
 app.use(json());
 app.use(urlencoded({extended: true}));
@@ -29,6 +32,18 @@ app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
 app.use("/compile", compileRouter)
+
+app.get("/api/contests", (req, res) => {
+    Contests.find({}, (err, contests) => {
+        if(err) {
+            res.json({
+                status: "failure"
+            })
+        } else {
+            res.send(contests)
+        }
+    })
+})
 
 app.get("/api/problems", (req, res) => {
     ProblemSet.find({}, (err, problems) => {
