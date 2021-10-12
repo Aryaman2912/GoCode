@@ -6,14 +6,11 @@ import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
-<<<<<<< HEAD
 //import d from 'dotenv';
 //d.config();
 
 
-=======
 import Contests from './models/contest.js'
->>>>>>> c6d56ec41c42ee402886aa1eea34617805722690
 
 app.use(json());
 app.use(urlencoded({extended: true}));
