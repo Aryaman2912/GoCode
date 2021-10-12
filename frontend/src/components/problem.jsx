@@ -9,6 +9,7 @@ import Editor from './Editor'
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import axios from 'axios';
 import { API } from '../api/index';
+import { Container, Row, Col } from 'react-grid-system';
 
 const Problem = (props) => {
 
@@ -76,6 +77,10 @@ const Problem = (props) => {
 
             }}><ReactLoading type={loadingOptions.type} color={loadingOptions.color} height={100} width={100} /></div> :
                 <>
+                <Container>
+                    <Row>
+                    <Col sm={6}>
+
                     <Typography variant='h3' style={{
                         textAlign: 'center',
                         textTransform: 'capitalize',
@@ -122,12 +127,18 @@ const Problem = (props) => {
                             )
                         })}
                     </div>
+                   
+                    </Col>
+                    <Col sm={6}>
                     <DropdownButton id="dropdown-basic-button" title="Language">
                         {Object.keys(languageOptions).map( (key, index) => {
                             return (<Dropdown.Item href='#' onClick={() => setLanguage(languageOptions[key])}>{key}</Dropdown.Item>)
                         })}
                     </DropdownButton>
                     <Editor code={code} language={language} onChange={setCode} handleSubmit={handleProblemSubmit}/>
+                    </Col>
+                    </Row>
+                    </Container>
                 </>
             }
         </>
