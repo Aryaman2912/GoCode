@@ -6,6 +6,10 @@ import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
+import d from 'dotenv';
+
+d.config();
+
 
 
 app.use(json());
