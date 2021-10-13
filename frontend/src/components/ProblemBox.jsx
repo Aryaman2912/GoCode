@@ -18,7 +18,7 @@ export default function ProblemBox(problemset, i) {
         setPage(value);
       };
  
-    var currentprobs=problemset.problemset[1].slice(page * postsPerPage-postsPerPage,page*postsPerPage)
+    let currentprobs=problemset.problemset[1].slice(page * postsPerPage-postsPerPage,page*postsPerPage)
     return (
 
         <Paper style={

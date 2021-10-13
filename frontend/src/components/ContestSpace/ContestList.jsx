@@ -1,5 +1,5 @@
 import React from 'react'
-import FlatList from 'flatlist-react';
+// import FlatList from 'flatlist-react';
 import { Typography } from '@material-ui/core';
 import Contest from './Contest'
 
