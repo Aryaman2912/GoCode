@@ -11,8 +11,8 @@ const ProblemSpace = () => {
     const [loading, setLoading] = useState(true)
 
     const hasCache = (expireTime, cachedProblems) => {
-        if(cachedProblems === null || expireTime == null || +new Date() > expireTime) return true
-        return false
+        if(cachedProblems === null || expireTime === null || +new Date() > expireTime) return false
+        return true
     }
 
     // Problems refresh every 5 minutes
@@ -23,7 +23,7 @@ const ProblemSpace = () => {
         // console.log(cachedProblems)
         console.log(+new Date())
         const expireTime = localStorage.getItem('problemsExpirationTimestamp')
-        if(hasCache(expireTime, cachedProblems)) {
+        if(!hasCache(expireTime, cachedProblems)) {
             fetch('http://localhost:5000/api/problems')
                 .then((data) => data.json())
                 .then(data => {
