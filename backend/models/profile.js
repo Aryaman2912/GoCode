@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-const profileSchema = mongoose.Schema({
-    id: {type: String},
+const profileSchema = new Schema({
+    userId: {type: Schema.Types.ObjectId, ref: 'User'},
     rating: {type: Number},
-    friends: {type: [String]},
-    problems: {type: [String]},
-    createdContests: {type: [String]},
-    participatedContests: {type: [String]}
-})
+    friends: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    problems: [{type: Schema.Types.ObjectId, ref: 'ProblemSet'}],
+    createdContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}],
+    givenContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}]
+}, {collection: 'Profiles'});
 
-export default mongoose.model("Profile", profileSchema);
+const Profiles = mongoose.model("Profiles", profileSchema);
+
+export default Profiles;

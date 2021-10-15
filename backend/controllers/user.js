@@ -1,5 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Profiles from "../models/profile.js";
+
+// USED FOR PROFILE PAGE
+//const currentUserId;
+var currentUserId;
 
 import User from '../models/user.js'
 
@@ -15,6 +20,10 @@ export const signin = async (req, res) => {
         if(!isPasswordCorrect) return res.status(400).json({message: "Incorrect credentials" });
 
         const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, 'randomaccesstoken', { expiresIn: '1h' });
+
+        // the current user
+        currentUserId = existingUser._id;
+        
 
         res.status(200).json({ result: existingUser, token});
     } catch(error) {
@@ -35,6 +44,10 @@ export const signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
+        
+        // added to profile database
+        await Profiles.create({userId: result._id});
+        currentUserId = result._id;
 
         const token = jwt.sign({ email: result.email, id: result._id }, 'randomaccesstoken', { expiresIn: '1h' });
 
@@ -43,3 +56,6 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: "Something went wrong" });
     }
 }
+
+// exporting the current userID
+export {currentUserId};
