@@ -1,9 +1,10 @@
 import Profiles from '../models/profile.js'
-import {currentUserId} from "../controllers/user.js"
+import {currentUserId} from "./user.js"
+import User from '../models/profile.js'
 import auth from '../middleware/auth.js'
 
 // 'display' GET request
-export const display = function(req, res){
+export const displayProblems = function(req, res){
     try{
         Profiles.findOne({userId: req.userId}, function(error, profile){
             if(error){
@@ -13,7 +14,7 @@ export const display = function(req, res){
             else{
                 //console.log(currentUserId);
                 //console.log(profile);
-                res.send(profile);
+                res.send(profile.problems);
             }
         });
     }
@@ -22,3 +23,4 @@ export const display = function(req, res){
         res.status(500).json({message: error});
     }
 };
+
