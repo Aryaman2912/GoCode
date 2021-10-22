@@ -8,6 +8,8 @@ import { DropdownButton, Dropdown, Badge } from 'react-bootstrap';
 import { API } from '../../api/index';
 import { Container, Row, Col } from 'react-grid-system';
 import UserInputOutput from '../CodingSpace/UserInputOutput';
+import axios from 'axios';
+import { useHistory } from 'react-router';
 
 const Problem = (props) => {
 
@@ -19,6 +21,7 @@ const Problem = (props) => {
     const [codeLanguage, setCodeLanguage] = useState('cpp')
     const [userOutput, setuserOutput] = useState('')
 
+    const history = useHistory()
     const [userInput, setUserInput] = useState('')
 
     const languageOptions = {
@@ -28,8 +31,23 @@ const Problem = (props) => {
         "Python": "python"
     }
 
+
+
     const buttonHandlerIDE = (type) => {
-        API.post('/compile/submit', {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type})
+        const storage = JSON.parse(localStorage.getItem('profile'))
+        // console.log(storage)
+        if(storage === null) {
+            history.push('/auth')
+        }
+        let token = storage.token
+        const headers = {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Authorization': `Bearer ${token}`
+        }
+        API.post('http://localhost:5000/compile/submit', 
+        {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type},
+        {headers: headers}
+        )
         .then( (res) => {
             console.log(res);
             setuserOutput(res.data.output)

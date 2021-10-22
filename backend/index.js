@@ -67,9 +67,9 @@ const convertStatement = (str) => {
 }
 
 
-app.post('/compile/submit', (req, res) => {
-    console.log(req.body)
-})
+// app.post('/compile/submit', (req, res) => {
+//     console.log(req.body)
+// })
 
 app.get("/api/problem", (req, res) => {
     const problemID = req.query.problemID;
