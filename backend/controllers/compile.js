@@ -77,7 +77,7 @@ export const problemCompilation = async(req, res) => {
                                 if(err) {
                                     console.log(err)
                                 }
-                                console.log(success)
+                                // console.log(success)
                             }
                         )
                         // Profile.save()
@@ -88,13 +88,13 @@ export const problemCompilation = async(req, res) => {
             }
             
             submission['verdict'] = "accepted"
-            Profile.findByIdAndUpdate(req.userId, 
+            Profile.findOneAndUpdate({userId: req.userId}, 
                 { $push: { problems: submission }},
                 (err, success) => {
                     if(err) {
                         console.log(err)
                     }
-                    console.log(success)
+                    // console.log(success)
                 }
             )
             if(accepted) res.status(200).json({"Verdict": "Correct answer"})
