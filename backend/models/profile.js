@@ -5,7 +5,13 @@ const profileSchema = new Schema({
     userId: {type: Schema.Types.ObjectId, ref: 'User'},
     rating: {type: Number},
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}],
-    problems: [{type: Schema.Types.ObjectId, ref: 'ProblemSet'}],
+    problems: [{
+        problemID: {type: Schema.Types.ObjectId},
+        verdict: {type: String},
+        timeStamp: {type: Date, default: Date.now},
+        code: {type: String},
+        language: {type: String}
+    }],
     createdContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}],
     givenContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}]
 }, {collection: 'Profiles'});

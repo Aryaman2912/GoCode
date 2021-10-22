@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-
 import ReactLoading from 'react-loading';
-
 import ProblemBox from './ProblemBox';
 
 
@@ -16,7 +14,8 @@ const ProblemSpace = () => {
     }
 
     // Problems refresh every 5 minutes
-    let MINUTES_TO_ADD = 5
+    const MINUTES_TO_ADD = 5
+
     useEffect(() => {
         const cachedProblems = localStorage.getItem('problems')
         // console.log(cachedProblems)
@@ -62,26 +61,14 @@ const ProblemSpace = () => {
     }
     return (
         <>
-            {/* TODO --------------------------------->>> Need to design and put tags and stuff */}
             {loading ? <div style={{
-
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '90vh'
             }}><ReactLoading type={loadingOptions.type} color={loadingOptions.color} height={100} width={100} /></div> :
                 Object.entries(problems).map((problem, i)=>{
-
-                    // const indexOfLastPost = currentPage * postsPerPage;
-                    //  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-                    // const currentPosts = problem[1].slice(indexOfFirstPost, indexOfLastPost);
-                 
-                    
-                    // const paginate = () => setCurrentPage(currentPage+1);
-
-                
-
-                return  <ProblemBox  problemset={problem} i={i}/>
+                    return  <ProblemBox  problemset={problem} key={i}/>
                 }
             )
             }
