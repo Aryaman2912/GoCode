@@ -63,6 +63,9 @@ export default makeStyles({
     paddingBottom:"30px",
     paddingTop:"20px",
     borderRadius:"25px",
-  } 
+  },
   
+  dropdown:{
+    width: "50%"
+  }
 })
