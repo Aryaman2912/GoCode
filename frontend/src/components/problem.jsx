@@ -18,31 +18,21 @@ const Problem = (props) => {
     const [loading, setLoading] = useState(true)
     const [testcases, setTestcases] = useState([])
     const [code, setCode] = useState('')
-    const [language, setLanguage] = useState('')
+    const [CodeMirrorMode, setCodeMirrorMode] = useState('clike')
+    const [codeLanguage, setCodeLanguage] = useState('cpp')
     const [userOutput, setuserOutput] = useState('')
 
     const [userInput, setUserInput] = useState('')
 
     const languageOptions = {
-        "cpp": "clike",
-        "java": "clike",
-        "c": "clike",
-        "javascript": "javascript",
-        "pyton": "python"
+        "C++": "clike",
+        "Java": "clike",
+        "C": "clike",
+        "Python": "python"
     }
 
-    const arr = [
-        "cpp", "clike",
-        "java", "clike",
-        "c", "clike",
-        "javascript", "javascript",
-        "pyton", "python"
-    ]
-
-    const handleProblemSubmit = () => {
-        // console.log(JSON.stringify(problem.input[0]))
-        // const input = "1"
-        API.post('/compile/submit', {"code": code, "language": language, "userInput": userInput})
+    const buttonHandlerIDE = (type) => {
+        API.post('/compile/submit', {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type})
         .then( (res) => {
             console.log(res);
             setuserOutput(res.data.output)
@@ -136,10 +126,10 @@ const Problem = (props) => {
                     <Col sm={6}>
                     <DropdownButton id="dropdown-basic-button" title="Language">
                         {Object.keys(languageOptions).map( (key, index) => {
-                            return (<Dropdown.Item href='#' onClick={() => setLanguage(languageOptions[key])}>{key}</Dropdown.Item>)
+                            return (<Dropdown.Item href='#' onClick={() => {setCodeMirrorMode(languageOptions[key]); setCodeLanguage(key)}}>{key}</Dropdown.Item>)
                         })}
                     </DropdownButton>
-                    <Editor code={code} language={language} onChange={setCode} handleSubmit={handleProblemSubmit}/>
+                    <Editor code={code} languageMode={CodeMirrorMode} onChange={setCode} buttonHandlerIDE={buttonHandlerIDE}/>
                     <br/>
                     <Badge bg="success">Input</Badge>
                     <UserInputOutput text={userInput} onChange={setUserInput} isInput={true}/>
