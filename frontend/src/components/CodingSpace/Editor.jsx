@@ -9,10 +9,10 @@ import { Button } from 'react-bootstrap';
 
 const Editor = (props) => {
   const {
-    language,
+    languageMode,
     code,
     onChange,
-    handleSubmit
+    buttonHandlerIDE
   } = props
 
   const handleChange = (editor, data, value) => {
@@ -28,13 +28,13 @@ const Editor = (props) => {
         options = {{
           lineWrapping: true,
           lint: true,
-          mode: language,
+          mode: languageMode,
           theme: 'material',
           lineNumbers: true
         }}
       />
-      <Button variant="primary" onClick={handleSubmit}>Test</Button>{' '}
-      <Button variant="primary" onClick={handleSubmit}>Submit</Button>{' '}
+      <Button variant="primary" onClick={() => buttonHandlerIDE("test")}>Test</Button>{' '}
+      <Button variant="primary" onClick={() => buttonHandlerIDE("submit")}>Submit</Button>{' '}
       
     </>
   )

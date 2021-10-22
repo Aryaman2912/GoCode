@@ -2,7 +2,7 @@ import express, { json, urlencoded } from 'express';
 // Use the latest stable(>12) version of nodejs
 import mongoose from 'mongoose';
 import cors from "cors";
-import  ProblemSet  from './models/problemSet.js';
+import  gocodeproblems  from './models/Gocodeproblems.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
@@ -37,7 +37,7 @@ app.use("/",contestRouter)
 app.use("/profile", profileRouter);
 
 app.get("/api/problems", (req, res) => {
-    ProblemSet.find({}, (err, problems) => {
+    gocodeproblems.find({}, (err, problems) => {
         if(err) {
             res.json({
                 status: "failure"
@@ -73,7 +73,7 @@ app.post('/compile/submit', (req, res) => {
 
 app.get("/api/problem", (req, res) => {
     const problemID = req.query.problemID;
-    ProblemSet.findById(problemID, (err, problem) => {
+    gocodeproblems.findById(problemID, (err, problem) => {
         if(err) {
             res.json({
                 status: "failure"

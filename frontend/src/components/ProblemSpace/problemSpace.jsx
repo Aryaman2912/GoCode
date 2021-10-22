@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-
 import ReactLoading from 'react-loading';
-
 import ProblemBox from './ProblemBox';
 
 
@@ -16,7 +14,7 @@ const ProblemSpace = () => {
     }
 
     // Problems refresh every 5 minutes
-    let MINUTES_TO_ADD = 5
+    const MINUTES_TO_ADD = 5
 
     useEffect(() => {
         const cachedProblems = localStorage.getItem('problems')
@@ -31,13 +29,16 @@ const ProblemSpace = () => {
                     data.forEach(problem => {
                         problem.tags.forEach(tag => {
                             tags.push(tag)
+                            console.log(tag);
                         })
                     });
+                    console.log(tags);
                     const uniqueTags = new Set(tags);
+                    console.log(uniqueTags);
                     const finalData = {};
                     uniqueTags.forEach(t => {
                         finalData[t] = data.filter(d => {
-                            return d.tags.indexOf(t) != -1;
+                            return d.tags.indexOf(t) !== -1;
                         })
                     })
                     setProblems(finalData);
@@ -54,33 +55,20 @@ const ProblemSpace = () => {
         }
     }, [])
 
-   
     const loadingOptions = {
         type: "spin",
         color: "#347deb",
     }
     return (
         <>
-            {/* TODO --------------------------------->>> Need to design and put tags and stuff */}
             {loading ? <div style={{
-
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '90vh'
             }}><ReactLoading type={loadingOptions.type} color={loadingOptions.color} height={100} width={100} /></div> :
                 Object.entries(problems).map((problem, i)=>{
-
-                    // const indexOfLastPost = currentPage * postsPerPage;
-                    //  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-                    // const currentPosts = problem[1].slice(indexOfFirstPost, indexOfLastPost);
-                 
-                    
-                    // const paginate = () => setCurrentPage(currentPage+1);
-
-                
-
-                return  <ProblemBox  problemset={problem} i={i}/>
+                    return  <ProblemBox  problemset={problem} key={i}/>
                 }
             )
             }
