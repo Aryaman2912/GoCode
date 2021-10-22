@@ -1,7 +1,6 @@
 
 import './App.css';
-import Sidebar from './components/sidebar';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Drawer from './components/Drawer';
 import { createBrowserHistory } from 'history';

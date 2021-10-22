@@ -15,7 +15,7 @@ const Problem = (props) => {
     const [loading, setLoading] = useState(true)
     const [testcases, setTestcases] = useState([])
     const [code, setCode] = useState('')
-    const [CodeMirrorMode, setCodeMirrorMode] = useState('clike')
+    const [codeMirrorMode, setCodeMirrorMode] = useState('clike')
     const [codeLanguage, setCodeLanguage] = useState('cpp')
     const [userOutput, setuserOutput] = useState('')
 
@@ -36,9 +36,9 @@ const Problem = (props) => {
         })
     }
 
-    const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
     // console.log(problemURL)
     useEffect(() => {
+        const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
         fetch(problemURL)
             .then((data) => data.json())
             .then(data => {
@@ -102,20 +102,12 @@ const Problem = (props) => {
 
                     <div>
                         {testcases.map((testcase, i) => {
-                            return (<>
-                                <Typography variant='h6' style={{
-
-                                    color: 'white'
-                                }}>Input</Typography>
-
+                            return (<div>
+                                <Typography variant='h6' style={{color: 'white'}}>Input</Typography>
                                 <p style={{ whiteSpace: "pre-wrap", color: 'white' }}>{testcase[0]}</p><br></br>
-                                <Typography variant='h6' style={{
-
-                                    color: 'white'
-                                }}>Output</Typography>
+                                <Typography variant='h6' style={{color: 'white'}}>Output</Typography>
                                 <p style={{ whiteSpace: "pre-wrap", color: 'white' }}>{testcase[1]}</p><br></br><br></br>
-                            </>
-                            )
+                            </div>)
                         })}
                     </div>
                    
@@ -126,7 +118,7 @@ const Problem = (props) => {
                             return (<Dropdown.Item href='#' onClick={() => {setCodeMirrorMode(languageOptions[key]); setCodeLanguage(key)}}>{key}</Dropdown.Item>)
                         })}
                     </DropdownButton>
-                    <Editor code={code} languageMode={CodeMirrorMode} onChange={setCode} buttonHandlerIDE={buttonHandlerIDE}/>
+                    <Editor code={code} languageMode={codeMirrorMode} onChange={setCode} buttonHandlerIDE={buttonHandlerIDE}/>
                     <br/>
                     <Badge bg="success">Input</Badge>
                     <UserInputOutput text={userInput} onChange={setUserInput} isInput={true}/>
