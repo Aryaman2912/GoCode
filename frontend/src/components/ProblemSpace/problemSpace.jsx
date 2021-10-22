@@ -29,9 +29,12 @@ const ProblemSpace = () => {
                     data.forEach(problem => {
                         problem.tags.forEach(tag => {
                             tags.push(tag)
+                            console.log(tag);
                         })
                     });
+                    console.log(tags);
                     const uniqueTags = new Set(tags);
+                    console.log(uniqueTags);
                     const finalData = {};
                     uniqueTags.forEach(t => {
                         finalData[t] = data.filter(d => {
@@ -52,7 +55,6 @@ const ProblemSpace = () => {
         }
     }, [])
 
-   
     const loadingOptions = {
         type: "spin",
         color: "#347deb",

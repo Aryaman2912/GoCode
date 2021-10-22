@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ProblemSet from '../models/problemSet'
-
+import Profile from '../models/profile'
 
 const RESOLVER = {
     "C++": "cpp17",
@@ -27,7 +27,6 @@ export const problemCompilation = async(req, res) => {
         "stdin": ""
     }
 
-
     if(submissionType === 'test') {
         APIData['stdin'] = userInput
         const resp = await axios.post('https://api.jdoodle.com/v1/execute', APIData)
@@ -53,6 +52,15 @@ export const problemCompilation = async(req, res) => {
 
 
             let accepted = true
+
+            let submission = {
+                problemID: problemID,
+                verdict: "",
+                code: code,
+                language: language
+            }
+
+
             const results = await Promise.all(promises)
             for(let i = 0; i < inputs.length; i++) {
                 let userOutput = results[i].data.output
@@ -62,11 +70,30 @@ export const problemCompilation = async(req, res) => {
                 } else {
                     if(accepted) {
                         accepted = false
+                        submission['verdict'] = "Wrong answer"
+                        Profile.findByIdAndUpdate(req.userId, 
+                            { $push: { problems: submission }},
+                            (err, success) => {
+                                if(err) {
+                                    console.log(err)
+                                }
+                            }
+                        )
                         res.json({"Verdict": "Wrong answer"})
                         break
                     }
                 }
             }
+            
+            submission['verdict'] = "accepted"
+            Profile.findByIdAndUpdate(req.userId, 
+                { $push: { problems: submission }},
+                (err, success) => {
+                    if(err) {
+                        console.log(err)
+                    }
+                }
+            )
             if(accepted) res.status(200).json({"Verdict": "Correct answer"})
         })
     }
