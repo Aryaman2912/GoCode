@@ -6,10 +6,11 @@ import ReactLoading from 'react-loading';
 import { Typography } from '@material-ui/core';
 import './problem.css'
 import Editor from './Editor'
-import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Button, DropdownButton, Dropdown, Badge } from 'react-bootstrap';
 import axios from 'axios';
 import { API } from '../api/index';
 import { Container, Row, Col } from 'react-grid-system';
+import UserInputOutput from './UserInputOutput';
 
 const Problem = (props) => {
 
@@ -18,7 +19,9 @@ const Problem = (props) => {
     const [testcases, setTestcases] = useState([])
     const [code, setCode] = useState('')
     const [language, setLanguage] = useState('')
-    const [output, setOutput] = useState('')
+    const [userOutput, setuserOutput] = useState('')
+
+    const [userInput, setUserInput] = useState('')
 
     const languageOptions = {
         "cpp": "clike",
@@ -37,13 +40,14 @@ const Problem = (props) => {
     ]
 
     const handleProblemSubmit = () => {
-        API.post('/compile/submit', {"code": code, "language": language})
+        // console.log(JSON.stringify(problem.input[0]))
+        // const input = "1"
+        API.post('/compile/submit', {"code": code, "language": language, "userInput": userInput})
         .then( (res) => {
             console.log(res);
+            setuserOutput(res.data.output)
         })
     }
-
-
 
     const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
     // console.log(problemURL)
@@ -136,6 +140,11 @@ const Problem = (props) => {
                         })}
                     </DropdownButton>
                     <Editor code={code} language={language} onChange={setCode} handleSubmit={handleProblemSubmit}/>
+                    <br/>
+                    <Badge bg="success">Input</Badge>
+                    <UserInputOutput text={userInput} onChange={setUserInput} isInput={true}/>
+                    <Badge bg="success">Output</Badge>
+                    <UserInputOutput text={userOutput} isInput={false}/>
                     </Col>
                     </Row>
                     </Container>

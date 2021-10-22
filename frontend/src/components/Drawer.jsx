@@ -38,6 +38,8 @@ import Problem from "./problem";
 import Auth from "./Auth/Auth";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ContestSpace from "./ContestSpace/ContestSpace";
+import AddContest from "./ContestSpace/AddContest";
+import AddProblem from "./ContestSpace/AddProblem";
 import { useHistory } from "react-router";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -406,9 +408,16 @@ export default function MiniDrawer(props) {
               <Profile />
             </Route>
 
-            <Route exact path="/contests" component={ContestSpace}>
-              <ContestSpace />
+            <Route exact path="/profile">
+              <Profile />
             </Route>
+
+            <Route exact path="/contests" component={ContestSpace} />
+            {/* <Route exact path='/contests' component={ContestSpace}>
+            <ContestSpace />
+          </Route> */}
+            <Route exact path="/addcontest" component={AddContest} />
+            <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
           </Switch>
         </div>

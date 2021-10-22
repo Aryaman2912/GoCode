@@ -10,35 +10,48 @@ const ProblemSpace = () => {
     const [problems, setProblems] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const hasCache = (expireTime, cachedProblems) => {
+        if(cachedProblems === null || expireTime === null || +new Date() > expireTime) return false
+        return true
+    }
 
+    // Problems refresh every 5 minutes
+    let MINUTES_TO_ADD = 5
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/problems')
-            .then((data) => data.json())
-            .then(data => {
-                let tags = [];
-                data.forEach(problem => {
-                    problem.tags.forEach(tag => {
-                        tags.push(tag)
+        const cachedProblems = localStorage.getItem('problems')
+        // console.log(cachedProblems)
+        console.log(+new Date())
+        const expireTime = localStorage.getItem('problemsExpirationTimestamp')
+        if(!hasCache(expireTime, cachedProblems)) {
+            fetch('http://localhost:5000/api/problems')
+                .then((data) => data.json())
+                .then(data => {
+                    let tags = [];
+                    data.forEach(problem => {
+                        problem.tags.forEach(tag => {
+                            tags.push(tag)
+                        })
+                    });
+                    const uniqueTags = new Set(tags);
+                    const finalData = {};
+                    uniqueTags.forEach(t => {
+                        finalData[t] = data.filter(d => {
+                            return d.tags.indexOf(t) != -1;
+                        })
                     })
-
-                });
-
-                const uniqueTags = new Set(tags);
-                const finalData = {};
-                uniqueTags.forEach(t => {
-                    finalData[t] = data.filter(d => {
-                        return d.tags.indexOf(t) != -1;
-                    })
-
+                    setProblems(finalData);
+                    localStorage.setItem('problems', JSON.stringify(finalData));
+                    let currentDate = new Date()
+                    let expireTimeStamp = +new Date(currentDate.getTime() + MINUTES_TO_ADD*60000)
+                    localStorage.setItem('problemsExpirationTimestamp', expireTimeStamp)
+                    setLoading(false)
 
                 })
-
-              //  console.log(finalData);
-                setProblems(finalData);
-                setLoading(false)
-              //  console.log(data)
-            })
+        } else {
+            setProblems(JSON.parse(cachedProblems))
+            setLoading(false)
+        }
     }, [])
 
    

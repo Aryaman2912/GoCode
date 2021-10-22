@@ -6,7 +6,15 @@ import  ProblemSet  from './models/problemSet.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
-import Contests from './models/contest.js'
+import profileRouter from "./routes/profile.js";
+import Contests from './models/contest.js';
+import contestRouter from './routes/contest.js'
+import Profiles from './models/profile.js';
+//import d from 'dotenv';
+//d.config();
+
+// dummy added to Profiles collection
+//Profiles.create({userId: new ObjectId("615d3a535cbb99c73e8972b7"), rating: 2000});
 
 app.use(json());
 app.use(urlencoded({extended: true}));
@@ -25,18 +33,8 @@ app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
 app.use("/compile", compileRouter)
-
-app.get("/api/contests", (req, res) => {
-    Contests.find({}, (err, contests) => {
-        if(err) {
-            res.json({
-                status: "failure"
-            })
-        } else {
-            res.send(contests)
-        }
-    })
-})
+app.use("/",contestRouter)
+app.use("/profile", profileRouter);
 
 app.get("/api/problems", (req, res) => {
     ProblemSet.find({}, (err, problems) => {
