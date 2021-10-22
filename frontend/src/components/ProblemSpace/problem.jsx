@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-// import MathJax from 'react-mathjax';
 import MathJax from 'mathjax3-react';
 import ReactLoading from 'react-loading';
 import { Typography } from '@material-ui/core';
 import './problem.css'
-import Editor from './Editor'
-import { Button, DropdownButton, Dropdown, Badge } from 'react-bootstrap';
-import axios from 'axios';
-import { API } from '../api/index';
+import Editor from '../CodingSpace/Editor'
+import { DropdownButton, Dropdown, Badge } from 'react-bootstrap';
+import { API } from '../../api/index';
 import { Container, Row, Col } from 'react-grid-system';
-import UserInputOutput from './UserInputOutput';
+import UserInputOutput from '../CodingSpace/UserInputOutput';
 
 const Problem = (props) => {
 
