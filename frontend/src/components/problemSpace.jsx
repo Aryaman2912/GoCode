@@ -17,7 +17,6 @@ const ProblemSpace = () => {
 
     // Problems refresh every 5 minutes
     let MINUTES_TO_ADD = 5
-
     useEffect(() => {
         const cachedProblems = localStorage.getItem('problems')
         // console.log(cachedProblems)
@@ -31,13 +30,16 @@ const ProblemSpace = () => {
                     data.forEach(problem => {
                         problem.tags.forEach(tag => {
                             tags.push(tag)
+                            console.log(tag);
                         })
                     });
+                    console.log(tags);
                     const uniqueTags = new Set(tags);
+                    console.log(uniqueTags);
                     const finalData = {};
                     uniqueTags.forEach(t => {
                         finalData[t] = data.filter(d => {
-                            return d.tags.indexOf(t) != -1;
+                            return d.tags.indexOf(t) !== -1;
                         })
                     })
                     setProblems(finalData);
@@ -54,7 +56,6 @@ const ProblemSpace = () => {
         }
     }, [])
 
-   
     const loadingOptions = {
         type: "spin",
         color: "#347deb",
