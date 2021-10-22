@@ -36,7 +36,7 @@ const Problem = (props) => {
         "java", "clike",
         "c", "clike",
         "javascript", "javascript",
-        "pyton", "python"
+        "python", "python"
     ]
 
     const handleProblemSubmit = () => {
