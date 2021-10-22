@@ -136,6 +136,13 @@ const ContestSpace = () => {
               Public Contests
             </Typography>
             <Contest  data={contests}/>
+            <Typography
+           variant='h4' style={{
+           
+            color: 'white'}}
+            >
+              Invited Contests
+            </Typography>
         </div>
         </>
          }
