@@ -1,5 +1,6 @@
 import Contests from "../models/contest";
 import GoCodeProblems from "../models/Gocodeproblems";
+import User from "../models/user";
 export const getPublicContests = async(req,res ) => {
     try{
         Contests.find({}, (err, contests) => {
@@ -16,6 +17,33 @@ export const getPublicContests = async(req,res ) => {
     }
 };
 
+export const addContest = async (req, res) => {
+    try{
+        console.log(req.body);
+        const {contestName, date, duration, hostId} = req.body
+        const user = await User.findById(hostId);
+        let hostName = '';
+        let id = undefined
+        const data = {
+            name: contestName,
+            Host: hostName,
+            Date: date,
+            Duration: duration,
+            isPublic: true,
+            hostId: id,
+        }
+        data['Date'] = new Date(date);
+        id = user._id;
+        data['hostId'] = id;
+        data['Host'] = user.name;
+        console.log(data);
+        const result = await Contests.create(data);
+        res.status(200).json({result});
+    } catch(err){
+        console.log(err);
+        res.status(500).json({err});
+    }
+}
 export const addProblem = async (req,res) => {
     try{
         const {name, description, statement, tags, input, output, testInput, testOutput} = req.body;

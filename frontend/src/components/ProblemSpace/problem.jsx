@@ -44,7 +44,7 @@ const Problem = (props) => {
             'Content-Type': 'application/json;charset=UTF-8',
             'Authorization': `Bearer ${token}`
         }
-        API.post('http://localhost:5000/compile/submit', 
+        axios.post('http://localhost:5000/compile/submit', 
         {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type},
         {headers: headers}
         )
