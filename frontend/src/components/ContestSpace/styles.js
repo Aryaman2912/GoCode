@@ -3,7 +3,7 @@ export default makeStyles({
   
   h1: {
     marginTop: "10px",
-    color: "white",
+    color: "black",
     fontSize: "25px",
     paddingBottom: "10px",
     borderBottom: "1px solid rgb(79, 98, 148)"
@@ -24,7 +24,7 @@ export default makeStyles({
     boxSizing: "border-box",
     width: "100%",
     borderRadius: "4px",
-    border: "1px solid white",
+    border: "1px solid black",
     padding: "10px 15px",
     marginBottom: "10px",
     fontSize: "14px"
@@ -36,14 +36,14 @@ export default makeStyles({
     display: "block",
     marginBottom: "13px",
     marginTop: "20px",
-    color: "white",
+    color: "black",
     fontSize: "14px",
     fontWeight: "200",
   },
   
   submitButton: {
     background: "#ec5990",
-    color: "white",
+    color: "black",
     textTransform: "uppercase",
     border: "none",
     marginTop: "40px",
