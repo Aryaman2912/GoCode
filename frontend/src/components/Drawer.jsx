@@ -38,6 +38,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import * as actionType from "../constants/actionTypes";
+import Pds from "./PersonalDevelopementSpace/pds";
 
 const drawerWidth = 300;
 
@@ -359,7 +360,7 @@ export default function MiniDrawer(props) {
         <ListItem
           button
           key={"Personal Development Space"}
-          onClick={() => history.push("/problems")}
+          onClick={() => history.push("/pds")}
         >
           <ListItemIcon>
             <EmojiPeopleIcon />
@@ -405,6 +406,7 @@ export default function MiniDrawer(props) {
             </Route>
 
             <Route exact path="/contests" component={ContestSpace} />
+            <Route exact path="/pds" component={Pds} />
             {/* <Route exact path='/contests' component={ContestSpace}>
             <ContestSpace />
           </Route> */}
