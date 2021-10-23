@@ -17,6 +17,18 @@ export const getPublicContests = async(req,res ) => {
     }
 };
 
+export const getContest = async (req, res) => {
+    // console.log(req);
+    const  { id } = req.params;
+    console.log(id);
+    try{
+        const contest = await Contests.findById(id);
+        res.status(200).json(contest);
+    } catch(error){
+        res.status(404).json({ message: error.message });
+    }
+}
+
 export const addContest = async (req, res) => {
     try{
         console.log(req.body);
