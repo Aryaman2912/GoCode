@@ -14,7 +14,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useStyles from "./styles";
 import { useForm } from "react-hook-form";
-
+import {API} from '../../api/index';
+import axios from "axios";
 const ContestSpace = () => {
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,10 +34,15 @@ const ContestSpace = () => {
       });
   }, []);
 
-  console.log(contests);
+  // console.log(contests);
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
+    const storage = JSON.parse(localStorage.getItem('profile'))
+        // console.log(storage)
+        if(storage === null) {
+            history.push('/auth')
+        }
     setOpen(true);
   };
 
@@ -44,14 +50,33 @@ const ContestSpace = () => {
     setOpen(false);
   };
   const history = useHistory();
+
+  const [formData, setFormData] = useState('')
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+
+  const handleChange = (event) => {
+    setFormData({ [event.target.name]: event.target.value })
+  }
+
   const onSubmit = (data) => {
-    history.push("/addcontest");
-    console.log(data);
+    const time = data.time.split(':');
+    data.date.setHours(time[0]);
+    data.date.setMinutes(time[1]);
+    const userId = JSON.parse(localStorage.getItem('profile'))['result']['_id'];
+    data['hostId'] = userId;
+    data['duration'] = String(data['duration']) + " hrs"
+    delete data['time'];
+    axios.post('http://localhost:5000/api/addcontest',
+      data
+    )
+      .then((res) => history.push('/addcontest/'+ res.data.result._id))
+      .catch((err) => console.log(err))
+    
   };
 
   const classes = useStyles();
@@ -124,7 +149,7 @@ const ContestSpace = () => {
                       Contest Name:
                     </label>
 
-                    <input
+                    <input onChange={handleChange}
                       className={classes.input}
                       {...register("contestName", {
                         required: "Contest name cannot be empty.",
@@ -140,9 +165,9 @@ const ContestSpace = () => {
                     <label className={classes.label} htmlFor="date">
                       Date:
                     </label>
-                    <input
+                    <input onChange={handleChange}
                       className={classes.input}
-                      type="date"
+                      type="date" data-date="" data-date-format="DD MMMM YYYY" v
                       {...register("date", {
                         required: "Contest Date cannot be empty.",
                         valueAsDate: true,
@@ -154,7 +179,7 @@ const ContestSpace = () => {
                     <label className={classes.label} htmlFor="time">
                       Start Time:
                     </label>
-                    <input
+                    <input onChange={handleChange}
                       className={classes.input}
                       type="time"
                       {...register("time", {
@@ -165,7 +190,7 @@ const ContestSpace = () => {
                     <label className={classes.label} htmlFor="duration">
                       Duration(hrs)
                     </label>
-                    <input
+                    <input onChange={handleChange}
                       className={classes.input}
                       type="number"
                       step="0.5"
@@ -180,7 +205,7 @@ const ContestSpace = () => {
                         {errors.duration.message}
                       </span>
                     )}
-                    <input
+                    <input 
                       className={classes.submitButton}
                       value="Next"
                       type="submit"
