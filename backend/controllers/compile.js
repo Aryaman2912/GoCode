@@ -1,5 +1,4 @@
 import axios from 'axios';
-import ProblemSet from '../models/problemSet'
 import Profile from '../models/profile'
 import GoCodeProblems from '../models/Gocodeproblems'
 
@@ -13,7 +12,7 @@ const RESOLVER = {
 
 export const problemCompilation = async(req, res) => {
     let { code, language, userInput, problemID, submissionType } = req.body;
-    console.log(problemID)
+    // console.log(problemID)
     language = RESOLVER[language]
     if(submissionType !== 'test' && submissionType !== 'submit') {
         res.status(404).send('Not found');
@@ -32,7 +31,7 @@ export const problemCompilation = async(req, res) => {
         const resp = await axios.post('https://api.jdoodle.com/v1/execute', APIData)
         res.send(resp.data);
     } else {
-        console.log(req.userId)
+        // console.log(req.userId)
         GoCodeProblems.findById(problemID, async(err, problemDocument) => {
             if(err) {
                 res.status(404).send("Invalid request")
@@ -80,7 +79,6 @@ export const problemCompilation = async(req, res) => {
                                 // console.log(success)
                             }
                         )
-                        // Profile.save()
                         res.json({"Verdict": "Wrong answer"})
                         break
                     }
