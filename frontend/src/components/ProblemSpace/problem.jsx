@@ -148,7 +148,7 @@ const Problem = (props) => {
                    
                     </Col>
                     <Col sm={6}>
-                    <DropdownButton id="dropdown-basic-button" title="Language">
+                    <DropdownButton id="dropdown-basic-button" title={codeLanguage}>
                         {Object.keys(languageOptions).map( (key, index) => {
                             return (<Dropdown.Item href='#' onClick={() => {setCodeMirrorMode(languageOptions[key]); setCodeLanguage(key)}}>{key}</Dropdown.Item>)
                         })}
