@@ -18,7 +18,7 @@ const Problem = (props) => {
     const [testcases, setTestcases] = useState([])
     const [code, setCode] = useState('')
     const [codeMirrorMode, setCodeMirrorMode] = useState('clike')
-    const [codeLanguage, setCodeLanguage] = useState('cpp')
+    const [codeLanguage, setCodeLanguage] = useState('C++')
     const [userOutput, setuserOutput] = useState('')
 
     const history = useHistory()
@@ -31,13 +31,13 @@ const Problem = (props) => {
         "Python": "python"
     }
 
-
-
     const buttonHandlerIDE = (type) => {
         const storage = JSON.parse(localStorage.getItem('profile'))
         // console.log(storage)
+        console.log(code)
         if(storage === null) {
             history.push('/auth')
+            return
         }
         let token = storage.token
         const headers = {
@@ -54,9 +54,9 @@ const Problem = (props) => {
         })
     }
 
-    // console.log(problemURL)
+    const problemID = props.match.params.id
     useEffect(() => {
-        const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
+        let problemURL = `http://localhost:5000/api/problem?problemID=${problemID}`
         fetch(problemURL)
             .then((data) => data.json())
             .then(data => {
@@ -69,7 +69,24 @@ const Problem = (props) => {
                 }
                 setTestcases(tc)
             })
+        const localStorageCode = localStorage.getItem(`code_${problemID}`)
+        if(localStorageCode !== null) {
+            const jsonCode = JSON.parse(localStorageCode)
+            setCode(jsonCode['code'])
+            setCodeMirrorMode(jsonCode['codeMirrorMode'])
+            setCodeLanguage(jsonCode['codeLanguage'])
+        }
     }, [])
+
+    useEffect(() => {
+        let localIDEData = {
+            code: code,
+            codeMirrorMode: codeMirrorMode,
+            codeLanguage: codeLanguage
+        }
+        localStorage.setItem(`code_${problemID}`, JSON.stringify(localIDEData))
+    }, [code, codeMirrorMode, codeLanguage])
+
     const loadingOptions = {
         type: "spin",
         color: "#347deb",
