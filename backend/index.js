@@ -11,7 +11,7 @@ import Contests from './models/contest.js';
 import contestRouter from './routes/contest.js'
 import submissionsRouter from './routes/submissions'
 import Profiles from './models/profile.js';
-import Playlists from './models/playlist.js';
+import Playlists from './routes/playlist';
 //import d from 'dotenv';
 //d.config();
 
@@ -34,6 +34,7 @@ const corsOptions ={
 app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
+app.use("/playlists", Playlists)
 app.use("/compile", compileRouter)
 app.use("/",contestRouter)
 app.use("/profile", profileRouter)
