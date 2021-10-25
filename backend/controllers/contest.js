@@ -34,12 +34,13 @@ export const getContest = async (req, res) => {
 export const addContest = async (req, res) => {
     try{
         console.log(req.body);
-        const {contestName, date, duration, hostId} = req.body
+        const {contestName, date, duration, description, hostId} = req.body
         const user = await User.findById(hostId);
         let hostName = '';
         let id = undefined
         const data = {
             name: contestName,
+            Description: req.body.Description,
             Host: hostName,
             Date: date,
             Duration: duration,

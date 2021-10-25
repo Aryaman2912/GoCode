@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CircularProgress, Container } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -177,7 +177,16 @@ const AddContest = (props) => {
   } = useForm();
 
   const history = useHistory();
-  fetch('http://localhost:5000/api/contests/' + props.match.params.id)
+  const [contestsOverview,setcontestsOverview] = useState();
+  useEffect(() => {
+    fetch('http://localhost:5000/api/contests/' + props.match.params.id)
+    .then((data) => data.json())
+    .then((data) => {
+      console.log(data);
+      setcontestsOverview(data);
+    })
+  },[])
+  
   const [loadingProblemSubmit,setloadingProblemSubmit] = useState(false);
   const onSubmit = (data) => {
     data['tags'] = selectedOptions;
@@ -247,8 +256,11 @@ const AddContest = (props) => {
           background: "#424242",
         }}
       >
-        Item One
-      </TabPanel>
+        {contestsOverview.name}<br/>
+        {contestsOverview.Host}<br/>
+        {contestsOverview.Duration}<br/>
+        {contestsOverview.isPublic}<br/>
+        </TabPanel>
       <TabPanel
         value={value}
         index={1}
