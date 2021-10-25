@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 
 const ContestSchema = new Schema({
     name: {type: String},
+    Description: {type: String},
     Host: {type: String},
     Date: {type: Date},
     Duration: {type: String},
