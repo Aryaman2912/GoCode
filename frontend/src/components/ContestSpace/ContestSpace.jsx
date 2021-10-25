@@ -14,7 +14,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useStyles from "./styles";
 import { useForm } from "react-hook-form";
-import {API} from '../../api/index';
 import axios from "axios";
 const ContestSpace = () => {
   const [contests, setContests] = useState([]);

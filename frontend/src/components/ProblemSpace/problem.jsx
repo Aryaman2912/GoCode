@@ -10,6 +10,7 @@ import { Container, Row, Col } from 'react-grid-system';
 import UserInputOutput from '../CodingSpace/UserInputOutput';
 import axios from 'axios';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Problem = (props) => {
 
@@ -159,9 +160,11 @@ const Problem = (props) => {
                     <UserInputOutput text={userInput} onChange={setUserInput} isInput={true}/>
                     <Badge bg="success">Output</Badge>
                     <UserInputOutput text={userOutput} isInput={false}/>
+                    <Link to={'/submissions/' + problemID}>Submissions</Link>
                     </Col>
                     </Row>
                     </Container>
+                    
                 </>
             }
         </>

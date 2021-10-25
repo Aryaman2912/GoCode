@@ -1,6 +1,8 @@
 import Contests from "../models/contest";
 import GoCodeProblems from "../models/Gocodeproblems";
 import User from "../models/user";
+import ContestProblems from "../models/contestProblems";
+
 export const getPublicContests = async(req,res ) => {
     try{
         Contests.find({}, (err, contests) => {
@@ -58,23 +60,25 @@ export const addContest = async (req, res) => {
 }
 export const addProblem = async (req,res) => {
     try{
-        const {name, description, statement, tags, input, output, testInput, testOutput} = req.body;
-        // console.log(req.body);
+        const {contestId, hidden, name, statement, tags, input, output, testInput, testOutput} = req.body;
+        console.log(req.body);
         const data = {
-            name: name,
-            description: description,
-            statement: statement,
-            tags: tags,
-            input: input,
-            output:output,
-            testInput: testInput,
-            testOutput: testOutput,
-            hidden: 'true',
+            name: req.body.problemName,
+            description: 'description',
+            statement: req.body.problemStatement,
+            tags: req.body.tags,
+            input: req.body.sampleInput,
+            output: req.body.sampleOutput,
+            testInput: req.body.testInputs,
+            testOutput: req.body.testOutputs,
+            hidden: req.body.hidden
         }
-        // console.log(data);
+        console.log(data);
         const result = await GoCodeProblems.create(data);
-
-        res.status(200).json({result});
+        const result2 = await ContestProblems.create({contestId:req.body.contestId,problemId: result._id})
+        console.log(result);
+        // const result = await 
+        res.status(200).json({result2});
     } catch(err){
         console.log(err);
         res.status(500).json({message: err});

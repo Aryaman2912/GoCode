@@ -40,6 +40,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import * as actionType from "../constants/actionTypes";
+import Submissions from "./ProblemSpace/Submisssions";
 
 const drawerWidth = 300;
 
@@ -415,7 +416,10 @@ export default function MiniDrawer(props) {
             <Route exact path="/playlists/:id" component={AddPlaylist} />
             <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
+            <Route exact path="/submissions/:id" component={Submissions} />
           </Switch>
+
+
         </div>
       </main>
     </div>
