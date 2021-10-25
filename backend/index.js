@@ -10,6 +10,7 @@ import profileRouter from "./routes/profile.js";
 import Contests from './models/contest.js';
 import contestRouter from './routes/contest.js'
 import Profiles from './models/profile.js';
+import Playlists from './models/playlist.js';
 //import d from 'dotenv';
 //d.config();
 
