@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-// import MathJax from 'react-mathjax';
 import MathJax from 'mathjax3-react';
 import ReactLoading from 'react-loading';
 import { Typography } from '@material-ui/core';
 import './problem.css'
-import Editor from './Editor'
-import { Button, DropdownButton, Dropdown, Badge } from 'react-bootstrap';
-import axios from 'axios';
-import { API } from '../api/index';
+import Editor from '../CodingSpace/Editor'
+import { DropdownButton, Dropdown, Badge } from 'react-bootstrap';
+import { API } from '../../api/index';
 import { Container, Row, Col } from 'react-grid-system';
-import UserInputOutput from './UserInputOutput';
+import UserInputOutput from '../CodingSpace/UserInputOutput';
+import axios from 'axios';
+import { useHistory } from 'react-router';
 
 const Problem = (props) => {
 
@@ -18,40 +17,46 @@ const Problem = (props) => {
     const [loading, setLoading] = useState(true)
     const [testcases, setTestcases] = useState([])
     const [code, setCode] = useState('')
-    const [language, setLanguage] = useState('')
+    const [codeMirrorMode, setCodeMirrorMode] = useState('clike')
+    const [codeLanguage, setCodeLanguage] = useState('C++')
     const [userOutput, setuserOutput] = useState('')
 
+    const history = useHistory()
     const [userInput, setUserInput] = useState('')
 
     const languageOptions = {
-        "cpp": "clike",
-        "java": "clike",
-        "c": "clike",
-        "javascript": "javascript",
-        "pyton": "python"
+        "C++": "clike",
+        "Java": "clike",
+        "C": "clike",
+        "Python": "python"
     }
 
-    const arr = [
-        "cpp", "clike",
-        "java", "clike",
-        "c", "clike",
-        "javascript", "javascript",
-        "pyton", "python"
-    ]
-
-    const handleProblemSubmit = () => {
-        // console.log(JSON.stringify(problem.input[0]))
-        // const input = "1"
-        API.post('/compile/submit', {"code": code, "language": language, "userInput": userInput})
+    const buttonHandlerIDE = (type) => {
+        const storage = JSON.parse(localStorage.getItem('profile'))
+        // console.log(storage)
+        console.log(code)
+        if(storage === null) {
+            history.push('/auth')
+            return
+        }
+        let token = storage.token
+        const headers = {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Authorization': `Bearer ${token}`
+        }
+        axios.post('http://localhost:5000/compile/submit', 
+        {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type},
+        {headers: headers}
+        )
         .then( (res) => {
             console.log(res);
             setuserOutput(res.data.output)
         })
     }
 
-    const problemURL = 'http://localhost:5000/api/problem?problemID=' + props.match.params.id
-    // console.log(problemURL)
+    const problemID = props.match.params.id
     useEffect(() => {
+        let problemURL = `http://localhost:5000/api/problem?problemID=${problemID}`
         fetch(problemURL)
             .then((data) => data.json())
             .then(data => {
@@ -64,7 +69,24 @@ const Problem = (props) => {
                 }
                 setTestcases(tc)
             })
+        const localStorageCode = localStorage.getItem(`code_${problemID}`)
+        if(localStorageCode !== null) {
+            const jsonCode = JSON.parse(localStorageCode)
+            setCode(jsonCode['code'])
+            setCodeMirrorMode(jsonCode['codeMirrorMode'])
+            setCodeLanguage(jsonCode['codeLanguage'])
+        }
     }, [])
+
+    useEffect(() => {
+        let localIDEData = {
+            code: code,
+            codeMirrorMode: codeMirrorMode,
+            codeLanguage: codeLanguage
+        }
+        localStorage.setItem(`code_${problemID}`, JSON.stringify(localIDEData))
+    }, [code, codeMirrorMode, codeLanguage])
+
     const loadingOptions = {
         type: "spin",
         color: "#347deb",
@@ -115,31 +137,23 @@ const Problem = (props) => {
 
                     <div>
                         {testcases.map((testcase, i) => {
-                            return (<>
-                                <Typography variant='h6' style={{
-
-                                    color: 'white'
-                                }}>Input</Typography>
-
+                            return (<div>
+                                <Typography variant='h6' style={{color: 'white'}}>Input</Typography>
                                 <p style={{ whiteSpace: "pre-wrap", color: 'white' }}>{testcase[0]}</p><br></br>
-                                <Typography variant='h6' style={{
-
-                                    color: 'white'
-                                }}>Output</Typography>
+                                <Typography variant='h6' style={{color: 'white'}}>Output</Typography>
                                 <p style={{ whiteSpace: "pre-wrap", color: 'white' }}>{testcase[1]}</p><br></br><br></br>
-                            </>
-                            )
+                            </div>)
                         })}
                     </div>
                    
                     </Col>
                     <Col sm={6}>
-                    <DropdownButton id="dropdown-basic-button" title="Language">
+                    <DropdownButton id="dropdown-basic-button" title={codeLanguage}>
                         {Object.keys(languageOptions).map( (key, index) => {
-                            return (<Dropdown.Item href='#' onClick={() => setLanguage(languageOptions[key])}>{key}</Dropdown.Item>)
+                            return (<Dropdown.Item href='#' onClick={() => {setCodeMirrorMode(languageOptions[key]); setCodeLanguage(key)}}>{key}</Dropdown.Item>)
                         })}
                     </DropdownButton>
-                    <Editor code={code} language={language} onChange={setCode} handleSubmit={handleProblemSubmit}/>
+                    <Editor code={code} languageMode={codeMirrorMode} onChange={setCode} buttonHandlerIDE={buttonHandlerIDE}/>
                     <br/>
                     <Badge bg="success">Input</Badge>
                     <UserInputOutput text={userInput} onChange={setUserInput} isInput={true}/>

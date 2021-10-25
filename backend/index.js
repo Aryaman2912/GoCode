@@ -2,13 +2,14 @@ import express, { json, urlencoded } from 'express';
 // Use the latest stable(>12) version of nodejs
 import mongoose from 'mongoose';
 import cors from "cors";
-import  ProblemSet  from './models/problemSet.js';
+import  gocodeproblems  from './models/Gocodeproblems.js';
 const app = express();
 import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
 import profileRouter from "./routes/profile.js";
 import Contests from './models/contest.js';
 import contestRouter from './routes/contest.js'
+import submissionsRouter from './routes/submissions'
 import Profiles from './models/profile.js';
 import Playlists from './models/playlist.js';
 //import d from 'dotenv';
@@ -35,10 +36,11 @@ app.use(cors(corsOptions))
 app.use("/user", userRouter)
 app.use("/compile", compileRouter)
 app.use("/",contestRouter)
-app.use("/profile", profileRouter);
+app.use("/profile", profileRouter)
+app.use("/submissions", submissionsRouter)
 
 app.get("/api/problems", (req, res) => {
-    ProblemSet.find({}, (err, problems) => {
+    gocodeproblems.find({}, (err, problems) => {
         if(err) {
             res.json({
                 status: "failure"
@@ -52,29 +54,29 @@ app.get("/api/problems", (req, res) => {
 
 // MathJax Library used in the frontend doesn't need $$$ to know that the equation is in tex. (react-mathjax package)
 // Also the text needs to be enclosed in \text{} otherwise MathJax removes all the whitespaces 
-const convertStatement = (str) => {
-    let strarr = str.split('$$$')
+// const convertStatement = (str) => {
+//     let strarr = str.split('$$$')
 
-    let ans = '';
-    for(let i = 0; i < strarr.length; i++) {
-        if(i%2 == 0) {
-            ans += ' \\text{' + strarr[i] + '} '
-        } else {
-            ans += strarr[i]
-        }
-    }
-    console.log(ans);
-    return ans;
-}
+//     let ans = '';
+//     for(let i = 0; i < strarr.length; i++) {
+//         if(i%2 == 0) {
+//             ans += ' \\text{' + strarr[i] + '} '
+//         } else {
+//             ans += strarr[i]
+//         }
+//     }
+//     console.log(ans);
+//     return ans;
+// }
 
 
-app.post('/compile/submit', (req, res) => {
-    console.log(req.body)
-})
+// app.post('/compile/submit', (req, res) => {
+//     console.log(req.body)
+// })
 
 app.get("/api/problem", (req, res) => {
     const problemID = req.query.problemID;
-    ProblemSet.findById(problemID, (err, problem) => {
+    gocodeproblems.findById(problemID, (err, problem) => {
         if(err) {
             res.json({
                 status: "failure"

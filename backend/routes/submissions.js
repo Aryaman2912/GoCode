@@ -1,9 +1,9 @@
 import express from 'express';
 import auth from '../middleware/auth'
-import {problemCompilation} from '../controllers/compile';
+import {getProblemSubmissions} from '../controllers/submissions';
 
 const router = express.Router();
 
-router.post('/submit', auth, problemCompilation);
+router.get('/', auth, getProblemSubmissions);
 
 export default router;

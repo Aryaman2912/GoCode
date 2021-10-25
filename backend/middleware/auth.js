@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 // User makes a POST/PUT/DELETE request => Middleware is invoked to authenticate user => next() is invoked to continue the request.
 const auth = async (req, res, next) => {
     try {
+        // console.log(req.headers)
         const token = req.headers.authorization.split(" ")[1];
         const isCustomAuth = token.length < 500;
 
