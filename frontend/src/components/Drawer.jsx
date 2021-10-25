@@ -30,7 +30,9 @@ import Problem from "./ProblemSpace/problem";
 import Auth from "./Auth/Auth";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ContestSpace from "./ContestSpace/ContestSpace";
+import PlaylistSpace from "./PlaylistSpace/PlaylistSpace";
 import AddContest from "./ContestSpace/AddContest";
+import AddPlaylist from "./PlaylistSpace/AddPlaylist";
 import AddProblem from "./ContestSpace/AddProblem";
 import { useHistory } from "react-router";
 import InputBase from "@material-ui/core/InputBase";
@@ -369,7 +371,7 @@ export default function MiniDrawer(props) {
         <ListItem
           button
           key={"Playlist of Problems"}
-          onClick={() => history.push("/problems")}
+          onClick={() => history.push("/playlists")}
         >
           <ListItemIcon>
             <FeaturedPlayListIcon />
@@ -408,7 +410,9 @@ export default function MiniDrawer(props) {
             {/* <Route exact path='/contests' component={ContestSpace}>
             <ContestSpace />
           </Route> */}
+            <Route exact path="/playlists" component={PlaylistSpace} />
             <Route exact path="/addcontest/:id" component={AddContest} />
+            <Route exact path="/playlists/:id" component={AddPlaylist} />
             <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
           </Switch>
