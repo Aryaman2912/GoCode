@@ -171,6 +171,18 @@ const ContestSpace = () => {
                       </span>
                     )}
 
+                    <label className={classes.label} htmlFor="Description">
+                      Contest description:{" "}
+                    </label>
+                    <textarea
+                      name="Description"
+                      id="Description"
+                      placeholder="Enter the description"
+                      className={classes.input}
+                      {...register("Description", {
+                        required: "Description cannot be empty.",
+                      })}
+                    ></textarea>
                     <label className={classes.label} htmlFor="date">
                       Date:
                     </label>

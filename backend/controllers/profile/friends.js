@@ -1,7 +1,7 @@
-import Profiles from '../models/profile.js'
-import {currentUserId} from "../controllers/user.js"
-import User from '../models/profile.js'
-import auth from '../middleware/auth.js'
+import Profiles from '../../models/profile.js'
+import {currentUserId} from "../user.js"
+import User from '../../models/profile.js'
+import auth from '../../middleware/auth.js'
 
 // 'display' GET request
 export const displayFriends = function(req, res){
