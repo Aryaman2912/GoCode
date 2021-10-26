@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,6 +16,9 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
+import { Chip, Grid, Paper, Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -227,6 +229,70 @@ const AddContest = () => {
           background: "#424242",
         }}
       >
+        <Paper
+          style={{
+            margin: "2rem",
+            padding: "0.5rem 5rem",
+            borderRadius: "2rem",
+          }}
+        >
+          <Row style={{ display: "flex", justifyContent: "space-between" }}>
+            <Grid container>
+              <Grid item xs={12}>
+                <Row
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  {/* <Link to={problemURL + problem._id}> */}
+                  <Typography variant="h5"> Problem Name</Typography>
+                  {/* </Link> */}
+                  {/* <Row>
+                    <Typography
+                      variant="h7"
+                      style={{
+                        fontWeight: "bold",
+                        padding: "10px",
+                      }}
+                    >
+                      Score:
+                    </Typography>
+
+                    <Typography
+                      // component="div"
+                      style={{
+                        borderRadius: "10px",
+                        backgroundColor: "gray",
+                        color: "white",
+                        fontWeight: "bold",
+
+                        padding: "10px",
+                        //  paddingRight: "20px",
+                      }}
+                    >
+                      15
+                    </Typography>
+                  </Row> */}
+                  <DeleteForeverIcon fontSize="large"></DeleteForeverIcon>
+                </Row>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography component="span">Other Tags:</Typography>
+                {/* {problem.tags.map((p, i) => {
+                  return (
+                    <Chip
+                      size="small"
+                      label={p}
+                      key={i}
+                      style={{
+                        padding: "10px",
+                        margin: "5px",
+                      }}
+                    />
+                  );
+                })} */}
+              </Grid>
+            </Grid>
+          </Row>
+        </Paper>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             style={{
