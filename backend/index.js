@@ -9,7 +9,9 @@ import compileRouter from './routes/compile.js';
 import profileRouter from "./routes/profile.js";
 import Contests from './models/contest.js';
 import contestRouter from './routes/contest.js'
+import submissionsRouter from './routes/submissions'
 import Profiles from './models/profile.js';
+import Playlists from './routes/playlist';
 //import d from 'dotenv';
 //d.config();
 
@@ -32,9 +34,11 @@ const corsOptions ={
 app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
+app.use("/playlists", Playlists)
 app.use("/compile", compileRouter)
 app.use("/",contestRouter)
-app.use("/profile", profileRouter);
+app.use("/profile", profileRouter)
+app.use("/submissions", submissionsRouter)
 
 app.get("/api/problems", (req, res) => {
     gocodeproblems.find({}, (err, problems) => {
@@ -51,20 +55,20 @@ app.get("/api/problems", (req, res) => {
 
 // MathJax Library used in the frontend doesn't need $$$ to know that the equation is in tex. (react-mathjax package)
 // Also the text needs to be enclosed in \text{} otherwise MathJax removes all the whitespaces 
-const convertStatement = (str) => {
-    let strarr = str.split('$$$')
+// const convertStatement = (str) => {
+//     let strarr = str.split('$$$')
 
-    let ans = '';
-    for(let i = 0; i < strarr.length; i++) {
-        if(i%2 == 0) {
-            ans += ' \\text{' + strarr[i] + '} '
-        } else {
-            ans += strarr[i]
-        }
-    }
-    console.log(ans);
-    return ans;
-}
+//     let ans = '';
+//     for(let i = 0; i < strarr.length; i++) {
+//         if(i%2 == 0) {
+//             ans += ' \\text{' + strarr[i] + '} '
+//         } else {
+//             ans += strarr[i]
+//         }
+//     }
+//     console.log(ans);
+//     return ans;
+// }
 
 
 // app.post('/compile/submit', (req, res) => {

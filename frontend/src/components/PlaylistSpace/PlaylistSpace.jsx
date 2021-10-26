@@ -1,8 +1,7 @@
 import { useEffect, useState, React } from "react";
-import { useHistory } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import ReactLoading from "react-loading";
-import Contest from "./Contest";
+import Playlist from "./Playlist";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
@@ -14,21 +13,42 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useStyles from "./styles";
 import { useForm } from "react-hook-form";
+import {API} from '../../api/index';
 import axios from "axios";
-const ContestSpace = () => {
-  const [contests, setContests] = useState([]);
+import { useHistory } from 'react-router';
+
+const PlaylistSpace = () => {
+  const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory()
+
+
+
+
   useEffect(() => {
-    fetch("http://localhost:5000/api/contests")
+    const storage = JSON.parse(localStorage.getItem('profile'))
+    if(storage === null) {
+        history.push('/auth')
+        return
+    }
+    let token = storage.token
+    const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': `Bearer ${token}`
+    }
+
+    fetch("http://localhost:5000/playlists", {headers: headers})
       .then((data) => data.json())
       .then((data) => {
-        let tempcontests = [];
-        data.forEach((contest) => {
-          if (contest.isPublic) {
-            tempcontests.push(contest);
-          }
-        });
-        setContests(tempcontests);
+        // let tempcontests = [];
+        // data.forEach((contest) => {
+        //   if (contest.isPublic) {
+        //     tempcontests.push(contest);
+        //   }
+        // });
+
+        console.log(data);
+        setPlaylists(data);
         setLoading(false);
       });
   }, []);
@@ -48,7 +68,6 @@ const ContestSpace = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const history = useHistory();
 
   const [formData, setFormData] = useState('')
   const {
@@ -63,17 +82,32 @@ const ContestSpace = () => {
   }
 
   const onSubmit = (data) => {
-    const time = data.time.split(':');
-    data.date.setHours(time[0]);
-    data.date.setMinutes(time[1]);
+    // const time = data.time.split(':');
+    // data.date.setHours(time[0]);
+    // data.date.setMinutes(time[1]);
     const userId = JSON.parse(localStorage.getItem('profile'))['result']['_id'];
-    data['hostId'] = userId;
-    data['duration'] = String(data['duration']) + " hrs"
-    delete data['time'];
-    axios.post('http://localhost:5000/api/addcontest',
-      data
+    data['userId'] = userId;
+    data['name'] = data.playlistName
+    // data['duration'] = String(data['duration']) + " hrs"
+    // delete data['time'];
+    const storage = JSON.parse(localStorage.getItem('profile'))
+    if(storage === null) {
+        history.push('/auth')
+        return
+    }
+    let token = storage.token
+    const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': `Bearer ${token}`
+    }
+    console.log(data)
+    axios.post('http://localhost:5000/playlists/create',
+      data, {headers: headers}
     )
-      .then((res) => history.push('/addcontest/'+ res.data.result._id))
+      .then((res) => {
+        console.log(res.data._id)
+        history.push('/addplaylist/' + res.data._id)
+      })
       .catch((err) => console.log(err))
     
   };
@@ -124,7 +158,7 @@ const ContestSpace = () => {
                       marginLeft: "10px",
                     }}
                   >
-                    Create Contest
+                    Create Playlist
                   </Typography>
                 </Row>
               </Button>
@@ -133,7 +167,7 @@ const ContestSpace = () => {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
               >
-                <DialogTitle id="form-dialog-title">Create Contest</DialogTitle>
+                <DialogTitle id="form-dialog-title">Create Playlist</DialogTitle>
                 <DialogContent
                   style={{
                     width: "35rem",
@@ -144,76 +178,20 @@ const ContestSpace = () => {
                     className={classes.form}
                     onSubmit={handleSubmit(onSubmit)}
                   >
-                    <label className={classes.label} htmlFor="contestName">
-                      Contest Name:
+                    <label className={classes.label} htmlFor="playlistName">
+                      Playlist Name:
                     </label>
 
                     <input onChange={handleChange}
                       className={classes.input}
-                      {...register("contestName", {
-                        required: "Contest name cannot be empty.",
+                      {...register("playlistName", {
+                        required: "Playlist name cannot be empty.",
                       })}
-                      id="contestName"
+                      id="playlistName"
                     />
-                    {errors.contestName && (
+                    {errors.playlistName && (
                       <span className={classes.p}>
-                        {errors.contestName.message}
-                      </span>
-                    )}
-
-                  <label className={classes.label} htmlFor="Description">
-                    Contest description:{" "}
-                  </label>
-                  <textarea
-                    name="Description"
-                    id="Description"
-                    placeholder="Enter the description"
-                    className={classes.input}
-                    {...register("Description", {
-                      required: "Description cannot be empty.",
-                    })}
-                  ></textarea>      
-                    <label className={classes.label} htmlFor="date">
-                      Date:
-                    </label>
-                    <input onChange={handleChange}
-                      className={classes.input}
-                      type="date" data-date="" data-date-format="DD MMMM YYYY" v
-                      {...register("date", {
-                        required: "Contest Date cannot be empty.",
-                        valueAsDate: true,
-                      })}
-                    />
-                    {errors.date && (
-                      <span className={classes.p}>{errors.date.message}</span>
-                    )}
-                    <label className={classes.label} htmlFor="time">
-                      Start Time:
-                    </label>
-                    <input onChange={handleChange}
-                      className={classes.input}
-                      type="time"
-                      {...register("time", {
-                        required: true,
-                        valueAsTime: true,
-                      })}
-                    />
-                    <label className={classes.label} htmlFor="duration">
-                      Duration(hrs)
-                    </label>
-                    <input onChange={handleChange}
-                      className={classes.input}
-                      type="number"
-                      step="0.5"
-                      {...register("duration", {
-                        required: "Contest Duration cannot be empty.",
-                        valueAsNumber: true,
-                      })}
-                      id="duration"
-                    />
-                    {errors.duration && (
-                      <span className={classes.p}>
-                        {errors.duration.message}
+                        {errors.playlistName.message}
                       </span>
                     )}
                     <input 
@@ -239,17 +217,17 @@ const ContestSpace = () => {
                 color: "white",
               }}
             >
-              Public Contests
+              Public Playlist
             </Typography>
 
-            <Contest data={contests} />
+            <Playlist data={playlists} />
             <Typography
               variant="h4"
               style={{
                 color: "white",
               }}
             >
-              Invited Contests
+              Invited Playlist
             </Typography>
           </div>
         </>
@@ -258,4 +236,4 @@ const ContestSpace = () => {
   );
 };
 
-export default ContestSpace;
+export default PlaylistSpace;

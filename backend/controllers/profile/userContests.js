@@ -1,10 +1,10 @@
-import Profiles from '../models/profile.js'
-import {currentUserId} from "./user.js"
-import User from '../models/profile.js'
-import auth from '../middleware/auth.js'
+import Profiles from '../../models/profile.js'
+import {currentUserId} from "../user.js"
+import User from '../../models/profile.js'
+import auth from '../../middleware/auth.js'
 
 // 'display' GET request
-export const displayProblems = function(req, res){
+export const displayContests = function(req, res){
     try{
         Profiles.findOne({userId: req.userId}, function(error, profile){
             if(error){
@@ -14,7 +14,7 @@ export const displayProblems = function(req, res){
             else{
                 //console.log(currentUserId);
                 //console.log(profile);
-                res.send(profile.problems);
+                res.send(profile.givenContests);
             }
         });
     }
@@ -23,4 +23,3 @@ export const displayProblems = function(req, res){
         res.status(500).json({message: error});
     }
 };
-

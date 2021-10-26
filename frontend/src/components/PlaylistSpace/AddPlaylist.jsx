@@ -1,6 +1,6 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CircularProgress, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -17,9 +17,6 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
-import axios from 'axios';
-import { useHistory } from "react-router";
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -169,46 +166,18 @@ const tags = [
   { value: "stack", label: "stack" },
   { value: "queue", label: "queue" },
 ];
-const AddContest = (props) => {
+const AddPlaylist = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const history = useHistory();
-  const [contestsOverview,setcontestsOverview] = useState();
-  useEffect(() => {
-    fetch('http://localhost:5000/api/contests/' + props.match.params.id)
-    .then((data) => data.json())
-    .then((data) => {
-      console.log(data);
-      setcontestsOverview(data);
-    })
-  },[])
-  
-  const [loadingProblemSubmit,setloadingProblemSubmit] = useState(false);
   const onSubmit = (data) => {
-    data['tags'] = selectedOptions;
-    data['hidden'] = true;
-    data['contestId'] = props.match.params.id;
-    console.log(data)
-    setloadingProblemSubmit(true);
-    axios.post('http://localhost:5000/api/addproblem',
-    data
-    )
-      .then((res) => {
-        setloadingProblemSubmit(false)
-        setOpen(false);
-
-      })
-      .catch((err) => console.log(err));
-
+    console.log(data);
   };
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -216,18 +185,9 @@ const AddContest = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleChange = (event,newValue) => {
+
+  const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleDropdownChange = (event) => {
-    console.log(event);
-    let tagsArray = [];
-    event.map(o => 
-       tagsArray.push(o.value)
-   );
-
-   setSelectedOptions(tagsArray);
   };
   return (
     <div className={classes.root}>
@@ -256,11 +216,8 @@ const AddContest = (props) => {
           background: "#424242",
         }}
       >
-        {contestsOverview.name}<br/>
-        {contestsOverview.Host}<br/>
-        {contestsOverview.Duration}<br/>
-        {contestsOverview.isPublic}<br/>
-        </TabPanel>
+        Item One
+      </TabPanel>
       <TabPanel
         value={value}
         index={1}
@@ -328,12 +285,8 @@ const AddContest = (props) => {
                 </label>
                 <textarea
                   name="problemStatement"
-                  id="problemStatement"
                   placeholder="Enter the problem statement"
                   className={classes.input}
-                  {...register("problemStatement", {
-                    required: "Problem statement cannot be empty.",
-                  })}
                 ></textarea>
                 {errors.problemStatement && (
                   <span className={classes.p}>
@@ -343,7 +296,7 @@ const AddContest = (props) => {
                 <label className={classes.label} htmlFor="tags">
                   Tags:{" "}
                 </label>
-                <Select id="tags" onChange={handleDropdownChange} className={classes.dropdown} isMulti options={tags}/>
+                <Select className={classes.dropdown} isMulti options={tags} />
                 <label className={classes.label} htmlFor="sampleInput">
                   Sample input:{" "}
                 </label>
@@ -352,7 +305,6 @@ const AddContest = (props) => {
                     height: "8rem",
                   }}
                   name="sampleInput"
-                  id="sampleInput"
                   placeholder="Separate sample inputs using ~                                                                                                                                                       
                   Ex:                                                                                                                                                             
                   abc                                                                                                                                                                                                                                            
@@ -360,9 +312,6 @@ const AddContest = (props) => {
                   def                                                                                                                                           
                   ~"
                   className={classes.input}
-                  {...register("sampleInput", {
-                    required: "Sample input cannot be empty.",
-                  })}
                 ></textarea>
                 <label className={classes.label} htmlFor="sampleInput">
                   Sample output:{" "}
@@ -371,7 +320,6 @@ const AddContest = (props) => {
                   style={{
                     height: "8rem",
                   }}
-                  id="sampleOutput"
                   name="sampleOutput"
                   placeholder="Separate sample outputs using ~                                                                                                                                                       
                   Ex:                                                                                                                                                             
@@ -380,42 +328,28 @@ const AddContest = (props) => {
                   456                                                                                                                                          
                   ~"
                   className={classes.input}
-                  {...register("sampleOutput", {
-                    required: "Sample output cannot be empty.",
-                  })}
                 ></textarea>
                 <label className={classes.label} htmlFor="testInputs">
                   Test inputs:{" "}
                 </label>
                 <textarea
                   name="testInputs"
-                  id="testInputs"
                   placeholder="Enter Testinputs similar to sample inputs"
                   className={classes.input}
-                  {...register("testInputs", {
-                    required: "Test inputs cannot be empty.",
-                  })}
                 ></textarea>
                 <label className={classes.label} htmlFor="testOutputs">
                   Test outputs:{" "}
                 </label>
                 <textarea
                   name="testOutputs"
-                  id="testOutputs"
                   placeholder="Enter Testoutputs similar to sample outputs"
                   className={classes.input}
-                  {...register("testOutputs", {
-                    required: "Test outputs cannot be empty.",
-                  })}
                 ></textarea>
-                {loadingProblemSubmit ? < CircularProgress style={{ display: "flex", justifyContent: "center" }} disableShrink /> :
-
                 <input
                   className={classes.submitButton}
                   value="Next"
                   type="submit"
                 />
-                }
               </form>
             </DialogContent>
             <DialogActions>
@@ -444,4 +378,4 @@ const AddContest = (props) => {
   );
 };
 
-export default AddContest;
+export default AddPlaylist;
