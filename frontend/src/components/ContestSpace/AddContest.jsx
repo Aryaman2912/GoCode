@@ -18,6 +18,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 import { useHistory } from "react-router";
 
 function TabPanel(props) {
@@ -178,12 +179,20 @@ const AddContest = (props) => {
 
   const history = useHistory();
   const [contestsOverview,setcontestsOverview] = useState();
+  const [loading, setLoading] = useState(true)
+
+  const loadingOptions = {
+    type: "spin",
+    color: "#347deb",
+}
+
   useEffect(() => {
     fetch('http://localhost:5000/api/contests/' + props.match.params.id)
     .then((data) => data.json())
     .then((data) => {
       console.log(data);
       setcontestsOverview(data);
+      setLoading(false)
     })
   },[])
   
@@ -230,225 +239,236 @@ const AddContest = (props) => {
    setSelectedOptions(tagsArray);
   };
   return (
-    <div className={classes.root}>
-      <AppBar
-        position="static"
-        style={{
-          background: "grey",
-        }}
-      >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="simple tabs example"
-        >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Challenges" {...a11yProps(1)} />
-          <Tab label="Settings" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel
-        value={value}
-        index={0}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
+    <div>
+            {loading ? <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '90vh'
+            }}><ReactLoading type={loadingOptions.type} color={loadingOptions.color} height={100} width={100} /></div> :(
+                <div className={classes.root}>
+                <AppBar
+                  position="static"
+                  style={{
+                    background: "grey",
+                  }}
+                >
+                  <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="simple tabs example"
+                  >
+                    <Tab label="Overview" {...a11yProps(0)} />
+                    <Tab label="Challenges" {...a11yProps(1)} />
+                    <Tab label="Settings" {...a11yProps(2)} />
+                  </Tabs>
+                </AppBar>
+                <TabPanel
+                  value={value}
+                  index={0}
+                  style={{
+                    display: "auto",
+                    minHeight: "50rem",
+                    background: "#424242",
+                  }}
+                >
+                  
+                  {contestsOverview?
+                  (
+                    <p>
+                    {contestsOverview.name}
+                    {contestsOverview.Host}
+                    {contestsOverview.Duration}
+                    {contestsOverview.isPublic}
+                    </p>
+                  ):(
+                      <></>
+                    )
+                  } 
+                  </TabPanel>
+                <TabPanel
+                  value={value}
+                  index={1}
+                  style={{
+                    display: "auto",
+                    minHeight: "50rem",
+                    background: "#424242",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Button
+                      style={{
+                        color: "white",
+                        padding: "1rem 2rem ",
+                        borderColor: "white",
+                        // marginLeft: "auto",
+                        background: "#006633",
+                      }}
+                      variant="contained"
+                      onClick={handleClickOpen}
+                    >
+                      <Row>
+                        <AddIcon />
+                        <Typography
+                          style={{
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Add a Challenge
+                        </Typography>
+                      </Row>
+                    </Button>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                    >
+                      <DialogTitle id="form-dialog-title">Create Problem</DialogTitle>
+                      <DialogContent
+                        style={{
+                          width: "35rem",
+                        }}
+                      >
+                        <DialogContentText></DialogContentText>
+                        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+                          <label className={classes.label} htmlFor="problemName">
+                            Problem Name:
+                          </label>
         
-        {contestsOverview?
-        (
-          <p>
-          {contestsOverview.name}
-          {contestsOverview.Host}
-          {contestsOverview.Duration}
-          {contestsOverview.isPublic}
-          </p>
-        ):(
-            <></>
-          )
-        } 
-        </TabPanel>
-      <TabPanel
-        value={value}
-        index={1}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            style={{
-              color: "white",
-              padding: "1rem 2rem ",
-              borderColor: "white",
-              // marginLeft: "auto",
-              background: "#006633",
-            }}
-            variant="contained"
-            onClick={handleClickOpen}
-          >
-            <Row>
-              <AddIcon />
-              <Typography
-                style={{
-                  marginLeft: "10px",
-                }}
-              >
-                Add a Challenge
-              </Typography>
-            </Row>
-          </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Create Problem</DialogTitle>
-            <DialogContent
-              style={{
-                width: "35rem",
-              }}
-            >
-              <DialogContentText></DialogContentText>
-              <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-                <label className={classes.label} htmlFor="problemName">
-                  Problem Name:
-                </label>
-
-                <input
-                  className={classes.input}
-                  {...register("problemName", {
-                    required: "Problem name cannot be empty.",
-                  })}
-                  id="problemName"
-                />
-                {errors.problemName && (
-                  <span className={classes.p}>
-                    {errors.problemName.message}
-                  </span>
-                )}
-
-                <label className={classes.label} htmlFor="problemStatement">
-                  Problem Statement:{" "}
-                </label>
-                <textarea
-                  name="problemStatement"
-                  id="problemStatement"
-                  placeholder="Enter the problem statement"
-                  className={classes.input}
-                  {...register("problemStatement", {
-                    required: "Problem statement cannot be empty.",
-                  })}
-                ></textarea>
-                {errors.problemStatement && (
-                  <span className={classes.p}>
-                    {errors.problemStatement.message}
-                  </span>
-                )}
-                <label className={classes.label} htmlFor="tags">
-                  Tags:{" "}
-                </label>
-                <Select id="tags" onChange={handleDropdownChange} className={classes.dropdown} isMulti options={tags}/>
-                <label className={classes.label} htmlFor="sampleInput">
-                  Sample input:{" "}
-                </label>
-                <textarea
+                          <input
+                            className={classes.input}
+                            {...register("problemName", {
+                              required: "Problem name cannot be empty.",
+                            })}
+                            id="problemName"
+                          />
+                          {errors.problemName && (
+                            <span className={classes.p}>
+                              {errors.problemName.message}
+                            </span>
+                          )}
+        
+                          <label className={classes.label} htmlFor="problemStatement">
+                            Problem Statement:{" "}
+                          </label>
+                          <textarea
+                            name="problemStatement"
+                            id="problemStatement"
+                            placeholder="Enter the problem statement"
+                            className={classes.input}
+                            {...register("problemStatement", {
+                              required: "Problem statement cannot be empty.",
+                            })}
+                          ></textarea>
+                          {errors.problemStatement && (
+                            <span className={classes.p}>
+                              {errors.problemStatement.message}
+                            </span>
+                          )}
+                          <label className={classes.label} htmlFor="tags">
+                            Tags:{" "}
+                          </label>
+                          <Select id="tags" onChange={handleDropdownChange} className={classes.dropdown} isMulti options={tags}/>
+                          <label className={classes.label} htmlFor="sampleInput">
+                            Sample input:{" "}
+                          </label>
+                          <textarea
+                            style={{
+                              height: "8rem",
+                            }}
+                            name="sampleInput"
+                            id="sampleInput"
+                            placeholder="Separate sample inputs using ~                                                                                                                                                       
+                            Ex:                                                                                                                                                             
+                            abc                                                                                                                                                                                                                                            
+                            ~                                                                                                                            
+                            def                                                                                                                                           
+                            ~"
+                            className={classes.input}
+                            {...register("sampleInput", {
+                              required: "Sample input cannot be empty.",
+                            })}
+                          ></textarea>
+                          <label className={classes.label} htmlFor="sampleInput">
+                            Sample output:{" "}
+                          </label>
+                          <textarea
+                            style={{
+                              height: "8rem",
+                            }}
+                            id="sampleOutput"
+                            name="sampleOutput"
+                            placeholder="Separate sample outputs using ~                                                                                                                                                       
+                            Ex:                                                                                                                                                             
+                            123                                                                                                                                                                                                                                            
+                            ~                                                                                                                            
+                            456                                                                                                                                          
+                            ~"
+                            className={classes.input}
+                            {...register("sampleOutput", {
+                              required: "Sample output cannot be empty.",
+                            })}
+                          ></textarea>
+                          <label className={classes.label} htmlFor="testInputs">
+                            Test inputs:{" "}
+                          </label>
+                          <textarea
+                            name="testInputs"
+                            id="testInputs"
+                            placeholder="Enter Testinputs similar to sample inputs"
+                            className={classes.input}
+                            {...register("testInputs", {
+                              required: "Test inputs cannot be empty.",
+                            })}
+                          ></textarea>
+                          <label className={classes.label} htmlFor="testOutputs">
+                            Test outputs:{" "}
+                          </label>
+                          <textarea
+                            name="testOutputs"
+                            id="testOutputs"
+                            placeholder="Enter Testoutputs similar to sample outputs"
+                            className={classes.input}
+                            {...register("testOutputs", {
+                              required: "Test outputs cannot be empty.",
+                            })}
+                          ></textarea>
+                          {loadingProblemSubmit ? < CircularProgress style={{ display: "flex", justifyContent: "center" }} disableShrink /> :
+        
+                          <input
+                            className={classes.submitButton}
+                            value="Next"
+                            type="submit"
+                          />
+                          }
+                        </form>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                          Cancel
+                        </Button>
+                        {/* <Button onClick={handleClose} color="primary">
+                              Subscribe
+                            </Button> */}
+                      </DialogActions>
+                    </Dialog>
+                  </div>
+                </TabPanel>
+                <TabPanel
+                  value={value}
+                  index={2}
                   style={{
-                    height: "8rem",
+                    display: "auto",
+                    minHeight: "50rem",
+                    background: "#424242",
                   }}
-                  name="sampleInput"
-                  id="sampleInput"
-                  placeholder="Separate sample inputs using ~                                                                                                                                                       
-                  Ex:                                                                                                                                                             
-                  abc                                                                                                                                                                                                                                            
-                  ~                                                                                                                            
-                  def                                                                                                                                           
-                  ~"
-                  className={classes.input}
-                  {...register("sampleInput", {
-                    required: "Sample input cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="sampleInput">
-                  Sample output:{" "}
-                </label>
-                <textarea
-                  style={{
-                    height: "8rem",
-                  }}
-                  id="sampleOutput"
-                  name="sampleOutput"
-                  placeholder="Separate sample outputs using ~                                                                                                                                                       
-                  Ex:                                                                                                                                                             
-                  123                                                                                                                                                                                                                                            
-                  ~                                                                                                                            
-                  456                                                                                                                                          
-                  ~"
-                  className={classes.input}
-                  {...register("sampleOutput", {
-                    required: "Sample output cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="testInputs">
-                  Test inputs:{" "}
-                </label>
-                <textarea
-                  name="testInputs"
-                  id="testInputs"
-                  placeholder="Enter Testinputs similar to sample inputs"
-                  className={classes.input}
-                  {...register("testInputs", {
-                    required: "Test inputs cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="testOutputs">
-                  Test outputs:{" "}
-                </label>
-                <textarea
-                  name="testOutputs"
-                  id="testOutputs"
-                  placeholder="Enter Testoutputs similar to sample outputs"
-                  className={classes.input}
-                  {...register("testOutputs", {
-                    required: "Test outputs cannot be empty.",
-                  })}
-                ></textarea>
-                {loadingProblemSubmit ? < CircularProgress style={{ display: "flex", justifyContent: "center" }} disableShrink /> :
+                >
+                  Item Three
+                </TabPanel>
+              </div>
+            )
+            }
 
-                <input
-                  className={classes.submitButton}
-                  value="Next"
-                  type="submit"
-                />
-                }
-              </form>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              {/* <Button onClick={handleClose} color="primary">
-                    Subscribe
-                  </Button> */}
-            </DialogActions>
-          </Dialog>
-        </div>
-      </TabPanel>
-      <TabPanel
-        value={value}
-        index={2}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
-        Item Three
-      </TabPanel>
     </div>
   );
 };
