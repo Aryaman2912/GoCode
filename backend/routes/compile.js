@@ -4,6 +4,6 @@ import {problemCompilation} from '../controllers/compile';
 
 const router = express.Router();
 
-router.post('/submit', auth, problemCompilation);
+router.post('/', auth, problemCompilation);
 
 export default router;

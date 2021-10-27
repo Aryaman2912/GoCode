@@ -45,7 +45,7 @@ const Problem = (props) => {
             'Content-Type': 'application/json;charset=UTF-8',
             'Authorization': `Bearer ${token}`
         }
-        axios.post('http://localhost:5000/compile/submit', 
+        axios.post('http://localhost:5000/api/compile', 
         {"code": code, "language": codeLanguage, "userInput": userInput, "problemID": problem._id, "submissionType": type},
         {headers: headers}
         )
@@ -57,7 +57,7 @@ const Problem = (props) => {
 
     const problemID = props.match.params.id
     useEffect(() => {
-        let problemURL = `http://localhost:5000/api/problem?problemID=${problemID}`
+        let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`
         fetch(problemURL)
             .then((data) => data.json())
             .then(data => {
