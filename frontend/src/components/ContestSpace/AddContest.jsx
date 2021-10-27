@@ -256,10 +256,19 @@ const AddContest = (props) => {
           background: "#424242",
         }}
       >
-        {contestsOverview.name}<br/>
-        {contestsOverview.Host}<br/>
-        {contestsOverview.Duration}<br/>
-        {contestsOverview.isPublic}<br/>
+        
+        {contestsOverview?
+        (
+          <p>
+          {contestsOverview.name}
+          {contestsOverview.Host}
+          {contestsOverview.Duration}
+          {contestsOverview.isPublic}
+          </p>
+        ):(
+            <></>
+          )
+        } 
         </TabPanel>
       <TabPanel
         value={value}
