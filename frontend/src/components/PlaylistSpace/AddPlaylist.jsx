@@ -1,6 +1,6 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Container } from "@material-ui/core";
+import { CircularProgress, Container } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -17,6 +17,9 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
+import axios from 'axios';
+import ReactLoading from 'react-loading';
+import { useHistory } from "react-router";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -166,14 +169,37 @@ const tags = [
   { value: "stack", label: "stack" },
   { value: "queue", label: "queue" },
 ];
-const AddPlaylist = () => {
+const AddPlaylist = (props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [loadingProblemSubmit,setloadingProblemSubmit] = useState(false);
   const onSubmit = (data) => {
-    console.log(data);
+    // data['tags'] = selectedOptions;
+    // data['hidden'] = true;
+    // data['contestId'] = props.match.params.id;
+    console.log(data)
+    setloadingProblemSubmit(true);
+    console.log(props);
+    axios.post(`http://localhost:5000/playlists/edit/${props.match.params.id}`,
+    data
+    )
+      .then((res) => {
+        setloadingProblemSubmit(false)
+        setOpen(false);
+
+      })
+      .catch((err) => console.log(err));
+    // axios.post('http://localhost:5000/playlists/create',
+    //   data, {headers: headers}
+    // )
+    //   .then((res) => {
+    //     console.log(res.data._id)
+    //     history.push('/addplaylist/' + res.data._id)
+    //   })
+    //   .catch((err) => console.log(err))
   };
   const classes = useStyles();
   const [value, setValue] = useState(0);
@@ -280,7 +306,7 @@ const AddPlaylist = () => {
                   </span>
                 )}
 
-                <label className={classes.label} htmlFor="problemStatement">
+                {/* <label className={classes.label} htmlFor="problemStatement">
                   Problem Statement:{" "}
                 </label>
                 <textarea
@@ -344,12 +370,15 @@ const AddPlaylist = () => {
                   name="testOutputs"
                   placeholder="Enter Testoutputs similar to sample outputs"
                   className={classes.input}
-                ></textarea>
+                ></textarea> */}
+                {loadingProblemSubmit ? < CircularProgress style={{ display: "flex", justifyContent: "center" }} disableShrink /> :
+        
                 <input
                   className={classes.submitButton}
                   value="Next"
                   type="submit"
                 />
+                }
               </form>
             </DialogContent>
             <DialogActions>
