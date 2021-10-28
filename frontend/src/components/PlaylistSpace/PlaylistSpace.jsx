@@ -194,6 +194,18 @@ const PlaylistSpace = () => {
                         {errors.playlistName.message}
                       </span>
                     )}
+                    <label className={classes.label} htmlFor="description">
+                    Playlist description:{" "}
+                  </label>
+                  <textarea
+                    name="description"
+                    id="description"
+                    placeholder="Enter the description"
+                    className={classes.input}
+                    {...register("description", {
+                      required: "Description cannot be empty.",
+                    })}
+                  ></textarea> 
                     <input 
                       className={classes.submitButton}
                       value="Next"

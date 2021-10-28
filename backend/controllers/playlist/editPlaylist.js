@@ -1,5 +1,6 @@
 import Playlists from '../../models/playlist.js';
 import auth from '../../middleware/auth.js'
+import gocodeproblems from '../../models/Gocodeproblems.js';
 
 // display the current playlist "get" request
 export const showPlaylist = function(req, res){
@@ -23,20 +24,46 @@ export const showPlaylist = function(req, res){
 // add a problem to the current playlist "post" request
 export const addProblem = function(req, res){
     try{
-        const {problem} = req.body;
-
-        Playlists.findById(req.params.id, function(error, playlist){
-            if(error){
-                res.json({status: "failure"});
+        //console.log(req.body);
+        const problemName = req.body.problemName;
+        console.log(problemName);
+        gocodeproblems.findOne({name: req.body.problemName}, (err, problem) => {
+            console.log(problem);
+            if(err) {
+                res.json({
+                    status: "failure"
+                })
+            } else {
+                Playlists.findById(req.params.id, function(error, playlist){
+                    if(error){
+                        res.json({status: "failure"});
+                    }
+        
+                    else{
+                        playlist.problems.addToSet(problem._id);
+                        playlist.save();
+                        console.log("Problem added!");
+                        //res.send("Problem added!");
+                    }
+                });
             }
+        })
+        // var problem = gocodeproblems.findOne({name: req.body.problemName});
+        // console.log(problem);
+        // console.log(problem._id);
 
-            else{
-                playlist.problems.addToSet(problem);
-                playlist.save();
-                console.log("Problem added!");
-                //res.send("Problem added!");
-            }
-        });
+        // Playlists.findById(req.params.id, function(error, playlist){
+        //     if(error){
+        //         res.json({status: "failure"});
+        //     }
+
+        //     else{
+        //         playlist.problems.addToSet(problem._id);
+        //         playlist.save();
+        //         console.log("Problem added!");
+        //         //res.send("Problem added!");
+        //     }
+        // });
     }
 
     catch(error){
