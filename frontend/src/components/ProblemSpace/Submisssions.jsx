@@ -28,7 +28,7 @@ const Submissions = (props) => {
             'Content-Type': 'application/json;charset=UTF-8',
             'Authorization': `Bearer ${token}`
         }
-        fetch(`http://localhost:5000/submissions?problemID=${props.match.params.id}`, {
+        fetch(`http://localhost:5000/api/submissions?problemID=${props.match.params.id}`, {
             method: 'GET',
             headers:headers
         })
