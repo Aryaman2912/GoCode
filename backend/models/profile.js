@@ -6,11 +6,11 @@ const profileSchema = new Schema({
     rating: {type: Number},
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}],
     problems: [{
-        problemID: {type: Schema.Types.ObjectId},
+        problemID: {type: Schema.Types.ObjectId, ref: 'GoCodeProblems'},
         verdict: {type: String},
         timeStamp: {type: Date, default: Date.now},
         code: {type: String},
-        language: {type: String}
+        language: {type: String},
     }],
     createdContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}],
     givenContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}]

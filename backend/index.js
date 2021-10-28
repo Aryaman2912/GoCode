@@ -10,6 +10,7 @@ import contestRouter from './routes/contest.js'
 import submissionsRouter from './routes/submissions'
 import Playlists from './routes/playlist';
 import problemRouter from './routes/problems';
+import pbsRouter from './routes/pbs.js';
 //import d from 'dotenv';
 //d.config();
 
@@ -38,7 +39,7 @@ app.use("/profile", profileRouter)
 app.use("/api/compile", compileRouter)
 app.use("/api/submissions", submissionsRouter)
 app.use("/api/problems", problemRouter)
-
+app.use("/api/pbs", pbsRouter)
 
 
 app.listen(5000, () => {
