@@ -1,6 +1,6 @@
 import express from 'express';
 
-import getProblemController from '../controllers/problems'; 
+import getProblemController from '../controllers/problems.js'; 
 
 const router = express.Router();
 

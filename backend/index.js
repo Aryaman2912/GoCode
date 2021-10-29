@@ -7,10 +7,9 @@ import userRouter from './routes/user.js';
 import compileRouter from './routes/compile.js';
 import profileRouter from "./routes/profile.js";
 import contestRouter from './routes/contest.js'
-import submissionsRouter from './routes/submissions'
-import Playlists from './routes/playlist';
-import problemRouter from './routes/problems';
-import pbsRouter from './routes/pbs.js';
+import submissionsRouter from './routes/submissions.js'
+import Playlists from './routes/playlist.js';
+import problemRouter from './routes/problems.js';
 //import d from 'dotenv';
 //d.config();
 
@@ -19,6 +18,12 @@ import pbsRouter from './routes/pbs.js';
 
 app.use(json());
 app.use(urlencoded({extended: true}));
+
+/* For testing */
+// mongoose.connect('mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/Test-GoCode?retryWrites=true&w=majority', (err) => {
+//     console.log("Connected to the database");
+//     app.emit('connected')
+// })
 
 mongoose.connect(process.env.GOCODE_URI, (err) => {
     console.log("Connected to the database");
@@ -39,9 +44,10 @@ app.use("/profile", profileRouter)
 app.use("/api/compile", compileRouter)
 app.use("/api/submissions", submissionsRouter)
 app.use("/api/problems", problemRouter)
-app.use("/api/pbs", pbsRouter)
-
 
 app.listen(5000, () => {
     console.log("Server started...");
 })
+
+
+export default app
