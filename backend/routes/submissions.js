@@ -1,6 +1,6 @@
 import express from 'express';
-import auth from '../middleware/auth'
-import {getProblemSubmissions} from '../controllers/submissions';
+import auth from '../middleware/auth.js'
+import {getProblemSubmissions} from '../controllers/submissions.js';
 
 const router = express.Router();
 

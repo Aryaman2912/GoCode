@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 100000",
+    "test": "mocha --timeout 10000000",
     "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js"
   },
   "keywords": [],
