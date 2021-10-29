@@ -1,6 +1,6 @@
 import axios from 'axios';
-import Profile from '../models/profile'
-import GoCodeProblems from '../models/Gocodeproblems'
+import Profile from '../models/profile.js'
+import GoCodeProblems from '../models/Gocodeproblems.js'
 
 const RESOLVER = {
     "C++": "cpp17",

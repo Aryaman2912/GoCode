@@ -1,7 +1,7 @@
-import Contests from "../models/contest";
-import GoCodeProblems from "../models/Gocodeproblems";
-import User from "../models/user";
-import ContestProblems from "../models/contestProblems";
+import Contests from "../models/contest.js";
+import GoCodeProblems from "../models/Gocodeproblems.js";
+import User from "../models/user.js";
+import ContestProblems from "../models/contestProblems.js";
 
 export const getPublicContests = async(req,res ) => {
     try{
