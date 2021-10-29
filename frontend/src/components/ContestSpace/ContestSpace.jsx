@@ -1,6 +1,6 @@
 import { useEffect, useState, React } from "react";
 import { useHistory } from "react-router-dom";
-import { Typography } from "@material-ui/core";
+import { FormControlLabel, Switch, Typography } from "@material-ui/core";
 import ReactLoading from "react-loading";
 import Contest from "./Contest";
 import Button from "@material-ui/core/Button";
@@ -14,6 +14,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useStyles from "./styles";
 import { useForm } from "react-hook-form";
+import { API } from "../../api/index";
 import axios from "axios";
 const ContestSpace = () => {
   const [contests, setContests] = useState([]);
@@ -37,11 +38,11 @@ const ContestSpace = () => {
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
-    const storage = JSON.parse(localStorage.getItem('profile'))
-        // console.log(storage)
-        if(storage === null) {
-            history.push('/auth')
-        }
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    // console.log(storage)
+    if (storage === null) {
+      history.push("/auth");
+    }
     setOpen(true);
   };
 
@@ -50,32 +51,40 @@ const ContestSpace = () => {
   };
   const history = useHistory();
 
-  const [formData, setFormData] = useState('')
+  const [state, setState] = useState({
+    checkedA: true,
+    checkedB: true,
+  });
+
+  const [formData, setFormData] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-
   const handleChange = (event) => {
-    setFormData({ [event.target.name]: event.target.value })
-  }
+    setFormData({ [event.target.name]: event.target.value });
+  };
+
+  const handleSwitchChange = (event) => {
+    console.log(state.checkedB);
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
 
   const onSubmit = (data) => {
-    const time = data.time.split(':');
+    const time = data.time.split(":");
     data.date.setHours(time[0]);
     data.date.setMinutes(time[1]);
-    const userId = JSON.parse(localStorage.getItem('profile'))['result']['_id'];
-    data['hostId'] = userId;
-    data['duration'] = String(data['duration']) + " hrs"
-    delete data['time'];
-    axios.post('http://localhost:5000/api/addcontest',
-      data
-    )
-      .then((res) => history.push('/addcontest/'+ res.data.result._id))
-      .catch((err) => console.log(err))
-    
+    const userId = JSON.parse(localStorage.getItem("profile"))["result"]["_id"];
+    data["hostId"] = userId;
+    data["duration"] = String(data["duration"]) + " hrs";
+    data["isPublic"] = state.checkedB;
+    delete data["time"];
+    axios
+      .post("http://localhost:5000/api/addcontest", data)
+      .then((res) => history.push("/addcontest/" + res.data.result._id))
+      .catch((err) => console.log(err));
   };
 
   const classes = useStyles();
@@ -148,7 +157,8 @@ const ContestSpace = () => {
                       Contest Name:
                     </label>
 
-                    <input onChange={handleChange}
+                    <input
+                      onChange={handleChange}
                       className={classes.input}
                       {...register("contestName", {
                         required: "Contest name cannot be empty.",
@@ -161,24 +171,28 @@ const ContestSpace = () => {
                       </span>
                     )}
 
-                  <label className={classes.label} htmlFor="Description">
-                    Contest description:{" "}
-                  </label>
-                  <textarea
-                    name="Description"
-                    id="Description"
-                    placeholder="Enter the description"
-                    className={classes.input}
-                    {...register("Description", {
-                      required: "Description cannot be empty.",
-                    })}
-                  ></textarea>      
+                    <label className={classes.label} htmlFor="Description">
+                      Contest description:{" "}
+                    </label>
+                    <textarea
+                      name="Description"
+                      id="Description"
+                      placeholder="Enter the description"
+                      className={classes.input}
+                      {...register("Description", {
+                        required: "Description cannot be empty.",
+                      })}
+                    ></textarea>
                     <label className={classes.label} htmlFor="date">
                       Date:
                     </label>
-                    <input onChange={handleChange}
+                    <input
+                      onChange={handleChange}
                       className={classes.input}
-                      type="date" data-date="" data-date-format="DD MMMM YYYY" v
+                      type="date"
+                      data-date=""
+                      data-date-format="DD MMMM YYYY"
+                      v
                       {...register("date", {
                         required: "Contest Date cannot be empty.",
                         valueAsDate: true,
@@ -190,7 +204,8 @@ const ContestSpace = () => {
                     <label className={classes.label} htmlFor="time">
                       Start Time:
                     </label>
-                    <input onChange={handleChange}
+                    <input
+                      onChange={handleChange}
                       className={classes.input}
                       type="time"
                       {...register("time", {
@@ -201,7 +216,8 @@ const ContestSpace = () => {
                     <label className={classes.label} htmlFor="duration">
                       Duration(hrs)
                     </label>
-                    <input onChange={handleChange}
+                    <input
+                      onChange={handleChange}
                       className={classes.input}
                       type="number"
                       step="0.5"
@@ -216,7 +232,19 @@ const ContestSpace = () => {
                         {errors.duration.message}
                       </span>
                     )}
-                    <input 
+                    <FormControlLabel
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                      control={
+                        <Switch
+                          checked={state.checkedB}
+                          onChange={handleSwitchChange}
+                          name="checkedB"
+                          color="primary"
+                        />
+                      }
+                      label="Public Contest"
+                    />
+                    <input
                       className={classes.submitButton}
                       value="Next"
                       type="submit"

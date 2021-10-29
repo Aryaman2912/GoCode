@@ -44,7 +44,7 @@ const VerticalBar = () => (
   <>
     <div className="header">
       <h1 className="title" style={{ color: "white" }}>
-        Vertical Bar Chart
+        Problems Vs Tags
       </h1>
     </div>
     <Bar data={data} options={options} />
