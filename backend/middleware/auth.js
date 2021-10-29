@@ -26,8 +26,8 @@ const auth = async (req, res, next) => {
 
         next();
     } catch(err) {
-        // console.log('F');
-        console.log(err);
+        res.status(401).json({message: 'Authentication failed'});
+        // console.log(err);
     }
 }
 
