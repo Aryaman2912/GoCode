@@ -424,7 +424,7 @@ export default function MiniDrawer(props) {
           </Route> */}
             <Route exact path="/playlists" component={PlaylistSpace} />
             <Route exact path="/addcontest/:id" component={AddContest} />
-            <Route exact path="/playlists/:id" component={AddPlaylist} />
+            <Route exact path="/addplaylist/:id" component={AddPlaylist} />
             <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
             <Route exact path="/submissions/:id" component={Submissions} />
