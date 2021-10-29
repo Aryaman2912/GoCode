@@ -20,14 +20,14 @@ app.use(json());
 app.use(urlencoded({extended: true}));
 
 /* For testing */
-mongoose.connect('mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/Test-GoCode?retryWrites=true&w=majority', (err) => {
-    console.log("Connected to the database");
-    app.emit('connected')
-})
-
-// mongoose.connect(process.env.GOCODE_URI, (err) => {
+// mongoose.connect('mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/Test-GoCode?retryWrites=true&w=majority', (err) => {
 //     console.log("Connected to the database");
+//     app.emit('connected')
 // })
+
+mongoose.connect(process.env.GOCODE_URI, (err) => {
+    console.log("Connected to the database");
+})
 
 const corsOptions ={
    origin: 'http://localhost:3000' || '*',
