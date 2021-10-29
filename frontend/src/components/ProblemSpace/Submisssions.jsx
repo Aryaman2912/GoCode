@@ -29,7 +29,7 @@ const Submissions = (props) => {
       Authorization: `Bearer ${token}`,
     };
     fetch(
-      `http://localhost:5000/submissions?problemID=${props.match.params.id}`,
+      `http://localhost:5000/api/submissions?problemID=${props.match.params.id}`,
       {
         method: "GET",
         headers: headers,

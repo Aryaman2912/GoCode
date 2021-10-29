@@ -30,76 +30,41 @@ const Problem = (props) => {
     C: "clike",
     Python: "python",
   };
-  const [loadTest, setLoadTest] = useState(false);
-  const [loadSubmit, setLoadSubmit] = useState(false);
+
   const buttonHandlerIDE = (type) => {
-    if (type === "test") {
-      setLoadTest(true);
-    } else {
-      setLoadSubmit(true);
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    // console.log(storage)
+    console.log(code);
+    if (storage === null) {
+      history.push("/auth");
+      return;
     }
-
-    const buttonHandlerIDE = (type) => {
-      const storage = JSON.parse(localStorage.getItem("profile"));
-      // console.log(storage)
-      console.log(code);
-      if (storage === null) {
-        history.push("/auth");
-        return;
-      }
-      let token = storage.token;
-      const headers = {
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: `Bearer ${token}`,
-      };
-      axios
-        .post(
-          "http://localhost:5000/api/compile",
-          {
-            code: code,
-            language: codeLanguage,
-            userInput: userInput,
-            problemID: problem._id,
-            submissionType: type,
-          },
-          { headers: headers }
-        )
-        .then((res) => {
-          console.log(res);
-          setuserOutput(res.data.output);
-        });
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization: `Bearer ${token}`,
     };
-
-    const problemID = props.match.params.id;
-    useEffect(() => {
-      let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
-      fetch(problemURL)
-        .then((data) => data.json())
-        .then((data) => {
-          setProblem(data);
-          setLoading(false);
-          const tc = [];
-          for (let i = 0; i < data.input.length; i++) {
-            // console.log(data.input[i])
-            tc.push([data.input[i], data.output[i]]);
-          }
-          setTestcases(tc);
-        });
-      const localStorageCode = localStorage.getItem(`code_${problemID}`);
-      if (localStorageCode !== null) {
-        const jsonCode = JSON.parse(localStorageCode);
-        setCode(jsonCode["code"]);
-        setCodeMirrorMode(jsonCode["codeMirrorMode"]);
-        setCodeLanguage(jsonCode["codeLanguage"]);
-      }
-      console.log(res);
-      setuserOutput(res.data.output);
-    });
+    axios
+      .post(
+        "http://localhost:5000/api/compile",
+        {
+          code: code,
+          language: codeLanguage,
+          userInput: userInput,
+          problemID: problem._id,
+          submissionType: type,
+        },
+        { headers: headers }
+      )
+      .then((res) => {
+        console.log(res);
+        setuserOutput(res.data.output);
+      });
   };
 
   const problemID = props.match.params.id;
   useEffect(() => {
-    let problemURL = `http://localhost:5000/api/problem?problemID=${problemID}`;
+    let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
     fetch(problemURL)
       .then((data) => data.json())
       .then((data) => {
