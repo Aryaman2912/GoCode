@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import decode from "jwt-decode";
 import clsx from "clsx";
 import { makeStyles, useTheme, alpha } from "@material-ui/core/styles";
@@ -179,6 +179,7 @@ export default function MiniDrawer(props) {
   user != null ? console.log(user["result"]["name"]) : console.log("no user");
 
   const classes = useStyles();
+  const [style, setStyle] = useState({ display: "none" });
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -293,7 +294,9 @@ export default function MiniDrawer(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Link to={"/profile"}>
+                <AccountCircle />
+              </Link>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
@@ -342,6 +345,12 @@ export default function MiniDrawer(props) {
         <ListItem
           button
           key={"Problem Space"}
+          onMouseEnter={(e) => {
+            setStyle({ display: "block" });
+          }}
+          onMouseLeave={(e) => {
+            setStyle({ display: "none" });
+          }}
           onClick={() => history.push("/problems")}
         >
           <ListItemIcon>
@@ -420,8 +429,6 @@ export default function MiniDrawer(props) {
             <Route path="/problem/:id" component={Problem} />
             <Route exact path="/submissions/:id" component={Submissions} />
           </Switch>
-
-
         </div>
       </main>
     </div>

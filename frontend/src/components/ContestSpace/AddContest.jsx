@@ -226,6 +226,7 @@ const AddContest = (props) => {
 
     setSelectedOptions(tagsArray);
   };
+  console.log(contestsOverview);
   return (
     <div className={classes.root}>
       <AppBar
@@ -253,14 +254,134 @@ const AddContest = (props) => {
           background: "#424242",
         }}
       >
-        {contestsOverview.name}
-        <br />
-        {contestsOverview.Host}
+        <Row style={{ display: "flex", justifyContent: "space-between" }}>
+          <Row
+            style={{
+              padding: "2rem",
+            }}
+          >
+            <Typography
+              style={{
+                color: "white",
+              }}
+            >
+              Name:
+            </Typography>
+            <Typography
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              'name'
+            </Typography>
+          </Row>
+
+          <Row
+            style={{
+              padding: "2rem",
+            }}
+          >
+            <Typography
+              style={{
+                color: "white",
+              }}
+            >
+              Host:
+            </Typography>
+            <Typography
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              'host'
+            </Typography>
+          </Row>
+        </Row>
+
+        <Row style={{ display: "flex", justifyContent: "space-between" }}>
+          <Row
+            style={{
+              padding: "2rem",
+            }}
+          >
+            <Typography
+              style={{
+                color: "white",
+              }}
+            >
+              Contest Date:
+            </Typography>
+            <Typography
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              'on'
+            </Typography>
+          </Row>
+
+          <Row
+            style={{
+              padding: "2rem",
+            }}
+          >
+            <Typography
+              style={{
+                color: "white",
+              }}
+            >
+              Duration:
+            </Typography>
+            <Typography
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              'duration'
+            </Typography>
+          </Row>
+        </Row>
+
+        <Typography
+          style={{
+            color: "white",
+          }}
+          variant="h6"
+        >
+          Description:
+        </Typography>
+        <Typography
+          style={{
+            color: "white",
+            padding: "2rem",
+          }}
+          variant="h6"
+        >
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
+          ab illo inventore veritatis et quasi architecto beatae vitae dicta
+          sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+          aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
+          qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
+          dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed
+          quia non numquam eius modi tempora incidunt ut labore et dolore magnam
+          aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
+          exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex
+          ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in
+          ea voluptate velit esse quam nihil molestiae consequatur, vel illum
+          qui dolorem eum fugiat quo voluptas nulla pariatur?
+        </Typography>
+
+        {/* {contestsOverview.Host}
         <br />
         {contestsOverview.Duration}
         <br />
         {contestsOverview.isPublic}
-        <br />
+        <br /> */}
       </TabPanel>
       <TabPanel
         value={value}
@@ -508,12 +629,15 @@ const AddContest = (props) => {
         value={value}
         index={2}
         style={{
-          display: "auto",
+          display: "flex",
+          justifyContent: "center",
           minHeight: "50rem",
           background: "#424242",
+          color: "white",
+          fontWeight: "bold",
         }}
       >
-        Item Three
+        Work In Progress
       </TabPanel>
     </div>
   );
