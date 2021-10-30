@@ -182,7 +182,8 @@ const AddContest = (props) => {
   const history = useHistory();
   const [contestsOverview, setcontestsOverview] = useState();
   const [loading, setLoading] = useState(true);
-
+  const [contestProblems, setcontestProblems] = useState([]);
+  // const contestProblems = [];
   const loadingOptions = {
     type: "spin",
     color: "#347deb",
@@ -192,12 +193,22 @@ const AddContest = (props) => {
     fetch("http://localhost:5000/api/contests/" + props.match.params.id)
       .then((data) => data.json())
       .then((data) => {
-        console.log(data);
-        setcontestsOverview(data);
-        setLoading(false);
-      });
+        // console.log(data);
+          fillProblems(data);
+          setcontestsOverview(data);
+          setLoading(false);
+        });
   }, []);
-
+  function fillProblems(data){
+    data['problems'].forEach(problemID => {
+      let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+      fetch(problemURL)
+        .then((problem) => problem.json())
+        .then((problem) => {
+          contestProblems.push(problem);
+      });  
+    });
+  }
   const [loadingProblemSubmit, setloadingProblemSubmit] = useState(false);
   const onSubmit = (data) => {
     data["tags"] = selectedOptions;
@@ -235,7 +246,6 @@ const AddContest = (props) => {
 
     setSelectedOptions(tagsArray);
   };
-  console.log(contestsOverview);
   return (
     <div>
       {loading ? (
@@ -283,10 +293,10 @@ const AddContest = (props) => {
           >
             {contestsOverview ? (
               <p>
-                {contestsOverview.name}
-                {contestsOverview.Host}
-                {contestsOverview.Duration}
-                {contestsOverview.isPublic}
+                {contestsOverview.name}<br/>
+                {contestsOverview.Host}<br/>
+                {contestsOverview.Duration}<br/>
+                {contestsOverview.isPublic}<br/>
               </p>
             ) : (
               <></>
@@ -301,7 +311,9 @@ const AddContest = (props) => {
               background: "#424242",
             }}
           >
+
             <div style={{ display: "flex", justifyContent: "center" }}>
+              {console.log(contestProblems)};
               <Button
                 style={{
                   color: "white",

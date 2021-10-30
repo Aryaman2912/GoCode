@@ -192,7 +192,7 @@ const ContestSpace = () => {
                       type="date"
                       data-date=""
                       data-date-format="DD MMMM YYYY"
-                      v
+                      min={new Date().toISOString().split("T")[0]}
                       {...register("date", {
                         required: "Contest Date cannot be empty.",
                         valueAsDate: true,
