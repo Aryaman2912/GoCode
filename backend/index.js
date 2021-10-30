@@ -10,6 +10,7 @@ import contestRouter from './routes/contest.js'
 import submissionsRouter from './routes/submissions.js'
 import Playlists from './routes/playlist.js';
 import problemRouter from './routes/problems.js';
+import pdsRouter from './routes/pds'
 //import d from 'dotenv';
 //d.config();
 
@@ -17,7 +18,7 @@ import problemRouter from './routes/problems.js';
 //Profiles.create({userId: new ObjectId("615d3a535cbb99c73e8972b7"), rating: 2000});
 
 app.use(json());
-app.use(urlencoded({extended: true}));
+app.use(urlencoded({ extended: true }));
 
 /* For testing */
 // mongoose.connect('mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/Test-GoCode?retryWrites=true&w=majority', (err) => {
@@ -29,21 +30,22 @@ mongoose.connect(process.env.GOCODE_URI, (err) => {
     console.log("Connected to the database");
 })
 
-const corsOptions ={
-   origin: 'http://localhost:3000' || '*',
-   credentials: true,
-   optionSuccessStatus: 200,
+const corsOptions = {
+    origin: 'http://localhost:3000' || '*',
+    credentials: true,
+    optionSuccessStatus: 200,
 }
 
 app.use(cors(corsOptions))
 
 app.use("/user", userRouter)
 app.use("/playlists", Playlists)
-app.use("/",contestRouter)
+app.use("/", contestRouter)
 app.use("/profile", profileRouter)
 app.use("/api/compile", compileRouter)
 app.use("/api/submissions", submissionsRouter)
 app.use("/api/problems", problemRouter)
+app.use("/api/pds", pdsRouter)
 
 app.listen(5000, () => {
     console.log("Server started...");
