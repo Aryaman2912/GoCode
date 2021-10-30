@@ -1,9 +1,9 @@
 import express from 'express'
-import {pbsController} from '../controllers/pbs.js'
+import { pdsController } from '../controllers/pds.js'
 import auth from '../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/', auth, pbsController)
+router.get('/', auth, pdsController)
 
 export default router

@@ -179,7 +179,7 @@ export default function MiniDrawer(props) {
   user != null ? console.log(user["result"]["name"]) : console.log("no user");
 
   const classes = useStyles();
-  const [style, setStyle] = useState({ display: "none" });
+  const [hover, setHover] = useState(false);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -214,6 +214,19 @@ export default function MiniDrawer(props) {
 
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
+
+  const handleMouseIn = () => {
+    console.log("called");
+    setHover(true);
+  };
+
+  const handleMouseOut = () => {
+    setHover(false);
+  };
+
+  const tooltipStyle = {
+    display: hover ? "block" : "none",
+  };
 
   return (
     <div className={classes.root}>
@@ -342,53 +355,54 @@ export default function MiniDrawer(props) {
             </ListItem>
           ))}
         </List> */}
-        <ListItem
-          button
-          key={"Problem Space"}
-          onMouseEnter={(e) => {
-            setStyle({ display: "block" });
-          }}
-          onMouseLeave={(e) => {
-            setStyle({ display: "none" });
-          }}
-          onClick={() => history.push("/problems")}
-        >
-          <ListItemIcon>
-            {" "}
-            <Assignment />
-          </ListItemIcon>
-          <ListItemText primary="Problem Space" />
-        </ListItem>
-        <ListItem
-          button
-          key={"Contest Space"}
-          onClick={() => history.push("/contests")}
-        >
-          <ListItemIcon>
-            <SupervisorAccountIcon />
-          </ListItemIcon>
-          <ListItemText primary="Contest Space" />
-        </ListItem>
-        <ListItem
-          button
-          key={"Personal Development Space"}
-          onClick={() => history.push("/pds")}
-        >
-          <ListItemIcon>
-            <EmojiPeopleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Personal Development Space" />
-        </ListItem>
-        <ListItem
-          button
-          key={"Playlist of Problems"}
-          onClick={() => history.push("/playlists")}
-        >
-          <ListItemIcon>
-            <FeaturedPlayListIcon />
-          </ListItemIcon>
-          <ListItemText primary="Playlist of Problems" />
-        </ListItem>
+        <div title="Problem space">
+          <ListItem
+            button
+            key={"Problem Space"}
+            onClick={() => history.push("/problems")}
+          >
+            <ListItemIcon>
+              <Assignment />
+            </ListItemIcon>
+            <ListItemText primary="Problem Space" />
+          </ListItem>
+        </div>
+        <div title="Contest Space">
+          <ListItem
+            button
+            key={"Contest Space"}
+            onClick={() => history.push("/contests")}
+          >
+            <ListItemIcon>
+              <SupervisorAccountIcon />
+            </ListItemIcon>
+            <ListItemText primary="Contest Space" />
+          </ListItem>
+        </div>
+        <div title="Personal Development Space">
+          <ListItem
+            button
+            key={"Personal Development Space"}
+            onClick={() => history.push("/pds")}
+          >
+            <ListItemIcon>
+              <EmojiPeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Personal Development Space" />
+          </ListItem>
+        </div>
+        <div title="Playlist of Problems">
+          <ListItem
+            button
+            key={"Playlist of Problems"}
+            onClick={() => history.push("/playlists")}
+          >
+            <ListItemIcon>
+              <FeaturedPlayListIcon />
+            </ListItemIcon>
+            <ListItemText primary="Playlist of Problems" />
+          </ListItem>
+        </div>
         <Divider />
         {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
