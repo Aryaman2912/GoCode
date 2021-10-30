@@ -33,7 +33,6 @@ export const getContest = async (req, res) => {
 
 export const addContest = async (req, res) => {
     try{
-        console.log(req.body);
         const {contestName, date, duration, description, hostId} = req.body
         const user = await User.findById(hostId);
         let hostName = '';
@@ -51,6 +50,8 @@ export const addContest = async (req, res) => {
         id = user._id;
         data['hostId'] = id;
         data['Host'] = user.name;
+        data['leaderboad'] = [];
+        data['problems'] = [];
         console.log(data);
         const result = await Contests.create(data);
         res.status(200).json({result});
@@ -61,8 +62,6 @@ export const addContest = async (req, res) => {
 }
 export const addProblem = async (req,res) => {
     try{
-        const {contestId, hidden, name, statement, tags, input, output, testInput, testOutput} = req.body;
-        console.log(req.body);
         const data = {
             name: req.body.problemName,
             description: 'description',
@@ -74,12 +73,19 @@ export const addProblem = async (req,res) => {
             testOutput: req.body.testOutputs,
             hidden: req.body.hidden
         }
-        console.log(data);
         const result = await GoCodeProblems.create(data);
-        const result2 = await ContestProblems.create({contestId:req.body.contestId,problemId: result._id})
-        console.log(result);
-        // const result = await 
-        res.status(200).json({result2});
+
+        Contests.findById(req.body.contestId,(err,contest) => {
+            if(err){
+                res.json({
+                    status: "failure"
+                })
+            } else {
+                contest.problems.addToSet(result._id)
+                contest.save();
+            }
+        })
+        res.status(200).json({result});
     } catch(err){
         console.log(err);
         res.status(500).json({message: err});
