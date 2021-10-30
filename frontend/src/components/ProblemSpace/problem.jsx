@@ -1,7 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MathJax from "mathjax3-react";
 import ReactLoading from "react-loading";
-import { Typography, Button } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
+} from "@material-ui/core";
 import "./problem.css";
 import Editor from "../CodingSpace/Editor";
 import { DropdownButton, Dropdown, Badge } from "react-bootstrap";
@@ -11,7 +21,11 @@ import UserInputOutput from "../CodingSpace/UserInputOutput";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { Controlled as ControlledEditor } from "react-codemirror2";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 const Problem = (props) => {
   const [problem, setProblem] = useState({});
   const [loading, setLoading] = useState(true);
@@ -23,6 +37,12 @@ const Problem = (props) => {
 
   const history = useHistory();
   const [userInput, setUserInput] = useState("");
+  const [submitLoad, setSubmitLoad] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogContent, setDialogContent] = useState("");
+
+  const [open, setDialogOpen] = useState(false);
+  const [TestLoad, setTestLoad] = useState(false);
 
   const languageOptions = {
     "C++": "clike",
@@ -32,6 +52,12 @@ const Problem = (props) => {
   };
 
   const buttonHandlerIDE = (type) => {
+    console.log(type);
+    if (type == "submit") {
+      setSubmitLoad(true);
+    } else {
+      setTestLoad(true);
+    }
     const storage = JSON.parse(localStorage.getItem("profile"));
     // console.log(storage)
     console.log(code);
@@ -58,7 +84,29 @@ const Problem = (props) => {
       )
       .then((res) => {
         console.log(res);
+        if (Object.entries(res)[1][1] !== 200) {
+          setDialogTitle("Error");
+          setDialogContent("Your code could not be compiled.Please Try Later");
+        } else if (type == "submit") {
+          if (Object.entries(res)[0][1].Verdict === "Wrong answer") {
+            setDialogTitle("Oops");
+            setDialogContent("Thats not right, Please check your code again");
+            setSubmitLoad(false);
+
+            setDialogOpen(true);
+          } else {
+            setDialogTitle("Hooray");
+            setDialogContent("Thats the Right Answer. You did it.");
+            setSubmitLoad(false);
+
+            setDialogOpen(true);
+          }
+        } else {
+          setTestLoad(false);
+        }
         setuserOutput(res.data.output);
+        let test = res.data.output;
+        console.log(Object.entries(res)[1][1]);
       });
   };
 
@@ -98,6 +146,17 @@ const Problem = (props) => {
   const loadingOptions = {
     type: "spin",
     color: "#347deb",
+  };
+  const handleChange = (editor, data, value) => {
+    setCode(value);
+  };
+
+  // const handleClickDialogOpen = () => {
+  //   setOpen(true);
+  // };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -224,12 +283,111 @@ const Problem = (props) => {
                     );
                   })}
                 </DropdownButton>
-                <Editor
+                {/* <Editor
                   code={code}
                   languageMode={codeMirrorMode}
                   onChange={setCode}
                   buttonHandlerIDE={buttonHandlerIDE}
+                /> */}
+                <ControlledEditor
+                  onBeforeChange={handleChange}
+                  value={code}
+                  className="code-mirror-wrapper"
+                  options={{
+                    lineWrapping: true,
+                    lint: true,
+                    mode: { codeMirrorMode },
+                    theme: "material",
+                    lineNumbers: true,
+                  }}
                 />
+                {TestLoad ? (
+                  <>
+                    <CircularProgress color="secondary" size="1.5rem " />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      style={{
+                        color: "white",
+                        padding: "0.3rem ",
+                        // borderColor: "white",
+                        marginLeft: "auto",
+                        background: "#087afc",
+                      }}
+                      variant="outlined"
+                      onClick={() => buttonHandlerIDE("test")}
+                    >
+                      Test
+                    </Button>
+                  </>
+                )}
+                {submitLoad ? (
+                  <>
+                    <CircularProgress color="secondary" size="2rem " />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      style={{
+                        color: "white",
+                        padding: "0.3rem ",
+                        // borderColor: "white",
+                        marginLeft: "auto",
+                        background: "#087afc",
+                      }}
+                      variant="outlined"
+                      onClick={() => buttonHandlerIDE("submit")}
+                    >
+                      Submit
+                    </Button>
+                    <Dialog
+                      open={open}
+                      TransitionComponent={Transition}
+                      keepMounted
+                      onClose={handleDialogClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "#424242",
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      <DialogTitle
+                        id="alert-dialog-title"
+                        style={{
+                          color: "white",
+                        }}
+                      >
+                        {dialogTitle}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText
+                          id="alert-dialog-description"
+                          style={{
+                            color: "#bebec3",
+                          }}
+                        >
+                          {dialogContent}
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        {/* <Button onClick={handleDialogClose} color="primary">
+                          Disagree
+                        </Button> */}
+                        <Button
+                          onClick={handleDialogClose}
+                          color="secondary"
+                          autoFocus
+                        >
+                          Okay
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </>
+                )}
                 <br />
                 <Badge bg="success">Input</Badge>
                 <UserInputOutput
