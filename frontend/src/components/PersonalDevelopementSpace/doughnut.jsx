@@ -30,18 +30,7 @@ const data = {
 
 const DoughnutChart = () => (
   <>
-    <div className="header">
-      <h1 className="title">Doughnut Chart</h1>
-      <div className="links">
-        <a
-          className="btn btn-gh"
-          href="https://github.com/reactchartjs/react-chartjs-2/blob/master/example/src/charts/Doughnut.js"
-        >
-          Github Source
-        </a>
-      </div>
-    </div>
-    <Doughnut data={data} height="1000px" />
+    <Doughnut data={data} height="100" />
   </>
 );
 
