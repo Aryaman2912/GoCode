@@ -194,19 +194,22 @@ const AddContest = (props) => {
       .then((data) => data.json())
       .then((data) => {
         // console.log(data);
-          fillProblems(data);
-          setcontestsOverview(data);
-          setLoading(false);
-        });
+        fillProblems(data);
+        setcontestsOverview(data);
+        setLoading(false);
+      });
   }, []);
-  function fillProblems(data){
-    data['problems'].forEach(problemID => {
+  function fillProblems(data) {
+    setcontestProblems([]);
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
+    console.log(data);
+    data["problems"].forEach((problemID) => {
       let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
       fetch(problemURL)
         .then((problem) => problem.json())
         .then((problem) => {
           contestProblems.push(problem);
-      });  
+        });
     });
   }
   const [loadingProblemSubmit, setloadingProblemSubmit] = useState(false);
@@ -219,8 +222,29 @@ const AddContest = (props) => {
     axios
       .post("http://localhost:5000/api/addproblem", data)
       .then((res) => {
-        setloadingProblemSubmit(false);
-        setOpen(false);
+        console.log(res);
+        axios
+          .get("http://localhost:5000/api/contests/" + props.match.params.id)
+          .then((res) => {
+            console.log("##################");
+
+            let cDetails = Object.entries(res)[0][1];
+
+            var pCount = 0;
+            cDetails["problems"].forEach((problemID) => {
+              let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+              fetch(problemURL)
+                .then((problem) => problem.json())
+                .then((problem) => {
+                  contestProblems.push(problem);
+                  pCount++;
+                  if (pCount == cDetails["problems"].length) {
+                    setloadingProblemSubmit(false);
+                    setOpen(false);
+                  }
+                });
+            });
+          });
       })
       .catch((err) => console.log(err));
   };
@@ -293,10 +317,14 @@ const AddContest = (props) => {
           >
             {contestsOverview ? (
               <p>
-                {contestsOverview.name}<br/>
-                {contestsOverview.Host}<br/>
-                {contestsOverview.Duration}<br/>
-                {contestsOverview.isPublic}<br/>
+                {contestsOverview.name}
+                <br />
+                {contestsOverview.Host}
+                <br />
+                {contestsOverview.Duration}
+                <br />
+                {contestsOverview.isPublic}
+                <br />
               </p>
             ) : (
               <></>
@@ -311,7 +339,6 @@ const AddContest = (props) => {
               background: "#424242",
             }}
           >
-
             <div style={{ display: "flex", justifyContent: "center" }}>
               {console.log(contestProblems)};
               <Button
