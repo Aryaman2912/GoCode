@@ -20,7 +20,7 @@ export const display = function(req, res){
                     }
 
                     else{
-                        res.send(user.name);
+                        res.status(200).json({user});
                     }
                 });
             }

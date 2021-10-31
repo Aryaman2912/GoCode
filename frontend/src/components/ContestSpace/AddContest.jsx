@@ -319,7 +319,6 @@ const AddContest = (props) => {
                   color: "white",
                   padding: "1rem 2rem ",
                   borderColor: "white",
-                  // marginLeft: "auto",
                   background: "#006633",
                 }}
                 variant="contained"
