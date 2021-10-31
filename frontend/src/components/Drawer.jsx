@@ -25,7 +25,7 @@ import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import FeaturedPlayListIcon from "@material-ui/icons/FeaturedPlayList";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ProblemSpace from "./ProblemSpace/problemSpace";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 import Problem from "./ProblemSpace/problem";
 import Auth from "./Auth/Auth";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -249,10 +249,11 @@ export default function MiniDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          {/* <Link to="/"> */}
+          <Typography className={classes.title} onClick={() => history.push("/")}variant="h6" noWrap>
             GoCode
           </Typography>
-
+            {/* </Link> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
