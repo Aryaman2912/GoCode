@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import { DATE_OPTIONS } from "../../constants/dateOptions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,14 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Contest({ data }) {
   const classes = useStyles();
-  const DATE_OPTIONS = {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minutes: "numeric",
-  };
 
   return (
     <div className={classes.root}>
