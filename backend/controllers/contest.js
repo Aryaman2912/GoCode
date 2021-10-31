@@ -71,7 +71,8 @@ export const addProblem = async (req,res) => {
             output: req.body.sampleOutput,
             testInput: req.body.testInputs,
             testOutput: req.body.testOutputs,
-            hidden: req.body.hidden
+            hidden: req.body.hidden,
+            score: req.body.score,
         }
         const result = await GoCodeProblems.create(data);
 

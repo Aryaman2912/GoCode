@@ -10,7 +10,8 @@ const problemSchema = mongoose.Schema({
     output:{type:Array},
     testInput: {type:Array},
     testOutput: {type: Array},
-    hidden: {type: Boolean}
+    hidden: {type: Boolean},
+    score: {type: Number}
 })
 
 export default mongoose.model("GoCodeProblems", problemSchema);
