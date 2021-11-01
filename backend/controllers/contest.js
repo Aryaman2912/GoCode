@@ -3,10 +3,10 @@ import GoCodeProblems from "../models/Gocodeproblems.js";
 import User from "../models/user.js";
 import ContestProblems from "../models/contestProblems.js";
 
-export const getPublicContests = async(req,res ) => {
-    try{
+export const getPublicContests = async (req, res) => {
+    try {
         Contests.find({}, (err, contests) => {
-            if(err) {
+            if (err) {
                 res.json({
                     status: "failure"
                 })
@@ -14,26 +14,26 @@ export const getPublicContests = async(req,res ) => {
                 res.send(contests)
             }
         })
-    } catch(error){
+    } catch (error) {
         res.status(500).json({ message: "Something went wrong" });
     }
 };
 
 export const getContest = async (req, res) => {
     // console.log(req);
-    const  { id } = req.params;
+    const { id } = req.params;
     console.log(id);
-    try{
+    try {
         const contest = await Contests.findById(id);
         res.status(200).json(contest);
-    } catch(error){
+    } catch (error) {
         res.status(404).json({ message: error.message });
     }
 }
 
 export const addContest = async (req, res) => {
-    try{
-        const {contestName, date, duration, description, hostId} = req.body
+    try {
+        const { contestName, date, duration, description, hostId } = req.body
         const user = await User.findById(hostId);
         let hostName = '';
         let id = undefined
@@ -54,14 +54,14 @@ export const addContest = async (req, res) => {
         data['problems'] = [];
         console.log(data);
         const result = await Contests.create(data);
-        res.status(200).json({result});
-    } catch(err){
+        res.status(200).json({ result });
+    } catch (err) {
         console.log(err);
-        res.status(500).json({err});
+        res.status(500).json({ err });
     }
 }
-export const addProblem = async (req,res) => {
-    try{
+export const addProblem = async (req, res) => {
+    try {
         const data = {
             name: req.body.problemName,
             description: 'description',
@@ -76,19 +76,21 @@ export const addProblem = async (req,res) => {
         }
         const result = await GoCodeProblems.create(data);
 
-        Contests.findById(req.body.contestId,(err,contest) => {
-            if(err){
+        Contests.findById(req.body.contestId, (err, contest) => {
+            if (err) {
                 res.json({
                     status: "failure"
                 })
             } else {
                 contest.problems.addToSet(result._id)
                 contest.save();
+                res.status(200).json({ result });
             }
         })
-        res.status(200).json({result});
-    } catch(err){
+        // const contest = await Contests.findById(req.body.contestId);
+        // res.status(200).json({ conest });
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message: err});
+        res.status(500).json({ message: err });
     }
 };

@@ -22,6 +22,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import axios from "axios";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
+import { DATE_OPTIONS } from "../../constants/dateOptions";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -190,25 +191,42 @@ const AddContest = (props) => {
   };
 
   useEffect(() => {
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
     fetch("http://localhost:5000/api/contests/" + props.match.params.id)
       .then((data) => data.json())
       .then((data) => {
-        // console.log(data);
-          fillProblems(data);
-          setcontestsOverview(data);
-          setLoading(false);
+        console.log(data);
+        // fillProblems(data);
+        // setcontestProblems([]);
+        var pCount = 0;
+        data["problems"].forEach((problemID) => {
+          let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+          fetch(problemURL)
+            .then((problem) => problem.json())
+            .then((problem) => {
+              contestProblems.push(problem);
+              pCount++;
+              if (pCount == data["problems"].length) {
+                setcontestsOverview(data);
+                setLoading(false);
+              }
+            });
         });
+      });
   }, []);
-  function fillProblems(data){
-    data['problems'].forEach(problemID => {
-      let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
-      fetch(problemURL)
-        .then((problem) => problem.json())
-        .then((problem) => {
-          contestProblems.push(problem);
-      });  
-    });
-  }
+  // function fillProblems(data) {
+  //   setcontestProblems([]);
+  //   console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
+  //   console.log(data);
+  //   data["problems"].forEach((problemID) => {
+  //     let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+  //     fetch(problemURL)
+  //       .then((problem) => problem.json())
+  //       .then((problem) => {
+  //         contestProblems.push(problem);
+  //       });
+  //   });
+  // }
   const [loadingProblemSubmit, setloadingProblemSubmit] = useState(false);
   const onSubmit = (data) => {
     data["tags"] = selectedOptions;
@@ -219,8 +237,32 @@ const AddContest = (props) => {
     axios
       .post("http://localhost:5000/api/addproblem", data)
       .then((res) => {
-        setloadingProblemSubmit(false);
-        setOpen(false);
+        console.log(res);
+        axios
+          .get("http://localhost:5000/api/contests/" + props.match.params.id)
+          .then((res) => {
+            console.log("##################");
+
+            let cDetails = Object.entries(res)[0][1];
+
+            let tcproblems = [];
+
+            var pCount = 0;
+            cDetails["problems"].forEach((problemID) => {
+              let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+              fetch(problemURL)
+                .then((problem) => problem.json())
+                .then((problem) => {
+                  tcproblems.push(problem);
+                  pCount++;
+                  if (pCount == cDetails["problems"].length) {
+                    setcontestProblems(tcproblems);
+                    setloadingProblemSubmit(false);
+                    setOpen(false);
+                  }
+                });
+            });
+          });
       })
       .catch((err) => console.log(err));
   };
@@ -292,14 +334,144 @@ const AddContest = (props) => {
             }}
           >
             {contestsOverview ? (
-              <p>
-                {contestsOverview.name}<br/>
-                {contestsOverview.Host}<br/>
-                {contestsOverview.Duration}<br/>
-                {contestsOverview.isPublic}<br/>
-              </p>
+              <>
+                <Row
+                  style={{
+                    marginTop: "3rem",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Row
+                    style={{
+                      marginLeft: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Name:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.name}
+                    </Typography>
+                  </Row>
+                  <Row
+                    style={{
+                      marginRight: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Host:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.Host}
+                    </Typography>
+                  </Row>
+                </Row>
+                <Row
+                  style={{
+                    marginTop: "3rem",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Row
+                    style={{
+                      marginLeft: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Date:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {new Date(contestsOverview.Date).toLocaleDateString(
+                        "en-US",
+                        DATE_OPTIONS
+                      )}
+                    </Typography>
+                  </Row>
+                  <Row
+                    style={{
+                      marginRight: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Duration:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.Duration}
+                    </Typography>
+                  </Row>
+                </Row>
+                <Typography
+                  style={{
+                    color: "white",
+                    marginTop: "8rem",
+                  }}
+                  variant="h6"
+                >
+                  Description:
+                </Typography>
+                <Typography
+                  style={{
+                    color: "grey",
+                    marginTop: "0.4rem",
+                    marginLeft: "2rem",
+                  }}
+                  variant="h6"
+                >
+                  {contestsOverview.Description}
+                </Typography>
+              </>
             ) : (
-              <></>
+              <>
+                <CircularProgress />
+              </>
             )}
           </TabPanel>
           <TabPanel
@@ -311,9 +483,46 @@ const AddContest = (props) => {
               background: "#424242",
             }}
           >
-
+            {contestProblems.map((problem, i) => {
+              console.log(problem);
+              return (
+                <Paper
+                  style={{
+                    margin: "2rem",
+                    padding: "0.5rem 5rem",
+                    borderRadius: "2rem",
+                  }}
+                >
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Link to={"/problem/" + problem._id}>
+                        <Typography variant="h5"> {problem.name}</Typography>
+                      </Link>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography component="span">Other Tags:</Typography>
+                      {problem.tags.map((p, i) => {
+                        return (
+                          <Chip
+                            size="small"
+                            label={p}
+                            key={i}
+                            style={{
+                              padding: "10px",
+                              margin: "5px",
+                            }}
+                          />
+                        );
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography component="span">Score:</Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              );
+            })}
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {console.log(contestProblems)};
               <Button
                 style={{
                   color: "white",
@@ -507,7 +716,16 @@ const AddContest = (props) => {
               background: "#424242",
             }}
           >
-            Item Three
+            <Typography
+              style={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              variant="h4"
+            >
+              Work under Progress
+            </Typography>
           </TabPanel>
         </div>
       )}
