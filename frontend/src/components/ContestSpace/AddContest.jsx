@@ -528,7 +528,6 @@ const AddContest = (props) => {
                   color: "white",
                   padding: "1rem 2rem ",
                   borderColor: "white",
-                  // marginLeft: "auto",
                   background: "#006633",
                 }}
                 variant="contained"
@@ -604,6 +603,20 @@ const AddContest = (props) => {
                       className={classes.dropdown}
                       isMulti
                       options={tags}
+                    />
+                    <label className={classes.label} htmlFor="score">
+                      Score:
+                    </label>
+                    <input
+                      onChange={handleChange}
+                      className={classes.input}
+                      type="number"
+                      step="50"
+                      {...register("score", {
+                        required: "Problem score cannot be empty.",
+                        valueAsNumber: true,
+                      })}
+                      id="score"
                     />
                     <label className={classes.label} htmlFor="sampleInput">
                       Sample input:{" "}
