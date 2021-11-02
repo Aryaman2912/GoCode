@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { API } from "../../api/index";
 import axios from "axios";
 const ContestSpace = () => {
+  console.log(JSON.parse(localStorage.getItem("profile")));
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {

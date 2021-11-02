@@ -206,12 +206,16 @@ const AddContest = (props) => {
             .then((problem) => {
               contestProblems.push(problem);
               pCount++;
-              if (pCount == data["problems"].length) {
+              if (pCount === data["problems"].length) {
                 setcontestsOverview(data);
                 setLoading(false);
               }
             });
         });
+        if (pCount === 0) {
+          setcontestsOverview(data);
+          setLoading(false);
+        }
       });
   }, []);
   // function fillProblems(data) {

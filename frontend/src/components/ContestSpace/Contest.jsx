@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
@@ -7,8 +7,10 @@ import Button from "@material-ui/core/Button";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import ContestDeleteButton from "./ContestDeleteButton";
+import ContestParticipateButton from "./ContestParticipateButton";
+import axios from 'axios';
 import { DATE_OPTIONS } from "../../constants/dateOptions";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -23,6 +25,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Contest({ data }) {
   const classes = useStyles();
+  // const deleteContest = (contestId) => {
+  //   // console.log(contestId);
+  //   console.log(`http://localhost:5000/api/contests/${contestId}`);
+  //   axios.delete(`http://localhost:5000/api/contests/${contestId}`)
+  //   .then((res) => {
+  //     if(res.status === 200) {
+  //       alert("Contest Deleted Successfully");
+  //       console.log(this);
+  //     }
+  //     else console.log(res);
+  //   })
+  // }
+
 
   return (
     <div className={classes.root}>
@@ -135,17 +150,32 @@ export default function Contest({ data }) {
                     margin: "0rem 1rem",
                   }}
                   variant="outlined"
+                  href={"/contests/" + t._id}
                 >
                   INFO
                 </Button>
 
-                <Button
+                <ContestParticipateButton contest={t} />
+                {/* <Button
                   variant="contained"
                   color="primary"
                   href="#outlined-buttons"
                 >
                   Participate
-                </Button>
+                </Button> */}
+
+                <ContestDeleteButton contest={t} />
+                {/* <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "#ff4d4d",
+                    padding: "0rem 2rem",
+                    margin: "0rem 1rem"
+                  }}
+                  onClick={() => deleteContest(t._id)}
+                >
+                  Delete
+                </Button> */}
               </Row>
             </Paper>
           </>
