@@ -16,6 +16,7 @@ import useStyles from "./styles";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 const ContestSpace = () => {
+  console.log(JSON.parse(localStorage.getItem("profile")));
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -73,7 +74,7 @@ const ContestSpace = () => {
     axios.post('http://localhost:5000/api/addcontest',
       data
     )
-      .then((res) => history.push('/addcontest/'+ res.data.result._id))
+      .then((res) => history.push('/contests/'+ res.data.result._id))
       .catch((err) => console.log(err))
     
   };

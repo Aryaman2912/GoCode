@@ -58,6 +58,24 @@ export const addContest = async (req, res) => {
         res.status(500).json({err});
     }
 }
+
+export const deleteContest = async (req, res) => {
+    try{
+        // console.log(req);
+        console.log(req.params);
+        const contestId = req.params.id;
+        console.log(contestId);
+
+        await ContestProblems.deleteMany({contestId: contestId});
+        await Contests.findByIdAndDelete(contestId);
+
+        res.status(200).json({message: "Contest deleted successully."})
+    } catch(err) {
+        console.log(err);
+        res.status(404).json({message: "Contest Not Found"});
+    }
+}
+
 export const addProblem = async (req,res) => {
     try{
         const {contestId, hidden, name, statement, tags, input, output, testInput, testOutput} = req.body;
@@ -80,6 +98,31 @@ export const addProblem = async (req,res) => {
         // const result = await 
         res.status(200).json({result2});
     } catch(err){
+        console.log(err);
+        res.status(500).json({message: err});
+    }
+};
+
+export const isValidContest = async (req, res) => {
+    try {
+        const contestId = req.params.id;
+        const contest = await Contests.findById(contestId);
+        let current_time = new Date().toISOString();
+        console.log(current_time + "\n" + contest.Date.toISOString());
+        console.log((current_time > contest.Date.toISOString()));
+        // console.log(contest.Date instanceof Date);
+        var closing_time = new Date(contest.Date);
+        // console.log(closing_time.getHours());
+        closing_time.setHours(closing_time.getHours() + parseFloat(contest.Duration));
+        console.log(closing_time.toISOString());
+        console.log(contest.Date);
+        if(current_time >= contest.Date.toISOString() && current_time <= closing_time.toISOString()) {
+            console.log("Valid contest");
+            res.status(200).json({message: "Valid"});
+        } else {
+            res.status(200).json({message: "Invalid"});
+        }
+    } catch(err) {
         console.log(err);
         res.status(500).json({message: err});
     }
