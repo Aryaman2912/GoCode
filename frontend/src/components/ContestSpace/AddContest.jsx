@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CircularProgress, Container } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,8 +16,13 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
-import axios from 'axios';
+import { Chip, Grid, Paper, Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import axios from "axios";
+import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
+import { DATE_OPTIONS } from "../../constants/dateOptions";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -177,24 +181,94 @@ const AddContest = (props) => {
   } = useForm();
 
   const history = useHistory();
-  fetch('http://localhost:5000/api/contests/' + props.match.params.id)
-  const [loadingProblemSubmit,setloadingProblemSubmit] = useState(false);
-  const onSubmit = (data) => {
-    data['tags'] = selectedOptions;
-    data['hidden'] = true;
-    data['contestId'] = props.match.params.id;
-    console.log(data)
-    setloadingProblemSubmit(true);
-    axios.post('http://localhost:5000/api/addproblem',
-    data
-    )
-      .then((res) => {
-        setloadingProblemSubmit(false)
-        setOpen(false);
+  const [contestsOverview, setcontestsOverview] = useState();
+  const [loading, setLoading] = useState(true);
+  const [contestProblems, setcontestProblems] = useState([]);
+  // const contestProblems = [];
+  const loadingOptions = {
+    type: "spin",
+    color: "#347deb",
+  };
 
+  useEffect(() => {
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
+    fetch("http://localhost:5000/api/contests/" + props.match.params.id)
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        // fillProblems(data);
+        // setcontestProblems([]);
+        var pCount = 0;
+        data["problems"].forEach((problemID) => {
+          let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+          fetch(problemURL)
+            .then((problem) => problem.json())
+            .then((problem) => {
+              contestProblems.push(problem);
+              pCount++;
+              if (pCount === data["problems"].length) {
+                setcontestsOverview(data);
+                setLoading(false);
+              }
+            });
+        });
+        if (pCount === 0) {
+          setcontestsOverview(data);
+          setLoading(false);
+        }
+      });
+  }, []);
+  // function fillProblems(data) {
+  //   setcontestProblems([]);
+  //   console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
+  //   console.log(data);
+  //   data["problems"].forEach((problemID) => {
+  //     let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+  //     fetch(problemURL)
+  //       .then((problem) => problem.json())
+  //       .then((problem) => {
+  //         contestProblems.push(problem);
+  //       });
+  //   });
+  // }
+  const [loadingProblemSubmit, setloadingProblemSubmit] = useState(false);
+  const onSubmit = (data) => {
+    data["tags"] = selectedOptions;
+    data["hidden"] = true;
+    data["contestId"] = props.match.params.id;
+    console.log(data);
+    setloadingProblemSubmit(true);
+    axios
+      .post("http://localhost:5000/api/addproblem", data)
+      .then((res) => {
+        console.log(res);
+        axios
+          .get("http://localhost:5000/api/contests/" + props.match.params.id)
+          .then((res) => {
+            console.log("##################");
+
+            let cDetails = Object.entries(res)[0][1];
+
+            let tcproblems = [];
+
+            var pCount = 0;
+            cDetails["problems"].forEach((problemID) => {
+              let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+              fetch(problemURL)
+                .then((problem) => problem.json())
+                .then((problem) => {
+                  tcproblems.push(problem);
+                  pCount++;
+                  if (pCount == cDetails["problems"].length) {
+                    setcontestProblems(tcproblems);
+                    setloadingProblemSubmit(false);
+                    setOpen(false);
+                  }
+                });
+            });
+          });
       })
       .catch((err) => console.log(err));
-
   };
   const classes = useStyles();
   const [value, setValue] = useState(0);
@@ -207,227 +281,458 @@ const AddContest = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleChange = (event,newValue) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const handleDropdownChange = (event) => {
     console.log(event);
     let tagsArray = [];
-    event.map(o => 
-       tagsArray.push(o.value)
-   );
+    event.map((o) => tagsArray.push(o.value));
 
-   setSelectedOptions(tagsArray);
+    setSelectedOptions(tagsArray);
   };
   return (
-    <div className={classes.root}>
-      <AppBar
-        position="static"
-        style={{
-          background: "grey",
-        }}
-      >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="simple tabs example"
+    <div>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "90vh",
+          }}
         >
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Challenges" {...a11yProps(1)} />
-          <Tab label="Settings" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel
-        value={value}
-        index={0}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
-        Item One
-      </TabPanel>
-      <TabPanel
-        value={value}
-        index={1}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            style={{
-              color: "white",
-              padding: "1rem 2rem ",
-              borderColor: "white",
-              // marginLeft: "auto",
-              background: "#006633",
-            }}
-            variant="contained"
-            onClick={handleClickOpen}
-          >
-            <Row>
-              <AddIcon />
-              <Typography
-                style={{
-                  marginLeft: "10px",
-                }}
-              >
-                Add a Challenge
-              </Typography>
-            </Row>
-          </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Create Problem</DialogTitle>
-            <DialogContent
-              style={{
-                width: "35rem",
-              }}
-            >
-              <DialogContentText></DialogContentText>
-              <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-                <label className={classes.label} htmlFor="problemName">
-                  Problem Name:
-                </label>
-
-                <input
-                  className={classes.input}
-                  {...register("problemName", {
-                    required: "Problem name cannot be empty.",
-                  })}
-                  id="problemName"
-                />
-                {errors.problemName && (
-                  <span className={classes.p}>
-                    {errors.problemName.message}
-                  </span>
-                )}
-
-                <label className={classes.label} htmlFor="problemStatement">
-                  Problem Statement:{" "}
-                </label>
-                <textarea
-                  name="problemStatement"
-                  id="problemStatement"
-                  placeholder="Enter the problem statement"
-                  className={classes.input}
-                  {...register("problemStatement", {
-                    required: "Problem statement cannot be empty.",
-                  })}
-                ></textarea>
-                {errors.problemStatement && (
-                  <span className={classes.p}>
-                    {errors.problemStatement.message}
-                  </span>
-                )}
-                <label className={classes.label} htmlFor="tags">
-                  Tags:{" "}
-                </label>
-                <Select id="tags" onChange={handleDropdownChange} className={classes.dropdown} isMulti options={tags}/>
-                <label className={classes.label} htmlFor="sampleInput">
-                  Sample input:{" "}
-                </label>
-                <textarea
-                  style={{
-                    height: "8rem",
-                  }}
-                  name="sampleInput"
-                  id="sampleInput"
-                  placeholder="Separate sample inputs using ~                                                                                                                                                       
-                  Ex:                                                                                                                                                             
-                  abc                                                                                                                                                                                                                                            
-                  ~                                                                                                                            
-                  def                                                                                                                                           
-                  ~"
-                  className={classes.input}
-                  {...register("sampleInput", {
-                    required: "Sample input cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="sampleInput">
-                  Sample output:{" "}
-                </label>
-                <textarea
-                  style={{
-                    height: "8rem",
-                  }}
-                  id="sampleOutput"
-                  name="sampleOutput"
-                  placeholder="Separate sample outputs using ~                                                                                                                                                       
-                  Ex:                                                                                                                                                             
-                  123                                                                                                                                                                                                                                            
-                  ~                                                                                                                            
-                  456                                                                                                                                          
-                  ~"
-                  className={classes.input}
-                  {...register("sampleOutput", {
-                    required: "Sample output cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="testInputs">
-                  Test inputs:{" "}
-                </label>
-                <textarea
-                  name="testInputs"
-                  id="testInputs"
-                  placeholder="Enter Testinputs similar to sample inputs"
-                  className={classes.input}
-                  {...register("testInputs", {
-                    required: "Test inputs cannot be empty.",
-                  })}
-                ></textarea>
-                <label className={classes.label} htmlFor="testOutputs">
-                  Test outputs:{" "}
-                </label>
-                <textarea
-                  name="testOutputs"
-                  id="testOutputs"
-                  placeholder="Enter Testoutputs similar to sample outputs"
-                  className={classes.input}
-                  {...register("testOutputs", {
-                    required: "Test outputs cannot be empty.",
-                  })}
-                ></textarea>
-                {loadingProblemSubmit ? < CircularProgress style={{ display: "flex", justifyContent: "center" }} disableShrink /> :
-
-                <input
-                  className={classes.submitButton}
-                  value="Next"
-                  type="submit"
-                />
-                }
-              </form>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              {/* <Button onClick={handleClose} color="primary">
-                    Subscribe
-                  </Button> */}
-            </DialogActions>
-          </Dialog>
+          <ReactLoading
+            type={loadingOptions.type}
+            color={loadingOptions.color}
+            height={100}
+            width={100}
+          />
         </div>
-      </TabPanel>
-      <TabPanel
-        value={value}
-        index={2}
-        style={{
-          display: "auto",
-          minHeight: "50rem",
-          background: "#424242",
-        }}
-      >
-        Item Three
-      </TabPanel>
+      ) : (
+        <div className={classes.root}>
+          <AppBar
+            position="static"
+            style={{
+              background: "grey",
+            }}
+          >
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="simple tabs example"
+            >
+              <Tab label="Overview" {...a11yProps(0)} />
+              <Tab label="Challenges" {...a11yProps(1)} />
+              <Tab label="Settings" {...a11yProps(2)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel
+            value={value}
+            index={0}
+            style={{
+              display: "auto",
+              minHeight: "50rem",
+              background: "#424242",
+            }}
+          >
+            {contestsOverview ? (
+              <>
+                <Row
+                  style={{
+                    marginTop: "3rem",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Row
+                    style={{
+                      marginLeft: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Name:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.name}
+                    </Typography>
+                  </Row>
+                  <Row
+                    style={{
+                      marginRight: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Host:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.Host}
+                    </Typography>
+                  </Row>
+                </Row>
+                <Row
+                  style={{
+                    marginTop: "3rem",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Row
+                    style={{
+                      marginLeft: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Date:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {new Date(contestsOverview.Date).toLocaleDateString(
+                        "en-US",
+                        DATE_OPTIONS
+                      )}
+                    </Typography>
+                  </Row>
+                  <Row
+                    style={{
+                      marginRight: "10rem",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginTop: "0.4rem",
+                      }}
+                      variant="h6"
+                    >
+                      Duration:
+                    </Typography>
+                    <Typography
+                      style={{
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      variant="h4"
+                    >
+                      {contestsOverview.Duration}
+                    </Typography>
+                  </Row>
+                </Row>
+                <Typography
+                  style={{
+                    color: "white",
+                    marginTop: "8rem",
+                  }}
+                  variant="h6"
+                >
+                  Description:
+                </Typography>
+                <Typography
+                  style={{
+                    color: "grey",
+                    marginTop: "0.4rem",
+                    marginLeft: "2rem",
+                  }}
+                  variant="h6"
+                >
+                  {contestsOverview.Description}
+                </Typography>
+              </>
+            ) : (
+              <>
+                <CircularProgress />
+              </>
+            )}
+          </TabPanel>
+          <TabPanel
+            value={value}
+            index={1}
+            style={{
+              display: "auto",
+              minHeight: "50rem",
+              background: "#424242",
+            }}
+          >
+            {contestProblems.map((problem, i) => {
+              console.log(problem);
+              return (
+                <Paper
+                  style={{
+                    margin: "2rem",
+                    padding: "0.5rem 5rem",
+                    borderRadius: "2rem",
+                  }}
+                >
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Link to={"/problem/" + problem._id}>
+                        <Typography variant="h5"> {problem.name}</Typography>
+                      </Link>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography component="span">Other Tags:</Typography>
+                      {problem.tags.map((p, i) => {
+                        return (
+                          <Chip
+                            size="small"
+                            label={p}
+                            key={i}
+                            style={{
+                              padding: "10px",
+                              margin: "5px",
+                            }}
+                          />
+                        );
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography component="span">Score:</Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              );
+            })}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                style={{
+                  color: "white",
+                  padding: "1rem 2rem ",
+                  borderColor: "white",
+                  background: "#006633",
+                }}
+                variant="contained"
+                onClick={handleClickOpen}
+              >
+                <Row>
+                  <AddIcon />
+                  <Typography
+                    style={{
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Add a Challenge
+                  </Typography>
+                </Row>
+              </Button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Create Problem</DialogTitle>
+                <DialogContent
+                  style={{
+                    width: "35rem",
+                  }}
+                >
+                  <DialogContentText></DialogContentText>
+                  <form
+                    className={classes.form}
+                    onSubmit={handleSubmit(onSubmit)}
+                  >
+                    <label className={classes.label} htmlFor="problemName">
+                      Problem Name:
+                    </label>
+
+                    <input
+                      className={classes.input}
+                      {...register("problemName", {
+                        required: "Problem name cannot be empty.",
+                      })}
+                      id="problemName"
+                    />
+                    {errors.problemName && (
+                      <span className={classes.p}>
+                        {errors.problemName.message}
+                      </span>
+                    )}
+
+                    <label className={classes.label} htmlFor="problemStatement">
+                      Problem Statement:{" "}
+                    </label>
+                    <textarea
+                      name="problemStatement"
+                      id="problemStatement"
+                      placeholder="Enter the problem statement"
+                      className={classes.input}
+                      {...register("problemStatement", {
+                        required: "Problem statement cannot be empty.",
+                      })}
+                    ></textarea>
+                    {errors.problemStatement && (
+                      <span className={classes.p}>
+                        {errors.problemStatement.message}
+                      </span>
+                    )}
+                    <label className={classes.label} htmlFor="tags">
+                      Tags:{" "}
+                    </label>
+                    <Select
+                      id="tags"
+                      onChange={handleDropdownChange}
+                      className={classes.dropdown}
+                      isMulti
+                      options={tags}
+                    />
+                    <label className={classes.label} htmlFor="score">
+                      Score:
+                    </label>
+                    <input
+                      onChange={handleChange}
+                      className={classes.input}
+                      type="number"
+                      step="50"
+                      {...register("score", {
+                        required: "Problem score cannot be empty.",
+                        valueAsNumber: true,
+                      })}
+                      id="score"
+                    />
+                    <label className={classes.label} htmlFor="sampleInput">
+                      Sample input:{" "}
+                    </label>
+                    <textarea
+                      style={{
+                        height: "8rem",
+                      }}
+                      name="sampleInput"
+                      id="sampleInput"
+                      placeholder="Separate sample inputs using ~                                                                                                                                                       
+                            Ex:                                                                                                                                                             
+                            abc                                                                                                                                                                                                                                            
+                            ~                                                                                                                            
+                            def                                                                                                                                           
+                            ~"
+                      className={classes.input}
+                      {...register("sampleInput", {
+                        required: "Sample input cannot be empty.",
+                      })}
+                    ></textarea>
+                    <label className={classes.label} htmlFor="sampleInput">
+                      Sample output:{" "}
+                    </label>
+                    <textarea
+                      style={{
+                        height: "8rem",
+                      }}
+                      id="sampleOutput"
+                      name="sampleOutput"
+                      placeholder="Separate sample outputs using ~                                                                                                                                                       
+                            Ex:                                                                                                                                                             
+                            123                                                                                                                                                                                                                                            
+                            ~                                                                                                                            
+                            456                                                                                                                                          
+                            ~"
+                      className={classes.input}
+                      {...register("sampleOutput", {
+                        required: "Sample output cannot be empty.",
+                      })}
+                    ></textarea>
+                    <label className={classes.label} htmlFor="testInputs">
+                      Test inputs:{" "}
+                    </label>
+                    <textarea
+                      name="testInputs"
+                      id="testInputs"
+                      placeholder="Enter Testinputs similar to sample inputs"
+                      className={classes.input}
+                      {...register("testInputs", {
+                        required: "Test inputs cannot be empty.",
+                      })}
+                    ></textarea>
+                    <label className={classes.label} htmlFor="testOutputs">
+                      Test outputs:{" "}
+                    </label>
+                    <textarea
+                      name="testOutputs"
+                      id="testOutputs"
+                      placeholder="Enter Testoutputs similar to sample outputs"
+                      className={classes.input}
+                      {...register("testOutputs", {
+                        required: "Test outputs cannot be empty.",
+                      })}
+                    ></textarea>
+                    {loadingProblemSubmit ? (
+                      <CircularProgress
+                        style={{ display: "flex", justifyContent: "center" }}
+                        disableShrink
+                      />
+                    ) : (
+                      <input
+                        className={classes.submitButton}
+                        value="Next"
+                        type="submit"
+                      />
+                    )}
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  {/* <Button onClick={handleClose} color="primary">
+                              Subscribe
+                            </Button> */}
+                </DialogActions>
+              </Dialog>
+            </div>
+          </TabPanel>
+          <TabPanel
+            value={value}
+            index={2}
+            style={{
+              display: "auto",
+              minHeight: "50rem",
+              background: "#424242",
+            }}
+          >
+            <Typography
+              style={{
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              variant="h4"
+            >
+              Work under Progress
+            </Typography>
+          </TabPanel>
+        </div>
+      )}
     </div>
   );
 };

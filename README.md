@@ -71,3 +71,12 @@ $ npm run start:production
 
 - [React](https://reactjs.org/)
 
+
+## For testing
+- [Mocha](https://mochajs.org/)
+- [Chai](https://www.chaijs.com/)
+
+
+#### Testing the app
+- For testing the app, make sure you are using the test DB(check index.js)
+- Now go to the backend/ directory, use `mocha test/<file_name.js> --timeout 100000`
