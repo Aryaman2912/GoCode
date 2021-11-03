@@ -53,7 +53,7 @@ const Problem = (props) => {
 
   const buttonHandlerIDE = (type) => {
     console.log(type);
-    if (type == "submit") {
+    if (type === "submit") {
       setSubmitLoad(true);
     } else {
       setTestLoad(true);
@@ -87,7 +87,7 @@ const Problem = (props) => {
         if (Object.entries(res)[1][1] !== 200) {
           setDialogTitle("Error");
           setDialogContent("Your code could not be compiled.Please Try Later");
-        } else if (type == "submit") {
+        } else if (type === "submit") {
           if (Object.entries(res)[0][1].Verdict === "Wrong answer") {
             setDialogTitle("Oops");
             setDialogContent("Thats not right, Please check your code again");
@@ -141,7 +141,7 @@ const Problem = (props) => {
       codeLanguage: codeLanguage,
     };
     localStorage.setItem(`code_${problemID}`, JSON.stringify(localIDEData));
-  }, [code, codeMirrorMode, codeLanguage]);
+  }, [code, codeMirrorMode, codeLanguage, problemID]);
 
   const loadingOptions = {
     type: "spin",
@@ -296,7 +296,7 @@ const Problem = (props) => {
                   options={{
                     lineWrapping: true,
                     lint: true,
-                    mode: { codeMirrorMode },
+                    mode: codeMirrorMode,
                     theme: "material",
                     lineNumbers: true,
                   }}
