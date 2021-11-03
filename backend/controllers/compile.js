@@ -35,6 +35,7 @@ export const problemCompilation = async(req, res) => {
         GoCodeProblems.findById(problemID, async(err, problemDocument) => {
             if(err) {
                 res.status(404).send("Invalid request")
+                return
             }
             // console.log(problemDocument)
             const problem = problemDocument.toObject()
@@ -80,7 +81,7 @@ export const problemCompilation = async(req, res) => {
                             }
                         )
                         res.json({"Verdict": "Wrong answer"})
-                        break
+                        return
                     }
                 }
             }
