@@ -1,6 +1,5 @@
 import Profiles from '../../models/profile.js'
 import Users from '../../models/user.js'
-//import {currentUserId} from "../user.js"
 import auth from '../../middleware/auth.js'
 
 // 'display' GET request
@@ -12,7 +11,6 @@ export const display = function(req, res){
             }
 
             else{
-                //console.log(currentUserId);
                 //console.log(profile);
                 Users.findById(req.userId, function(error, user){
                     if(error){

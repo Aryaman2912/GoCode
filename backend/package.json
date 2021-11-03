@@ -14,14 +14,17 @@
   "dependencies": {
     "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
+    "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "mongoose": "^6.0.8",
+    "multer": "^1.4.3",
     "nodemon": "^2.0.13",
-    "react-google-login": "^5.2.2"
+    "react-google-login": "^5.2.2",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
