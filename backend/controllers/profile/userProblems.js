@@ -1,5 +1,4 @@
 import Profiles from '../../models/profile.js'
-import {currentUserId} from "../user.js"
 import User from '../../models/profile.js'
 import auth from '../../middleware/auth.js'
 
@@ -12,7 +11,6 @@ export const displayProblems = function(req, res){
             }
 
             else{
-                //console.log(currentUserId);
                 //console.log(profile);
                 res.send(profile.problems);
             }

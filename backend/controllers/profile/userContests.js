@@ -1,5 +1,4 @@
 import Profiles from '../../models/profile.js'
-import {currentUserId} from "../user.js"
 import User from '../../models/profile.js'
 import auth from '../../middleware/auth.js'
 
@@ -12,7 +11,6 @@ export const displayGivenContests = function(req, res){
             }
 
             else{
-                //console.log(currentUserId);
                 //console.log(profile);
                 res.send(profile.givenContests);
             }
@@ -33,7 +31,6 @@ export const displayCreatedContests = function(req, res){
             }
 
             else{
-                //console.log(currentUserId);
                 //console.log(profile);
                 res.send(profile.createdContests);
             }
