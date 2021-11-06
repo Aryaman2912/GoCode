@@ -4,15 +4,18 @@ import 'codemirror/theme/material.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
 import 'codemirror/mode/python/python'
+
+import 'codemirror/addon/edit/closebrackets'
+import "codemirror/addon/edit/closetag"
+import 'codemirror/addon/edit/matchbrackets'
+import 'codemirror/addon/edit/matchtags'
 import { Controlled as ControlledEditor } from 'react-codemirror2'
-import { Button } from 'react-bootstrap';
 
 const Editor = (props) => {
   const {
     languageMode,
     code,
     onChange,
-    buttonHandlerIDE
   } = props
 
   const handleChange = (editor, data, value) => {
@@ -28,14 +31,15 @@ const Editor = (props) => {
         options = {{
           lineWrapping: true,
           lint: true,
+          tabSize: 2,
           mode: languageMode,
           theme: 'material',
-          lineNumbers: true
+          lineNumbers: true,
+          autoCloseBrackets: true,
+          autoCloseTags: true,
+          matchBrackets: true,
         }}
-      />
-      <Button variant="primary" onClick={() => buttonHandlerIDE("test")}>Test</Button>{' '}
-      <Button variant="primary" onClick={() => buttonHandlerIDE("submit")}>Submit</Button>{' '}
-      
+      />      
     </>
   )
 }

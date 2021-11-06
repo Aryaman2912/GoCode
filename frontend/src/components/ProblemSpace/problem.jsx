@@ -283,13 +283,13 @@ const Problem = (props) => {
                     );
                   })}
                 </DropdownButton>
-                {/* <Editor
+                <Editor
                   code={code}
                   languageMode={codeMirrorMode}
                   onChange={setCode}
                   buttonHandlerIDE={buttonHandlerIDE}
-                /> */}
-                <ControlledEditor
+                />
+                {/* <ControlledEditor
                   onBeforeChange={handleChange}
                   value={code}
                   className="code-mirror-wrapper"
@@ -300,7 +300,7 @@ const Problem = (props) => {
                     theme: "material",
                     lineNumbers: true,
                   }}
-                />
+                /> */}
                 {TestLoad ? (
                   <>
                     <CircularProgress color="secondary" size="1.5rem " />
