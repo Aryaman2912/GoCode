@@ -42,6 +42,7 @@ import { useDispatch } from "react-redux";
 import * as actionType from "../constants/actionTypes";
 import Submissions from "./ProblemSpace/Submisssions";
 import Pds from "./PersonalDevelopementSpace/pds";
+import ContestIndex from "./ContestSpace/ContestIndex";
 
 const drawerWidth = 300;
 
@@ -444,6 +445,7 @@ export default function MiniDrawer(props) {
             <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
             <Route exact path="/submissions/:id" component={Submissions} />
+            <Route exact path="/contests/:id/index" component={ContestIndex} />
           </Switch>
         </div>
       </main>
