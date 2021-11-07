@@ -1,11 +1,12 @@
-import  gocodeproblems  from '../models/Gocodeproblems.js';
+import gocodeproblems from '../models/Gocodeproblems.js';
 
 
 const getProblemRouter = (req, res) => {
     const problemID = req.query.problemID;
-    if(!problemID) {
-        gocodeproblems.find({}, (err, problems) => {
-            if(err) {
+    if (!problemID) {
+        gocodeproblems.find({ 'hidden': 'false' }, (err, problems) => {
+            console.log(problems.name)
+            if (err) {
                 res.json({
                     status: "failure"
                 })
@@ -15,7 +16,7 @@ const getProblemRouter = (req, res) => {
         })
     } else {
         gocodeproblems.findById(problemID, (err, problem) => {
-            if(err) {
+            if (err) {
                 res.json({
                     status: "failure"
                 })

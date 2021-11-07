@@ -252,14 +252,18 @@ const AddContest = (props) => {
             let tcproblems = [];
 
             var pCount = 0;
+            setcontestProblems([]);
             cDetails["problems"].forEach((problemID) => {
               let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
               fetch(problemURL)
                 .then((problem) => problem.json())
                 .then((problem) => {
+                  console.log("!!!!!!!!!@@@@@@@@@@@@@@@@@@@");
+                  console.log(problem);
                   tcproblems.push(problem);
                   pCount++;
                   if (pCount == cDetails["problems"].length) {
+                    console.log("YESY");
                     setcontestProblems(tcproblems);
                     setloadingProblemSubmit(false);
                     setOpen(false);
@@ -520,7 +524,9 @@ const AddContest = (props) => {
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography component="span">Score:</Typography>
+                      <Typography component="span">
+                        Score: {problem.score}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Paper>

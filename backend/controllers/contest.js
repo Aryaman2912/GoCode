@@ -62,19 +62,19 @@ export const addContest = async (req, res) => {
 }
 
 export const deleteContest = async (req, res) => {
-    try{
+    try {
         // console.log(req);
         console.log(req.params);
         const contestId = req.params.id;
         console.log(contestId);
 
-        await ContestProblems.deleteMany({contestId: contestId});
+        await ContestProblems.deleteMany({ contestId: contestId });
         await Contests.findByIdAndDelete(contestId);
 
-        res.status(200).json({message: "Contest deleted successully."})
-    } catch(err) {
+        res.status(200).json({ message: "Contest deleted successully." })
+    } catch (err) {
         console.log(err);
-        res.status(404).json({message: "Contest Not Found"});
+        res.status(404).json({ message: "Contest Not Found" });
     }
 }
 
@@ -121,22 +121,34 @@ export const isValidContest = async (req, res) => {
         // console.log(current_time + "\n" + contest.Date.toISOString());
         // console.log((current_time > contest.Date.toISOString()));
         // console.log(contest.Date instanceof Date);
+        console.log(contest.name)
+        console.log(contest.Duration)
         var closing_time = new Date(contest.Date);
         // console.log(closing_time.getHours());
-        closing_time.setHours(closing_time.getHours() + parseFloat(contest.Duration));
+        const dur = contest.Duration.split(" ")
+
+        var intdur = parseFloat(dur[0])
+
+        console.log(intdur)
+        console.log((intdur % 1) * 60)
+
+        closing_time.setHours(closing_time.getHours() + intdur, closing_time.getMinutes() + (intdur % 1) * 60);
         // console.log(closing_time.toISOString());
         // console.log(contest.Date);
         console.log(`Current Time: ${current_time}`);
         console.log(`Contest Closing time: ${closing_time.toISOString()}`);
         console.log(`Contest Opening time: ${contest.Date.toISOString()}`);
-        if(current_time >= contest.Date.toISOString() && current_time <= closing_time.toISOString()) {
+        if (current_time >= contest.Date.toISOString() && current_time <= closing_time.toISOString()) {
             console.log("Valid contest");
-            res.status(200).json({message: "Valid"});
-        } else {
-            res.status(200).json({message: "Invalid"});
+            res.status(200).json({ message: "Valid" });
+        } else if (current_time < contest.Date.toISOString()) {
+            res.status(200).json({ message: "Enroll" });
         }
-    } catch(err) {
+        else {
+            res.status(200).json({ message: "Invalid" });
+        }
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message: err});
+        res.status(500).json({ message: err });
     }
 };
