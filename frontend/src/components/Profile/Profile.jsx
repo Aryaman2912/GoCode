@@ -3,11 +3,16 @@ import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
 import { Container, Row, Col, Form, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+
 const Profile = () => {
 
     const [loading, setLoading] = useState(true);
     const [userProfile, setProfile] = useState([]);
     const history = useHistory();
+
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
         const storage = JSON.parse(localStorage.getItem('profile'))
@@ -28,7 +33,41 @@ const Profile = () => {
                 setProfile(data);
                 setLoading(false);
             });
-    }, []);
+    }, [history]);
+
+    const handleProfileImageUpdate = () => {
+        console.log(image)
+        const storage = JSON.parse(localStorage.getItem('profile'))
+        if (storage === null) {
+            history.push('/auth')
+            return
+        }
+        let token = storage.token
+        const headers = {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Authorization': `Bearer ${token}`
+        }
+        const formData = new FormData();
+        // Just sending the data as body won't work for files.
+        formData.append('image', image, image.name);
+        axios.post("http://localhost:5000/profile/uploadPhoto", 
+            formData,
+            {headers: headers}
+        )
+            .then((data) => {
+                console.log(data);
+                // setProfile(data);
+                // setLoading(false);
+            });
+
+    }
+
+    const updateProfileImage = (e) => {
+        console.log(e.target.files[0])
+        setImage(e.target.files[0]);
+    }
+
+
     const loadingOptions = {
         type: "spin",
         color: "#347deb",
@@ -65,20 +104,20 @@ const Profile = () => {
 
                                         <Form.Group controlId="formCategory1">
                                             <Form.Label style={{ color: "white" }}>Username</Form.Label>
-                                            <Form.Control type="text" defaultValue={userProfile['user'].name} />
+                                            <Form.Control disabled type="text" defaultValue={userProfile['user'].name} />
                                         </Form.Group>
 
                                         <Form.Group controlId="formCategory2">
                                             <Form.Label style={{ color: "white" }}>Email</Form.Label>
-                                            <Form.Control type="email" defaultValue={userProfile['user'].email} />
+                                            <Form.Control disabled type="email" defaultValue={userProfile['user'].email} />
                                         </Form.Group>
 
                                         <Form.Group controlId="formCategory4">
                                             <Form.Label style={{ color: "white" }}>Profile Image</Form.Label>
-                                            <Form.Control type="file" name="profileImage" />
+                                            <Form.Control type="file" name="image" onChange={updateProfileImage} />
                                         </Form.Group>
 
-                                        <Button variant="primary">Update Profile</Button>
+                                        <Button variant="primary" onClick={handleProfileImageUpdate} >Update Profile</Button>
 
                                     </Form>
                                 </Col>

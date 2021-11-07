@@ -5,7 +5,6 @@ import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
 import 'codemirror/mode/python/python'
 import { Controlled as ControlledEditor } from 'react-codemirror2'
-import { Button } from 'react-bootstrap';
 
 const ViewCode = (props) => {
   const {

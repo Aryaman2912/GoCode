@@ -1,10 +1,8 @@
-import { Grid, Paper, Typography, Button } from "@material-ui/core";
+import { Paper, Typography, Button } from "@material-ui/core";
 import { React, useState } from "react";
-import { Container, Row, Col } from "react-grid-system";
-import { Link } from "react-router-dom";
+import { Row } from "react-grid-system";
 import { Collapse } from "react-collapse";
 import ViewCode from "../CodingSpace/ViewCode";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const DATE_OPTIONS = {
   weekday: "short",
@@ -14,16 +12,16 @@ const DATE_OPTIONS = {
   hour: "numeric",
   minutes: "numeric",
 };
-const RESOLVER = {
-  "C++": "cpp17",
-  Python: "python3",
-  Java: "java",
-  C: "c",
+
+
+const LANGUAGE_MODE = {
+  "cpp17": "clike",
+  "python3": "python",
+  "java": "clike",
+  "c": "clike",
 };
 
 const SubmissionCard = ({ submission }) => {
-  console.log(submission);
-  console.log(submission.problemID);
   const [copen, setcopen] = useState(false);
 
   const handleClickOpen = () => {
@@ -69,7 +67,7 @@ const SubmissionCard = ({ submission }) => {
         <Typography
           variant="h7"
           style={{
-            color: submission.verdict == "Wrong answer" ? "#AA4A44" : "green",
+            color: submission.verdict === "Wrong answer" ? "#AA4A44" : "green",
             fontWeight: "bold",
             paddingLeft: "0.5rem",
           }}
@@ -145,34 +143,13 @@ const SubmissionCard = ({ submission }) => {
           >
             {copen ? "Close" : "View Code"}
           </Button>
-          {/* <DeleteForeverIcon
-            style={{
-              color: "white",
-              paddingRight: "1rem",
-              fontSize: "3rem",
-            }}
-          ></DeleteForeverIcon> */}
         </Row>
       </div>
-
-      {/* <Grid item xs={12}>
-                        <Typography component='span' >
-                            Other Tags: 
-                        </Typography>
-                    {
-                        problem.tags.map((p, i)=>{
-                            return <Chip size="small" label={p} key={i} style={{
-                                padding:'10px',
-                                margin:'5px',
-                            }}/>
-                        })
-                    }
-                    </Grid> */}
       <Collapse isOpened={copen}>
         <div>
           <ViewCode
             code={submission.code}
-            languageMode={RESOLVER[submission.language]}
+            languageMode={LANGUAGE_MODE[submission.language]}
           />
         </div>
       </Collapse>

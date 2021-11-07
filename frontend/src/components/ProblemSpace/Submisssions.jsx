@@ -2,20 +2,15 @@ import { Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
-import ViewCode from "../CodingSpace/ViewCode";
 import SubmissionCard from "./SubmissionCard";
 
-const RESOLVER = {
-  cpp17: "clike",
-  python3: "python",
-  java: "clike",
-  c: "clike",
-};
 
 const Submissions = (props) => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+
+  const problemID = props.match.params.id
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("profile"));
@@ -29,7 +24,7 @@ const Submissions = (props) => {
       Authorization: `Bearer ${token}`,
     };
     fetch(
-      `http://localhost:5000/api/submissions?problemID=${props.match.params.id}`,
+      `http://localhost:5000/api/submissions?problemID=${problemID}`,
       {
         method: "GET",
         headers: headers,
@@ -37,12 +32,12 @@ const Submissions = (props) => {
     )
       .then((data) => data.json())
       .then((data) => {
-        console.log(data);
-        console.log(typeof data);
+        // console.log(data);
+        // console.log(typeof data);
         setSubmissions(data);
         setLoading(false);
       });
-  }, []);
+  }, [problemID, history]);
 
   const loadingOptions = {
     type: "spin",
@@ -76,18 +71,9 @@ const Submissions = (props) => {
           >
             My Submissions
           </Typography>
-          {submissions.map((submission) => {
+          {submissions.map((submission, i) => {
             return (
-              // <div>
-              //   <h3>{submission.problemID}</h3>
-              //   <p>{submission.verdict}</p>
-              //   <p>{submission.timeStamp}</p>
-              //   <ViewCode
-              //     code={submission.code}
-              //     languageMode={RESOLVER[submission.language]}
-              //   />
-              // </div>
-              <SubmissionCard submission={submission} />
+              <SubmissionCard submission={submission} key={i}/>
             );
           })}
         </>

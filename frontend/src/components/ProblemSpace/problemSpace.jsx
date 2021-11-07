@@ -19,7 +19,7 @@ const ProblemSpace = () => {
     useEffect(() => {
         const cachedProblems = localStorage.getItem('problems')
         // console.log(cachedProblems)
-        console.log(+new Date())
+        // console.log(+new Date())
         const expireTime = localStorage.getItem('problemsExpirationTimestamp')
         if(!hasCache(expireTime, cachedProblems)) {
             fetch('http://localhost:5000/api/problems')
@@ -29,12 +29,12 @@ const ProblemSpace = () => {
                     data.forEach(problem => {
                         problem.tags.forEach(tag => {
                             tags.push(tag)
-                            console.log(tag);
+                            // console.log(tag);
                         })
                     });
-                    console.log(tags);
+                    // console.log(tags);
                     const uniqueTags = new Set(tags);
-                    console.log(uniqueTags);
+                    // console.log(uniqueTags);
                     const finalData = {};
                     uniqueTags.forEach(t => {
                         finalData[t] = data.filter(d => {
