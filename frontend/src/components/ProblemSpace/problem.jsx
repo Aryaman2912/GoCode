@@ -287,20 +287,7 @@ const Problem = (props) => {
                   code={code}
                   languageMode={codeMirrorMode}
                   onChange={setCode}
-                  buttonHandlerIDE={buttonHandlerIDE}
                 />
-                {/* <ControlledEditor
-                  onBeforeChange={handleChange}
-                  value={code}
-                  className="code-mirror-wrapper"
-                  options={{
-                    lineWrapping: true,
-                    lint: true,
-                    mode: codeMirrorMode,
-                    theme: "material",
-                    lineNumbers: true,
-                  }}
-                /> */}
                 {TestLoad ? (
                   <>
                     <CircularProgress color="secondary" size="1.5rem " />

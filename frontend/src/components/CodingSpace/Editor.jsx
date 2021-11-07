@@ -39,7 +39,7 @@ const Editor = (props) => {
           autoCloseTags: true,
           matchBrackets: true,
         }}
-      />      
+      />
     </>
   )
 }
