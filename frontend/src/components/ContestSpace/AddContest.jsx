@@ -520,7 +520,9 @@ const AddContest = (props) => {
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography component="span">Score:</Typography>
+                      <Typography component="span">
+                        Score: {problem.score}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Paper>
