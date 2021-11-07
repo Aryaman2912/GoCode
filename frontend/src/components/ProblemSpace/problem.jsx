@@ -15,13 +15,11 @@ import {
 import "./problem.css";
 import Editor from "../CodingSpace/Editor";
 import { DropdownButton, Dropdown, Badge } from "react-bootstrap";
-import { API } from "../../api/index";
 import { Container, Row, Col } from "react-grid-system";
 import UserInputOutput from "../CodingSpace/UserInputOutput";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { Controlled as ControlledEditor } from "react-codemirror2";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -46,21 +44,18 @@ const Problem = (props) => {
 
   const languageOptions = {
     "C++": "clike",
-    Java: "clike",
-    C: "clike",
-    Python: "python",
+    "Java": "clike",
+    "C": "clike",
+    "Python": "python",
   };
 
   const buttonHandlerIDE = (type) => {
-    console.log(type);
     if (type === "submit") {
       setSubmitLoad(true);
     } else {
       setTestLoad(true);
     }
     const storage = JSON.parse(localStorage.getItem("profile"));
-    // console.log(storage)
-    console.log(code);
     if (storage === null) {
       history.push("/auth");
       return;
@@ -83,7 +78,6 @@ const Problem = (props) => {
         { headers: headers }
       )
       .then((res) => {
-        console.log(res);
         if (Object.entries(res)[1][1] !== 200) {
           setDialogTitle("Error");
           setDialogContent("Your code could not be compiled.Please Try Later");
@@ -105,8 +99,6 @@ const Problem = (props) => {
           setTestLoad(false);
         }
         setuserOutput(res.data.output);
-        let test = res.data.output;
-        console.log(Object.entries(res)[1][1]);
       });
   };
 
@@ -132,7 +124,7 @@ const Problem = (props) => {
       setCodeMirrorMode(jsonCode["codeMirrorMode"]);
       setCodeLanguage(jsonCode["codeLanguage"]);
     }
-  }, []);
+  }, [problemID]);
 
   useEffect(() => {
     let localIDEData = {
@@ -147,13 +139,6 @@ const Problem = (props) => {
     type: "spin",
     color: "#347deb",
   };
-  const handleChange = (editor, data, value) => {
-    setCode(value);
-  };
-
-  // const handleClickDialogOpen = () => {
-  //   setOpen(true);
-  // };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
@@ -161,7 +146,6 @@ const Problem = (props) => {
 
   return (
     <>
-      {/* TODO --------------------------------->>> Need to design and put tags and stuff */}
       {loading ? (
         <div
           style={{
@@ -194,13 +178,6 @@ const Problem = (props) => {
                   {problem.name}
                 </Typography>
                 <br></br>
-                {/* works but all comes on a single line react-mathjax(package) and need to mention \text{} explicitly to avoid spaces removal*/}
-                {/* <MathJax.Provider>
-                    <p>
-                        <MathJax.Node formula={problem.statement} />
-                    </p>
-                </MathJax.Provider> */}
-
                 <MathJax.Provider
                   url="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
                   options={{
