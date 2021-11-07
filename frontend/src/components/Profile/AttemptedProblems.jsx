@@ -27,17 +27,8 @@ const Profile = () => {
         fetch("http://localhost:5000/profile/problems", { headers: headers })
             .then((data) => data.json())
             .then((data) => {
-                console.log(data);
-                
-                let problemIDs = [];
-                data.forEach(problem => {
-                    problemIDs.push(problem.problemID)
-                });
-
-                const uniqueIDs = new Set(problemIDs);
-                console.log(uniqueIDs)
-                setProblems([...uniqueIDs]);
-                
+                // console.log(data);
+                setProblems(data);
                 setLoading(false);
             });
     }, [history]);
@@ -69,11 +60,11 @@ const Profile = () => {
                 <>
                 <h1> Attempted Problems </h1>
                 {
-                    problems.map((id, i) => {
+                    problems.map((problem, i) => {
                         return (
                             <div key={i}>
-                                <Link to={`/submissions/${id}`}>
-                                    <Button variant="primary">{id}</Button>
+                                <Link to={`/submissions/${problem[0]}`}>
+                                    <Button variant="primary">{problem[1]}</Button>
                                 </Link>
                             </div>
                         )
