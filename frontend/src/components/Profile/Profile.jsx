@@ -11,6 +11,7 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [userProfile, setProfile] = useState([]);
     const history = useHistory();
+    const [userImageLink, setUserImageLink] = useState('');
 
     const [image, setImage] = useState(null);
 
@@ -49,16 +50,22 @@ const Profile = () => {
         }
         const formData = new FormData();
         // Just sending the data as body won't work for files.
-        formData.append('image', image, image.name);
-        axios.post("http://localhost:5000/profile/uploadPhoto", 
-            formData,
-            {headers: headers}
-        )
-            .then((data) => {
-                console.log(data);
-                // setProfile(data);
-                // setLoading(false);
-            });
+        try {
+            formData.append('image', image, image.name);
+            axios.post("http://localhost:5000/profile/uploadPhoto", 
+                formData,
+                {headers: headers}
+            )
+                .then((res) => {
+                    console.log(res);
+                    setUserImageLink(res.data.uploadResult.url);
+                    // setProfile(data);
+                    // setLoading(false);
+                });
+        }
+        catch(err) {
+            alert("Image is not uploaded");
+        }
 
     }
 
@@ -96,7 +103,7 @@ const Profile = () => {
                         <Container>
                             <Row>
                                 <Col>
-                                    <img src="https://www.computerhope.com/jargon/g/guest-user.jpg" alt="profile pic" />
+                                    <img src={userImageLink} alt="profile pic" />
                                 </Col>
                                 <Col>
                                     <h1 style={{ color: "white" }}>User Profile</h1>
