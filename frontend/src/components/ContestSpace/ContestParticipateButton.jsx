@@ -24,11 +24,19 @@ export default function ContestParticipateButton({ contest }) {
             <Button
                   variant="contained"
                   color="primary"
-                  href="#outlined-buttons"
+                  href={"/contests/" + contest._id + "/index"}
                 >
                   Participate
                 </Button>
         );
     }
-    else return(null);
+    else return(
+        <Button
+                  variant="contained"
+                  color="primary"
+                  href="#outlined-buttons"
+                >
+                  Enroll
+                </Button>
+    );
 }
