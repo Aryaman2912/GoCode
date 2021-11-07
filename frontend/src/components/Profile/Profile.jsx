@@ -9,7 +9,7 @@ import axios from "axios";
 const Profile = () => {
 
     const [loading, setLoading] = useState(true);
-    const [userProfile, setProfile] = useState([]);
+    const [userProfile, setProfile] = useState({});
     const history = useHistory();
     const [userImageLink, setUserImageLink] = useState('');
 
@@ -30,9 +30,10 @@ const Profile = () => {
         fetch("http://localhost:5000/profile/", { headers: headers })
             .then((data) => data.json())
             .then((data) => {
-                console.log(data);
-                setProfile(data);
+                console.log(data.user);
+                setProfile(data.user);
                 setLoading(false);
+                setUserImageLink(data.user.avatar);
             });
     }, [history]);
 
@@ -99,7 +100,7 @@ const Profile = () => {
                 </div>
             ) : (
                 <><div>
-                        {console.log(userProfile['user'].name)}
+                        {console.log(userProfile.name)}
                         <Container>
                             <Row>
                                 <Col>
@@ -111,12 +112,12 @@ const Profile = () => {
 
                                         <Form.Group controlId="formCategory1">
                                             <Form.Label style={{ color: "white" }}>Username</Form.Label>
-                                            <Form.Control disabled type="text" defaultValue={userProfile['user'].name} />
+                                            <Form.Control disabled type="text" defaultValue={userProfile.name} />
                                         </Form.Group>
 
                                         <Form.Group controlId="formCategory2">
                                             <Form.Label style={{ color: "white" }}>Email</Form.Label>
-                                            <Form.Control disabled type="email" defaultValue={userProfile['user'].email} />
+                                            <Form.Control disabled type="email" defaultValue={userProfile.email} />
                                         </Form.Group>
 
                                         <Form.Group controlId="formCategory4">

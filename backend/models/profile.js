@@ -14,7 +14,6 @@ const profileSchema = new Schema({
     }],
     createdContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}],
     givenContests: [{type: Schema.Types.ObjectId, ref: 'Contests'}],
-    avatar: {type: String},
 }, {collection: 'Profiles'});
 
 const Profiles = mongoose.model("Profiles", profileSchema);

@@ -1,6 +1,6 @@
 import cloudinary from 'cloudinary'
 import streamifier from 'streamifier'
-import Profile from '../../models/profile.js'
+import User from '../../models/user.js'
 
 
 cloudinary.config({ 
@@ -48,8 +48,14 @@ export const uploadPhoto = async(req, res) => {
         let uploadResult = await upload(req);
         // console.log(uploadResult)
         if(uploadResult.message === 'success') {
-            let user = await Profile.findOneAndUpdate({userId: req.userId}, {$set: {avatar: uploadResult.url}})
-            uploadResult.user = user
+            try {
+                await User.findOneAndUpdate({_id: req.userId}, {$set: {avatar: uploadResult.url}})
+            }
+            catch(e) {
+                res.status(500).json({
+                    message: 'error'
+                })
+            }
             res.status(200).json({uploadResult})
         } else {
             res.status(500).json({uploadResult})
