@@ -26,6 +26,7 @@ import FeaturedPlayListIcon from "@material-ui/icons/FeaturedPlayList";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ProblemSpace from "./ProblemSpace/problemSpace";
 import Profile from "./Profile/Profile";
+import AttemptedProblems from './Profile/AttemptedProblems';
 import Problem from "./ProblemSpace/problem";
 import Auth from "./Auth/Auth";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -428,8 +429,8 @@ export default function MiniDrawer(props) {
               <Profile />
             </Route>
 
-            <Route exact path="/profile">
-              <Profile />
+            <Route exact path="/profile/problems">
+              <AttemptedProblems />
             </Route>
 
             <Route exact path="/contests" component={ContestSpace} />
