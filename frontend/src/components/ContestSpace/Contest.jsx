@@ -1,15 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import { Dialog, Typography } from "@material-ui/core";
-import { Container, Row, Col } from "react-grid-system";
+import { Typography } from "@material-ui/core";
+import { Row } from "react-grid-system";
 import Button from "@material-ui/core/Button";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ContestDeleteButton from "./ContestDeleteButton";
 import ContestParticipateButton from "./ContestParticipateButton";
-import axios from "axios";
 import { DATE_OPTIONS } from "../../constants/dateOptions";
 const useStyles = makeStyles((theme) => ({
   root: {
