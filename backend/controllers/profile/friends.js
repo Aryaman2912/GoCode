@@ -1,17 +1,18 @@
 import Profiles from '../../models/profile.js'
-import User from '../../models/profile.js'
+import User from '../../models/user.js'
 import auth from '../../middleware/auth.js'
 
 // 'display' GET request
 export const displayFriends = function(req, res){
     try{
+        console.log("Entered friends route");
         Profiles.findOne({userId: req.userId}, function(error, profile){
             if(error){
                 res.json({status: "failure"});
             }
 
             else{
-                console.log(profile);
+                //console.log(profile);
                 res.send(profile.friends);
             }
         });
@@ -22,34 +23,47 @@ export const displayFriends = function(req, res){
     }
 };
 
-// 'display' GET request
-export const addFriend = async function(req, res){
-    const { email } = req.body;
-
+// "search" POST request
+export const searchUser = function(req, res){
     try {
+        console.log("Entered search user route");
+        User.find({name: req.body.name}, function(error, users){
+            if(users === null) res.send("No such user found");
+            else res.send(users);
+        });;
+    } 
+    
+    catch(error) {
+        console.log(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+};
 
-        //console.log(email);
+// 'add' POST request
+export const addFriend = function(req, res){
+    try {
+        User.findOne({email: req.body.email}, function(error, existingUser){
+            if(error){
+                throw error;
+            }
 
-        const existingUser = await User.findOne({ email });
-
-        //console.log(existingUser);
-
-        if(!existingUser) return res.send(null);//status(400).json({ message: "User does not exist" });
-
-        else{
-
-            var currentUser = await Profiles.findOne({userId: req.userId}); 
-
-            currentUser.friends.addToSet(existingUser._id);
-            currentUser.save();
-
-            //console.log("Friend added");
-            //console.log(existingUser);
-
-            res.send("Friend added");
-
-        }
-    } catch(error) {
+            else{
+                Profiles.findOne({userId: req.userId}, function(error, currentUser){
+                    if(error) throw error;
+                    else{
+                        if(!(existingUser === null)){
+                            currentUser.friends.addToSet(existingUser._id);
+                            currentUser.save();
+                            res.send('Friend Added');
+                        }
+                        else res.send(null);
+                    }
+                });
+            }
+        });
+    } 
+    
+    catch(error) {
         res.status(500).json({ message: "Something went wrong" });
     }
 };
