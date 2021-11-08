@@ -95,8 +95,14 @@ const ContestSpace = () => {
     data["duration"] = String(data["duration"]) + " hrs";
     data["isPublic"] = state.checkedB;
     delete data["time"];
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Authorization": `Bearer ${token}`,
+    };
     axios
-      .post("https://gocode-nitk.herokuapp.com/api/addcontest", data)
+      .post(`${domain}/api/addcontest`, data, {headers: headers})
       .then((res) => history.push("/addcontest/" + res.data.result._id))
       .catch((err) => console.log(err));
   };
