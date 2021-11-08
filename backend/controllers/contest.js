@@ -90,8 +90,8 @@ export const addProblem = async (req, res) => {
     let sampleOutput = await getInputsArray(req.body.sampleOutput);
     sampleInput = sampleInput.slice(0, -1)
     sampleOutput = sampleOutput.slice(0, -1)
-    let testInput = await getInputsArray(req.body.testInputs);
-    let testOutput = await getInputsArray(req.body.testOutputs);
+    let testInput = await getInputsArray(req.body.sampleInput);
+    let testOutput = await getInputsArray(req.body.sampleOutput);
     testInput = testInput.slice(0, -1)
     testOutput = testOutput.slice(0, -1)
 
@@ -132,8 +132,8 @@ export const addProblem = async (req, res) => {
                 res.status(200).json({ result });
             }
         })
-        //const contest = await Contests.findById(req.body.contestId);
-        //res.status(200).json({ contest });
+        const contest = await Contests.findById(req.body.contestId);
+        res.status(200).json({ contest });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: err });
