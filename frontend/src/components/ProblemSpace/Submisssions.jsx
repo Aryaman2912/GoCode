@@ -32,8 +32,7 @@ const Submissions = (props) => {
     )
       .then((data) => data.json())
       .then((data) => {
-        // console.log(data);
-        // console.log(typeof data);
+        data.reverse()
         setSubmissions(data);
         setLoading(false);
       });
