@@ -209,11 +209,11 @@ const AddContest = (props) => {
     };
     setloadingProblemSubmit(true);
     axios
-      .post("http://localhost:5000/api/addproblem", data, {headers: headers})
+      .post(`${domain}/api/addproblem`, data, {headers: headers})
       .then((res) => {
         console.log(res);
         axios
-          .get("http://localhost:5000/api/contests/" + props.match.params.id, {headers: headers})
+          .get(`${domain}/api/contests/` + props.match.params.id, {headers: headers})
           .then((res) => {
             console.log("##################");
 
@@ -224,7 +224,7 @@ const AddContest = (props) => {
             var pCount = 0;
             setcontestProblems([]);
             cDetails["problems"].forEach((problemID) => {
-              let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+              let problemURL = `${domain}/api/problems?problemID=${problemID}`;
               fetch(problemURL, {
                 method: "GET",
                 headers: headers,
