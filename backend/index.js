@@ -31,7 +31,7 @@ mongoose.connect(process.env.GOCODE_URI, (err) => {
 })
 
 const corsOptions = {
-    origin: 'http://localhost:3000' || '*',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
     optionSuccessStatus: 200,
 }
