@@ -28,7 +28,19 @@ const ContestIndex = (props) => {
     const [contestProblems, setContestProblems] = useState([]);
     const [contest, setContest] = useState({});
     const history = useHistory();
+
     useEffect(() => {
+        const storage = JSON.parse(localStorage.getItem("profile"));
+        // console.log(storage)
+        if (storage === null) {
+          history.push("/auth");
+          return;
+        }
+        let token = storage.token;
+        const headers = {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": `Bearer ${token}`,
+        };
     //     axios
     //       .get("http://localhost:5000/api/contests/" + props.match.params.id)
     //       .then((res) => {
@@ -62,7 +74,7 @@ const ContestIndex = (props) => {
     //   })
     //   .catch((err) => console.log(err));
         axios
-        .get(`${domain}/api/contests/` + props.match.params.id)
+        .get(`${domain}/api/contests/` + props.match.params.id, {headers: headers})
         .then((res) => {
             console.log("#############");
             console.log(res.data, "The contest is as above");

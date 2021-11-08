@@ -2,13 +2,26 @@ import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import axios from 'axios';
 import { domain } from "../../constants/config";
+import { useHistory } from "react-router";
+
 export default function ContestParticipateButton({ contest }) {
   const [canParticipate, setCanParticipate] = useState(false);
   const [canEnroll, setCanEnroll] = useState(false);
-
+  const history = useHistory()
   useEffect(() => {
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    // console.log(storage)
+    if (storage === null) {
+      history.push("/auth");
+      return;
+    }
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Authorization": `Bearer ${token}`,
+    };
     axios
-      .get(`${domain}/api/contests/${contest._id}/is_valid`)
+      .get(`${domain}/api/contests/${contest._id}/is_valid`, {headers: headers})
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.message);
@@ -25,7 +38,18 @@ export default function ContestParticipateButton({ contest }) {
       });
   });
     useEffect(() => {
-        axios.get(`${domain}/api/contests/${contest._id}/is_valid`)
+      const storage = JSON.parse(localStorage.getItem("profile"));
+      // console.log(storage)
+      if (storage === null) {
+        history.push("/auth");
+        return;
+      }
+      let token = storage.token;
+      const headers = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": `Bearer ${token}`,
+      };
+        axios.get(`${domain}/api/contests/${contest._id}/is_valid`, {headers: headers})
         .then((res) => {
             if(res.status === 200) {
                 console.log(res.data.message);

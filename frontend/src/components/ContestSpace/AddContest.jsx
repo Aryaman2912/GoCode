@@ -24,6 +24,8 @@ import { DATE_OPTIONS } from "../../constants/dateOptions";
 import { tags } from "../../constants/tags";
 import { domain } from "../../constants/config";
 
+
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -147,8 +149,15 @@ const AddContest = (props) => {
   };
 
   useEffect(() => {
+    const storage = JSON.parse(localStorage.getItem("profile"));
+
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Authorization": `Bearer ${token}`,
+    };
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
-    axios.get(`${domain}/api/contests/` + props.match.params.id)
+    axios.get(`${domain}/api/contests/` + props.match.params.id, {headers: headers})
       .then((data) => {
         console.log(data.data.problems);
         // fillProblems(data);
@@ -156,7 +165,7 @@ const AddContest = (props) => {
         var pCount = 0;
         data.data.problems.forEach((problemID) => {
           let problemURL = `${domain}/api/problems?problemID=${problemID}`;
-          axios.get(problemURL)
+          axios.get(problemURL, {headers: headers})
             .then((problem) => {
               console.log(problem.data)
               contestProblems.push(problem.data);
@@ -192,13 +201,19 @@ const AddContest = (props) => {
     data["hidden"] = true;
     data["contestId"] = props.match.params.id;
     console.log(data);
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Authorization": `Bearer ${token}`,
+    };
     setloadingProblemSubmit(true);
     axios
-      .post("http://localhost:5000/api/addproblem", data)
+      .post("http://localhost:5000/api/addproblem", data, {headers: headers})
       .then((res) => {
         console.log(res);
         axios
-          .get("http://localhost:5000/api/contests/" + props.match.params.id)
+          .get("http://localhost:5000/api/contests/" + props.match.params.id, {headers: headers})
           .then((res) => {
             console.log("##################");
 
@@ -210,7 +225,10 @@ const AddContest = (props) => {
             setcontestProblems([]);
             cDetails["problems"].forEach((problemID) => {
               let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
-              fetch(problemURL)
+              fetch(problemURL, {
+                method: "GET",
+                headers: headers,
+              })
                 .then((problem) => problem.json())
                 .then((problem) => {
                   console.log("!!!!!!!!!@@@@@@@@@@@@@@@@@@@");
