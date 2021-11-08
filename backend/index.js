@@ -47,7 +47,7 @@ app.use("/api/submissions", submissionsRouter)
 app.use("/api/problems", problemRouter)
 app.use("/api/pds", pdsRouter)
 
-app.listen(5000, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log("Server started...");
 })
 
