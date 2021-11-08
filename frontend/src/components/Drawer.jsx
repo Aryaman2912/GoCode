@@ -45,6 +45,7 @@ import Submissions from "./ProblemSpace/Submisssions";
 import Pds from "./PersonalDevelopementSpace/pds";
 import ContestIndex from "./ContestSpace/ContestIndex";
 import logo from "../constants/logo.png";
+import ShowPlaylist from "./PlaylistSpace/AddPlaylist";
 
 const drawerWidth = 300;
 
@@ -456,7 +457,7 @@ export default function MiniDrawer(props) {
             <Route exact path="/contests/:id" component={AddContest} />
             <Route exact path="/playlists" component={PlaylistSpace} />
             <Route exact path="/addcontest/:id" component={AddContest} />
-            <Route exact path="/addplaylist/:id" component={AddPlaylist} />
+            <Route exact path="/showplaylist/:id" component={ShowPlaylist} />
             <Route exact path="/addproblem" component={AddProblem} />
             <Route path="/problem/:id" component={Problem} />
             <Route exact path="/submissions/:id" component={Submissions} />

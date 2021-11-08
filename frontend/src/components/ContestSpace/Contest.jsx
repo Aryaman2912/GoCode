@@ -143,7 +143,7 @@ export default function Contest({ data }) {
               >
                 {current_time > new Date(t.Date).toISOString() ||
                 JSON.parse(localStorage.getItem("profile"))["result"]["_id"] ===
-                  contest.hostId ? (
+                  t.hostId ? (
                   <Button
                     style={{
                       color: "white",

@@ -13,56 +13,72 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useStyles from "./styles";
 import { useForm } from "react-hook-form";
-import {API} from '../../api/index';
+import { API } from "../../api/index";
 import axios from "axios";
-import { useHistory } from 'react-router';
-import { domain } from '../../constants/config';
+import { useHistory } from "react-router";
+import { domain } from "../../constants/config";
+import { tags } from "../../constants/tags";
+import Select from "react-select";
 
 const PlaylistSpace = () => {
   const [playlists, setPlaylists] = useState([]);
+  const [problems, setProblems] = useState([]);
+  const [listProblems, setListProblems] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const [loading, setLoading] = useState(true);
-  const history = useHistory()
-
-
-
+  const history = useHistory();
 
   useEffect(() => {
-    const storage = JSON.parse(localStorage.getItem('profile'))
-    if(storage === null) {
-        history.push('/auth')
-        return
+    const cachedProblems = localStorage.getItem("problems");
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    if (storage === null) {
+      history.push("/auth");
+      return;
     }
-    let token = storage.token
+    let token = storage.token;
     const headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': `Bearer ${token}`
-    }
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization: `Bearer ${token}`,
+    };
 
-    fetch(`${domain}/playlists`, {headers: headers})
+    fetch(`${domain}/playlists`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
-        // let tempcontests = [];
-        // data.forEach((contest) => {
-        //   if (contest.isPublic) {
-        //     tempcontests.push(contest);
-        //   }
-        // });
-
-        console.log(data);
+        console.log('###############');
+        console.log(data)
         setPlaylists(data);
-        setLoading(false);
+        fetch(`${domain}/api/problems`)
+          .then((data) => data.json())
+          .then((data) => {
+            let dummyP = [];
+            data.forEach((problem) => {
+              dummyP.push({
+                value: problem._id.toString(),
+                label: problem.name,
+              });
+            });
+            setListProblems(dummyP);
+
+            setLoading(false);
+          });
       });
+    // let tempcontests = [];
+    // data.forEach((contest) => {
+    //   if (contest.isPublic) {
+    //     tempcontests.push(contest);
+    //   }
+    // });
   }, []);
 
   // console.log(contests);
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
-    const storage = JSON.parse(localStorage.getItem('profile'))
-        // console.log(storage)
-        if(storage === null) {
-            history.push('/auth')
-        }
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    // console.log(storage)
+    if (storage === null) {
+      history.push("/auth");
+    }
     setOpen(true);
   };
 
@@ -70,47 +86,46 @@ const PlaylistSpace = () => {
     setOpen(false);
   };
 
-  const [formData, setFormData] = useState('')
+  const [formData, setFormData] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-
   const handleChange = (event) => {
-    setFormData({ [event.target.name]: event.target.value })
-  }
+    setFormData({ [event.target.name]: event.target.value });
+  };
 
   const onSubmit = (data) => {
     // const time = data.time.split(':');
     // data.date.setHours(time[0]);
     // data.date.setMinutes(time[1]);
-    const userId = JSON.parse(localStorage.getItem('profile'))['result']['_id'];
-    data['userId'] = userId;
-    data['name'] = data.playlistName
+    const userId = JSON.parse(localStorage.getItem("profile"))["result"]["_id"];
+    data["userId"] = userId;
+    data["name"] = data.playlistName;
+    data["problems"] = selectedTags;
+    console.log(selectedTags);
     // data['duration'] = String(data['duration']) + " hrs"
     // delete data['time'];
-    const storage = JSON.parse(localStorage.getItem('profile'))
-    if(storage === null) {
-        history.push('/auth')
-        return
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    if (storage === null) {
+      history.push("/auth");
+      return;
     }
-    let token = storage.token
+    let token = storage.token;
     const headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': `Bearer ${token}`
-    }
-    console.log(data)
-    axios.post(`${domain}/playlists/create`,
-      data, {headers: headers}
-    )
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization: `Bearer ${token}`,
+    };
+    console.log(data);
+    axios
+      .post(`${domain}/playlists/create`, data, { headers: headers })
       .then((res) => {
-        console.log(res.data._id)
-        history.push('/addplaylist/' + res.data._id)
+        console.log(res.data._id);
+        history.push("/showplaylist/" + res.data._id);
       })
-      .catch((err) => console.log(err))
-    
+      .catch((err) => console.log(err));
   };
 
   const classes = useStyles();
@@ -118,6 +133,15 @@ const PlaylistSpace = () => {
     type: "spin",
     color: "#347deb",
   };
+  const handleDropdownChange = (event) => {
+    console.log(event);
+    let tagsArray = [];
+    event.map((o) => tagsArray.push(o.value));
+
+    setSelectedTags(tagsArray);
+  };
+
+ 
 
   return (
     <>
@@ -138,6 +162,7 @@ const PlaylistSpace = () => {
           />
         </div>
       ) : (
+        
         <>
           <div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -168,7 +193,9 @@ const PlaylistSpace = () => {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
               >
-                <DialogTitle id="form-dialog-title">Create Playlist</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                  Create Playlist
+                </DialogTitle>
                 <DialogContent
                   style={{
                     width: "35rem",
@@ -183,7 +210,8 @@ const PlaylistSpace = () => {
                       Playlist Name:
                     </label>
 
-                    <input onChange={handleChange}
+                    <input
+                      onChange={handleChange}
                       className={classes.input}
                       {...register("playlistName", {
                         required: "Playlist name cannot be empty.",
@@ -196,18 +224,27 @@ const PlaylistSpace = () => {
                       </span>
                     )}
                     <label className={classes.label} htmlFor="description">
-                    Playlist description:{" "}
-                  </label>
-                  <textarea
-                    name="description"
-                    id="description"
-                    placeholder="Enter the description"
-                    className={classes.input}
-                    {...register("description", {
-                      required: "Description cannot be empty.",
-                    })}
-                  ></textarea> 
-                    <input 
+                      Playlist description:{" "}
+                    </label>
+                    <textarea
+                      name="description"
+                      id="description"
+                      placeholder="Enter the description"
+                      className={classes.input}
+                      {...register("description", {
+                        required: "Description cannot be empty.",
+                      })}
+                    ></textarea>
+                    <Select
+                      // className={classes.dropdown}
+                      isMulti
+                      options={listProblems}
+                      onChange={handleDropdownChange}
+                      style={{
+                        width: "50%",
+                      }}
+                    />
+                    <input
                       className={classes.submitButton}
                       value="Next"
                       type="submit"

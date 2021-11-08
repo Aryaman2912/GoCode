@@ -5,7 +5,7 @@ import ProblemBox from "./ProblemBox";
 import { makeStyles, alpha } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import { domain } from '../../constants/config';
+import { domain } from "../../constants/config";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -65,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
 const ProblemSpace = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchProblems, setsearchProblems] = useState([]);
+
   const classes = useStyles();
   const hasCache = (expireTime, cachedProblems) => {
     if (
@@ -88,12 +90,22 @@ const ProblemSpace = () => {
         .then((data) => data.json())
         .then((data) => {
           let tags = [];
+          let dummysearch = [];
           data.forEach((problem) => {
+            dummysearch.push({
+              key: problem._id.toString(),
+              value: problem.name,
+            });
+
             problem.tags.forEach((tag) => {
               tags.push(tag);
               // console.log(tag);
             });
           });
+
+          console.log(dummysearch);
+
+          setsearchProblems(dummysearch);
           // console.log(tags);
           const uniqueTags = new Set(tags);
           // console.log(uniqueTags);
@@ -105,6 +117,7 @@ const ProblemSpace = () => {
           });
           setProblems(finalData);
           localStorage.setItem("problems", JSON.stringify(finalData));
+
           let currentDate = new Date();
           let expireTimeStamp = +new Date(
             currentDate.getTime() + MINUTES_TO_ADD * 60000
@@ -142,7 +155,7 @@ const ProblemSpace = () => {
         </div>
       ) : (
         <Col>
-          <div className={classes.search}>
+          {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -154,7 +167,8 @@ const ProblemSpace = () => {
               }}
               inputProps={{ "aria-label": "search" }}
             />
-          </div>
+          </div> */}
+
           {Object.entries(problems).map((problem, i) => (
             <ProblemBox problemset={problem} key={i} />
           ))}
