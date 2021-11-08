@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
 import SubmissionCard from "./SubmissionCard";
+import { domain } from '../../constants/config';
 
 
 const Submissions = (props) => {
@@ -24,7 +25,7 @@ const Submissions = (props) => {
       Authorization: `Bearer ${token}`,
     };
     fetch(
-      `http://localhost:5000/api/submissions?problemID=${problemID}`,
+      `${domain}/api/submissions?problemID=${problemID}`,
       {
         method: "GET",
         headers: headers,

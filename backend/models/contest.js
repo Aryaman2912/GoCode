@@ -11,7 +11,10 @@ const ContestSchema = new Schema({
     isPublic: {type: Boolean},
     hostId: {type: Schema.Types.ObjectId, ref: 'User'},
     problems: {type: [Schema.Types.ObjectId], ref: 'GoCodeProblems'},
-    leaderboard: {type: [Schema.Types.ObjectId], ref: 'User'},
+    leaderboard: [{
+        userID: {type: Schema.Types.ObjectId, ref: 'User'},
+        score: {type: Number},
+    }],
 }, {collection: 'Contests'});
 
 const Contests = mongoose.model("Contests",ContestSchema);

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Col } from "react-grid-system";
 import ReactLoading from "react-loading";
 import ProblemBox from "./ProblemBox";
-import { makeStyles, useTheme, alpha } from "@material-ui/core/styles";
+import { makeStyles, alpha } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-
+import { domain } from '../../constants/config';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -75,7 +75,6 @@ const ProblemSpace = () => {
       return false;
     return true;
   };
-
   // Problems refresh every 5 minutes
   const MINUTES_TO_ADD = 5;
 
@@ -85,7 +84,7 @@ const ProblemSpace = () => {
     // console.log(+new Date())
     const expireTime = localStorage.getItem("problemsExpirationTimestamp");
     if (!hasCache(expireTime, cachedProblems)) {
-      fetch("http://localhost:5000/api/problems")
+      fetch(`${domain}/api/problems`)
         .then((data) => data.json())
         .then((data) => {
           let tags = [];

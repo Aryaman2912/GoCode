@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import {API} from '../../api/index';
 import axios from "axios";
 import { useHistory } from 'react-router';
+import { domain } from '../../constants/config';
 
 const PlaylistSpace = () => {
   const [playlists, setPlaylists] = useState([]);
@@ -37,7 +38,7 @@ const PlaylistSpace = () => {
         'Authorization': `Bearer ${token}`
     }
 
-    fetch("http://localhost:5000/playlists", {headers: headers})
+    fetch(`${domain}/playlists`, {headers: headers})
       .then((data) => data.json())
       .then((data) => {
         // let tempcontests = [];
@@ -101,7 +102,7 @@ const PlaylistSpace = () => {
         'Authorization': `Bearer ${token}`
     }
     console.log(data)
-    axios.post('http://localhost:5000/playlists/create',
+    axios.post(`${domain}/playlists/create`,
       data, {headers: headers}
     )
       .then((res) => {

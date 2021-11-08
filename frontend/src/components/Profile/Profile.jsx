@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { domain } from '../../constants/config';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,7 @@ const Profile = () => {
       "Authorization": `Bearer ${token}`,
     };
     console.log(token);
-    fetch("http://localhost:5000/profile/", { headers: headers })
+    fetch(`${domain}/profile/`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
         console.log(data.user);

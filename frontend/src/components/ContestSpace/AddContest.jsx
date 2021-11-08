@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CircularProgress, Container } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -18,12 +18,11 @@ import { Row } from "react-grid-system";
 import Select from "react-select";
 import { Chip, Grid, Paper, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { useHistory } from "react-router";
 import { DATE_OPTIONS } from "../../constants/dateOptions";
 import { tags } from "../../constants/tags";
+import { domain } from "../../constants/config";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -138,7 +137,6 @@ const AddContest = (props) => {
     formState: { errors },
   } = useForm();
 
-  const history = useHistory();
   const [contestsOverview, setcontestsOverview] = useState();
   const [loading, setLoading] = useState(true);
   const [contestProblems, setcontestProblems] = useState([]);
@@ -150,28 +148,27 @@ const AddContest = (props) => {
 
   useEffect(() => {
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
-    fetch("http://localhost:5000/api/contests/" + props.match.params.id)
-      .then((data) => data.json())
+    axios.get(`${domain}/api/contests/` + props.match.params.id)
       .then((data) => {
-        console.log(data);
+        console.log(data.data.problems);
         // fillProblems(data);
         // setcontestProblems([]);
         var pCount = 0;
-        data["problems"].forEach((problemID) => {
-          let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
-          fetch(problemURL)
-            .then((problem) => problem.json())
+        data.data.problems.forEach((problemID) => {
+          let problemURL = `${domain}/api/problems?problemID=${problemID}`;
+          axios.get(problemURL)
             .then((problem) => {
-              contestProblems.push(problem);
+              console.log(problem.data)
+              contestProblems.push(problem.data);
               pCount++;
-              if (pCount === data["problems"].length) {
-                setcontestsOverview(data);
+              if (pCount === data.data.problems.length) {
+                setcontestsOverview(data.data);
                 setLoading(false);
               }
             });
         });
         if (pCount === 0) {
-          setcontestsOverview(data);
+          setcontestsOverview(data.data);
           setLoading(false);
         }
       });
@@ -220,8 +217,7 @@ const AddContest = (props) => {
                   console.log(problem);
                   tcproblems.push(problem);
                   pCount++;
-                  if (pCount == cDetails["problems"].length) {
-                    console.log("YESY");
+                  if (pCount === cDetails["problems"].length) {
                     setcontestProblems(tcproblems);
                     setloadingProblemSubmit(false);
                     setOpen(false);

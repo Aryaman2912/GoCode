@@ -3,6 +3,7 @@ import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { domain } from "../../constants/config";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ const Profile = () => {
       "Authorization": `Bearer ${token}`,
     };
     console.log(token);
-    fetch("http://localhost:5000/profile/problems", { headers: headers })
+    fetch(`${domain}/profile/problems`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
         // console.log(data);

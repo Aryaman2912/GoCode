@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
-
+import axios from 'axios';
+import { domain } from "../../constants/config";
 export default function ContestParticipateButton({ contest }) {
   const [canParticipate, setCanParticipate] = useState(false);
   const [canEnroll, setCanEnroll] = useState(false);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/contests/${contest._id}/is_valid`)
+      .get(`${domain}/api/contests/${contest._id}/is_valid`)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.message);
@@ -24,6 +24,19 @@ export default function ContestParticipateButton({ contest }) {
         console.log(err);
       });
   });
+    useEffect(() => {
+        axios.get(`${domain}/api/contests/${contest._id}/is_valid`)
+        .then((res) => {
+            if(res.status === 200) {
+                console.log(res.data.message);
+                if(res.data.message === "Valid") setCanParticipate(true);
+                else setCanParticipate(false);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    })
 
   if (canParticipate) {
     return (

@@ -22,6 +22,7 @@ import ReactLoading from "react-loading";
 import { useHistory } from "react-router";
 import { DATE_OPTIONS } from "../../constants/dateOptions";
 import ContestTimer from "./ContestTimer";
+import { domain } from "../../constants/config";
 
 const ContestIndex = (props) => {
     const [contestProblems, setContestProblems] = useState([]);
@@ -61,7 +62,7 @@ const ContestIndex = (props) => {
     //   })
     //   .catch((err) => console.log(err));
         axios
-        .get("http://localhost:5000/api/contests/" + props.match.params.id)
+        .get(`${domain}/api/contests/` + props.match.params.id)
         .then((res) => {
             console.log("#############");
             console.log(res.data, "The contest is as above");
@@ -77,7 +78,7 @@ const ContestIndex = (props) => {
             }
 
             cDetails["problems"].forEach((problemID) => {
-                let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+                let problemURL = `https://gocode-nitk.herokuapp.com/api/problems?problemID=${problemID}`;
                 fetch(problemURL)
                 .then((problem) => problem.json())
                 .then((problem) => {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MathJax from "mathjax3-react";
 import ReactLoading from "react-loading";
+import { domain } from '../../constants/config';
+
 import {
   Typography,
   Button,
@@ -63,11 +65,11 @@ const Problem = (props) => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
     axios
       .post(
-        "http://localhost:5000/api/compile",
+        `${domain}/api/compile`,
         {
           code: code,
           language: codeLanguage,
@@ -104,7 +106,7 @@ const Problem = (props) => {
 
   const problemID = props.match.params.id;
   useEffect(() => {
-    let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
+    let problemURL = `${domain}/api/problems?problemID=${problemID}`;
     fetch(problemURL)
       .then((data) => data.json())
       .then((data) => {
