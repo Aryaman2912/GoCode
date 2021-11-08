@@ -165,7 +165,7 @@ const AddContest = (props) => {
         var pCount = 0;
         data.data.problems.forEach((problemID) => {
           let problemURL = `${domain}/api/problems?problemID=${problemID}`;
-          axios.get(problemURL)
+          axios.get(problemURL, {headers: headers})
             .then((problem) => {
               console.log(problem.data)
               contestProblems.push(problem.data);
