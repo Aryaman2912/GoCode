@@ -26,7 +26,7 @@ import FeaturedPlayListIcon from "@material-ui/icons/FeaturedPlayList";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ProblemSpace from "./ProblemSpace/problemSpace";
 import Profile from "./Profile/Profile";
-import AttemptedProblems from './Profile/AttemptedProblems';
+import AttemptedProblems from "./Profile/AttemptedProblems";
 import Problem from "./ProblemSpace/problem";
 import Auth from "./Auth/Auth";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -44,6 +44,7 @@ import * as actionType from "../constants/actionTypes";
 import Submissions from "./ProblemSpace/Submisssions";
 import Pds from "./PersonalDevelopementSpace/pds";
 import ContestIndex from "./ContestSpace/ContestIndex";
+import logo from "../constants/logo.png";
 
 const drawerWidth = 300;
 
@@ -252,11 +253,20 @@ export default function MiniDrawer(props) {
             <MenuIcon />
           </IconButton>
           {/* <Link to="/"> */}
-          <Typography className={classes.title} onClick={() => history.push("/")}variant="h6" noWrap>
+          <img src={logo} alt="Logo" width="40" height="40" />
+          <Typography
+            className={classes.title}
+            onClick={() => history.push("/")}
+            variant="h6"
+            noWrap
+            style={{
+              paddingLeft: "1rem",
+            }}
+          >
             GoCode
           </Typography>
-            {/* </Link> */}
-          <div className={classes.search}>
+          {/* </Link> */}
+          {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -268,7 +278,7 @@ export default function MiniDrawer(props) {
               }}
               inputProps={{ "aria-label": "search" }}
             />
-          </div>
+          </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {/* <IconButton aria-label="show 4 new mails" color="inherit">
@@ -289,7 +299,11 @@ export default function MiniDrawer(props) {
               <a href="/auth">
                 <Button
                   variant="outlined"
-                  style={{ color: "white", borderColor: "white" }}
+                  style={{
+                    color: "white",
+                    borderColor: "white",
+                    marginTop: "0.5rem",
+                  }}
                 >
                   Login{" "}
                 </Button>
