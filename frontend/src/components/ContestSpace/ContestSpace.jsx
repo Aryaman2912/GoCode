@@ -16,12 +16,19 @@ import useStyles from "./styles";
 import { useForm } from "react-hook-form";
 import { API } from "../../api/index";
 import axios from "axios";
+import { domain } from "../../constants/config";
 const ContestSpace = () => {
   console.log(JSON.parse(localStorage.getItem("profile")));
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch("https://gocode-nitk.herokuapp.com/api/contests")
+    const storage = JSON.parse(localStorage.getItem("profile"));
+    // console.log(storage)
+    if (storage === null) {
+      history.push("/auth");
+      return;
+    }
+    fetch(`${domain}/api/contests`)
       .then((data) => data.json())
       .then((data) => {
         let tempcontests = [];
@@ -43,6 +50,7 @@ const ContestSpace = () => {
     // console.log(storage)
     if (storage === null) {
       history.push("/auth");
+      return;
     }
     setOpen(true);
   };
