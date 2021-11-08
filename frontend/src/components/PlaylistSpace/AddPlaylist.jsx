@@ -18,6 +18,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { Row } from "react-grid-system";
 import Select from "react-select";
 import axios from 'axios';
+import { domain } from '../../constants/config';
 import ReactLoading from 'react-loading';
 import { useHistory } from "react-router";
 function TabPanel(props) {
@@ -183,7 +184,7 @@ const AddPlaylist = (props) => {
     console.log(data)
     setloadingProblemSubmit(true);
     console.log(props);
-    axios.post(`http://localhost:5000/playlists/edit/${props.match.params.id}`,
+    axios.post(`${domain}/playlists/edit/${props.match.params.id}`,
     data
     )
       .then((res) => {

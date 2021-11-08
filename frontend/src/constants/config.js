@@ -1,0 +1,1 @@
+export const domain = "https://gocode-nitk.herokuapp.com"

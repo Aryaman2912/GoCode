@@ -21,7 +21,7 @@ const ContestSpace = () => {
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch("http://localhost:5000/api/contests")
+    fetch("https://gocode-nitk.herokuapp.com/api/contests")
       .then((data) => data.json())
       .then((data) => {
         let tempcontests = [];
@@ -83,7 +83,7 @@ const ContestSpace = () => {
     data["isPublic"] = state.checkedB;
     delete data["time"];
     axios
-      .post("http://localhost:5000/api/addcontest", data)
+      .post("https://gocode-nitk.herokuapp.com/api/addcontest", data)
       .then((res) => history.push("/addcontest/" + res.data.result._id))
       .catch((err) => console.log(err));
   };
