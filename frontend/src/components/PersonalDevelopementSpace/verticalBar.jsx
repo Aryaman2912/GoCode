@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { useHistory } from "react-router";
 import ReactLoading from "react-loading";
-
+import { domain } from "../../constants/config";
 const options = {
   scales: {
     yAxes: [
@@ -33,9 +33,9 @@ const VerticalBar = () => {
     console.log(token);
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
-    fetch(`http://localhost:5000/api/pds`, {
+    fetch(`${domain}/api/pds`, {
       method: "GET",
       headers: headers,
     })
