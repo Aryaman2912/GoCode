@@ -43,6 +43,13 @@ export const problemCompilation = async(req, res) => {
             // console.log(inputs)
             let outputs = problem['output']
 
+            if(problem['testInput'].length !== 0) {
+                inputs = inputs.concat(problem['testInput'])
+                outputs = outputs.concat(problem['testOutput'])
+            }
+
+            // console.log(inputs)
+            // console.log(outputs)
             let promises = []
              
             for(let i = 0; i < inputs.length; i++) {
@@ -51,6 +58,7 @@ export const problemCompilation = async(req, res) => {
                 APIData['stdin'] = inputs[i]
                 promises.push(axios.post('https://api.jdoodle.com/v1/execute', APIData))
             }
+
             let accepted = true
 
             let submission = {
