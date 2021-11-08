@@ -113,27 +113,25 @@ export const addProblem = async (req, res) => {
             hidden: req.body.hidden,
             score: req.body.score,
         }
-        // for(let i = 0; i < sampleInput.length; i++) {
-        //     let x = sampleInput[i].replace(/^\s*\n/gm, "")
-        //     let y = sampleOutput[i].replace(/^\s*[\r\n]/gm, "")
-        //     console.log(x);
-        //     console.log(y);
-        // }
-        const result = await GoCodeProblems.create(data);
 
-        Contests.findById(req.body.contestId, (err, contest) => {
+        Contests.findById(req.body.contestId, async(err, contest) => {
             if (err) {
                 res.json({
                     status: "failure"
                 })
             } else {
-                contest.problems.addToSet(result._id)
-                contest.save();
-                res.status(200).json({ result });
+                if(req.userId !== contest.hostId) {
+                    res.status(401).json({ message: "You are not authorized to add problem to this contest" });
+                } else {
+                    const result = await GoCodeProblems.create(data);
+                    contest.problems.push(result._id);
+                    contest.save();
+                    res.status(200).json({ result });
+                }
             }
         })
-        const contest = await Contests.findById(req.body.contestId);
-        res.status(200).json({ contest });
+        // const contest = await Contests.findById(req.body.contestId);
+        // res.status(200).json({ contest });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: err });
