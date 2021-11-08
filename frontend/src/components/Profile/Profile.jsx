@@ -22,7 +22,7 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
     console.log(token);
     fetch("http://localhost:5000/profile/", { headers: headers })
@@ -45,7 +45,7 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
     const formData = new FormData();
     // Just sending the data as body won't work for files.

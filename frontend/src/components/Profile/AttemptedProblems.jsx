@@ -18,7 +18,7 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     };
     console.log(token);
     fetch("http://localhost:5000/profile/problems", { headers: headers })

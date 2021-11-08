@@ -78,20 +78,47 @@ export const deleteContest = async (req, res) => {
     }
 }
 
+
+const getInputsArray = async(inputString) => {
+    return inputString.split('~');
+}
+
+
+
 export const addProblem = async (req, res) => {
+    let sampleInput = await getInputsArray(req.body.sampleInput);
+    let sampleOutput = await getInputsArray(req.body.sampleOutput);
+    sampleInput = sampleInput.slice(0, -1)
+    sampleOutput = sampleOutput.slice(0, -1)
+    let testInput = await getInputsArray(req.body.sampleInput);
+    let testOutput = await getInputsArray(req.body.sampleOutput);
+    testInput = testInput.slice(0, -1)
+    testOutput = testOutput.slice(0, -1)
+
+    console.log(sampleInput);
+    console.log(sampleOutput);
+    console.log(testInput)
+    console.log(testOutput)
+
     try {
         const data = {
             name: req.body.problemName,
             description: 'description',
             statement: req.body.problemStatement,
             tags: req.body.tags,
-            input: req.body.sampleInput,
-            output: req.body.sampleOutput,
-            testInput: req.body.testInputs,
-            testOutput: req.body.testOutputs,
+            input: sampleInput,
+            output: sampleOutput,
+            testInput: testInput,
+            testOutput: testOutput,
             hidden: req.body.hidden,
             score: req.body.score,
         }
+        // for(let i = 0; i < sampleInput.length; i++) {
+        //     let x = sampleInput[i].replace(/^\s*\n/gm, "")
+        //     let y = sampleOutput[i].replace(/^\s*[\r\n]/gm, "")
+        //     console.log(x);
+        //     console.log(y);
+        // }
         const result = await GoCodeProblems.create(data);
 
         Contests.findById(req.body.contestId, (err, contest) => {
@@ -105,8 +132,8 @@ export const addProblem = async (req, res) => {
                 res.status(200).json({ result });
             }
         })
-        // const contest = await Contests.findById(req.body.contestId);
-        // res.status(200).json({ conest });
+        const contest = await Contests.findById(req.body.contestId);
+        res.status(200).json({ contest });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: err });
