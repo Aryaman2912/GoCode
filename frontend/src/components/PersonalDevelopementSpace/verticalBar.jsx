@@ -30,10 +30,10 @@ const VerticalBar = () => {
       return;
     }
     let token = storage.token;
-    console.log(token);
+    // console.log(token);
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     fetch(`${domain}/api/pds`, {
       method: "GET",
@@ -41,15 +41,15 @@ const VerticalBar = () => {
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log(data);
-        // console.log(typeof data);
+        // console.log(data);
+        // // console.log(typeof data);
 
-        //console.log(test);
+        //// console.log(test);
 
         // let keys = [...test.keys()];
-        // console.log(keys);
+        // // console.log(keys);
 
-        // data.map((o) => console.log(o.value));
+        // data.map((o) => // console.log(o.value));
 
         setpvtData(data);
         let ttag = Object.entries(data).map((el) => el[0]);
@@ -60,12 +60,12 @@ const VerticalBar = () => {
           trc.push(getRandomColor());
         }
 
-        console.log(ttag);
+        // console.log(ttag);
         settags(ttag);
         setnop(tnop);
-        console.log(trc);
+        // console.log(trc);
         setrc(trc);
-        console.log(rc);
+        // console.log(rc);
         setLoading(false);
       });
   }, []);

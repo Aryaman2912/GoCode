@@ -5,7 +5,11 @@ import ProblemBox from "./ProblemBox";
 import { makeStyles, alpha } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import { domain } from '../../constants/config';
+import { domain } from "../../constants/config";
+import SelectSearch from "react-select-search";
+import test from "./select-search.css";
+import fuzzySearch from "./fuzzy";
+import { useHistory } from "react-router";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -65,6 +69,10 @@ const useStyles = makeStyles((theme) => ({
 const ProblemSpace = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchProblems, setsearchProblems] = useState([]);
+  const [options, setOptions] = useState([]);
+  const history = useHistory();
+
   const classes = useStyles();
   const hasCache = (expireTime, cachedProblems) => {
     if (
@@ -79,24 +87,37 @@ const ProblemSpace = () => {
   const MINUTES_TO_ADD = 5;
 
   useEffect(() => {
+    setOptions([]);
     const cachedProblems = localStorage.getItem("problems");
-    // console.log(cachedProblems)
-    // console.log(+new Date())
+
+    let dummysearch = [];
+    // // console.log(cachedProblems)
+    // // console.log(+new Date())
     const expireTime = localStorage.getItem("problemsExpirationTimestamp");
     if (!hasCache(expireTime, cachedProblems)) {
       fetch(`${domain}/api/problems`)
         .then((data) => data.json())
         .then((data) => {
           let tags = [];
+
           data.forEach((problem) => {
+            dummysearch.push({
+              value: problem._id.toString(),
+              name: problem.name,
+            });
+
             problem.tags.forEach((tag) => {
               tags.push(tag);
-              // console.log(tag);
+              // // console.log(tag);
             });
           });
-          // console.log(tags);
+
+          // console.log(dummysearch);
+
+          setOptions(dummysearch);
+          // // console.log(tags);
           const uniqueTags = new Set(tags);
-          // console.log(uniqueTags);
+          // // console.log(uniqueTags);
           const finalData = {};
           uniqueTags.forEach((t) => {
             finalData[t] = data.filter((d) => {
@@ -104,7 +125,10 @@ const ProblemSpace = () => {
             });
           });
           setProblems(finalData);
+          // console.log(finalData);
+          // console.log(JSON.stringify(finalData));
           localStorage.setItem("problems", JSON.stringify(finalData));
+
           let currentDate = new Date();
           let expireTimeStamp = +new Date(
             currentDate.getTime() + MINUTES_TO_ADD * 60000
@@ -114,9 +138,50 @@ const ProblemSpace = () => {
         });
     } else {
       setProblems(JSON.parse(cachedProblems));
+
+      let t = JSON.parse(cachedProblems);
+      // console.log(cachedProblems);
+      // console.log(t);
+
+      // console.log(typeof t);
+      let lproblems = [];
+
+      for (const tag in t) {
+        t[tag].map((p) => {
+          lproblems.push(p);
+        });
+      }
+      let answer = [];
+
+      lproblems.forEach((x) => {
+        if (!answer.some((y) => JSON.stringify(y) === JSON.stringify(x))) {
+          answer.push(x);
+        }
+      });
+
+      // console.log(answer);
+      answer.forEach((problem) => {
+        dummysearch.push({
+          value: problem._id.toString(),
+          name: problem.name,
+        });
+      });
+
+      setOptions(dummysearch);
+
       setLoading(false);
     }
   }, []);
+
+  // const options = [
+  //   { name: "Swedish", value: "sv" },
+  //   { name: "English", value: "en" },
+  //   // {
+  //   //   type: "group",
+  //   //   name: "Group name",
+  //   //   items: [{ name: "Spanish", value: "es" }],
+  //   // },
+  // ];
 
   const loadingOptions = {
     type: "spin",
@@ -142,7 +207,7 @@ const ProblemSpace = () => {
         </div>
       ) : (
         <Col>
-          <div className={classes.search}>
+          {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -154,7 +219,28 @@ const ProblemSpace = () => {
               }}
               inputProps={{ "aria-label": "search" }}
             />
+          </div> */}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <SelectSearch
+              options={options}
+              search
+              filterOptions={fuzzySearch}
+              emptyMessage={() => (
+                <div style={{ textAlign: "center", fontSize: "0.8em" }}>
+                  No Problems Found
+                </div>
+              )}
+              onChange={(e) => history.push(`/problem/${e}`)}
+              placeholder="Search for Problems"
+            />
           </div>
+
           {Object.entries(problems).map((problem, i) => (
             <ProblemBox problemset={problem} key={i} />
           ))}

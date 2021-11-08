@@ -22,12 +22,12 @@ app.use(urlencoded({ extended: true }));
 
 /* For testing */
 // mongoose.connect('mongodb+srv://GoCode:GoCode@cluster0.zcitw.mongodb.net/Test-GoCode?retryWrites=true&w=majority', (err) => {
-//     console.log("Connected to the database");
+//     // console.log("Connected to the database");
 //     app.emit('connected')
 // })
 
 mongoose.connect(process.env.GOCODE_URI, (err) => {
-    console.log("Connected to the database");
+    // console.log("Connected to the database");
 })
 
 const corsOptions = {
@@ -49,7 +49,7 @@ app.use("/api/problems", problemRouter)
 app.use("/api/pds", pdsRouter)
 
 app.listen(process.env.PORT || 5000, () => {
-    console.log("Server started...");
+    // console.log("Server started...");
 })
 
 

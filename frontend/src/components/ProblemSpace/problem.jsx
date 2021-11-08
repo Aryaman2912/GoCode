@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MathJax from "mathjax3-react";
 import ReactLoading from "react-loading";
-import { domain } from '../../constants/config';
+import { domain } from "../../constants/config";
 
 import {
   Typography,
@@ -46,9 +46,9 @@ const Problem = (props) => {
 
   const languageOptions = {
     "C++": "clike",
-    "Java": "clike",
-    "C": "clike",
-    "Python": "python",
+    Java: "clike",
+    C: "clike",
+    Python: "python",
   };
 
   const buttonHandlerIDE = (type) => {
@@ -65,7 +65,7 @@ const Problem = (props) => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     axios
       .post(
@@ -114,7 +114,7 @@ const Problem = (props) => {
         setLoading(false);
         const tc = [];
         for (let i = 0; i < data.input.length; i++) {
-          // console.log(data.input[i])
+          // // console.log(data.input[i])
           tc.push([data.input[i], data.output[i]]);
         }
         setTestcases(tc);

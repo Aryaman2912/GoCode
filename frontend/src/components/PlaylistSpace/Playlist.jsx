@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Playlist({ data }) {
+  // console.log(data)
   const classes = useStyles();
   const DATE_OPTIONS = {
     weekday: "short",
@@ -34,6 +35,7 @@ export default function Playlist({ data }) {
   return (
     <div className={classes.root}>
       {data.map((t, i) => {
+        // console.log(t);
         return (
           <>
             <Paper
@@ -73,10 +75,10 @@ export default function Playlist({ data }) {
                     color: "#ADD8E6",
                   }}
                 >
-                  Owner: {t.Host}
+                  Owner: {t.userId.name}
                 </Typography>
               </Row>
-{/* 
+              {/* 
               <Row
                 style={{
                   textTransform: "capitalize",
@@ -149,7 +151,7 @@ export default function Playlist({ data }) {
                 <Button
                   variant="contained"
                   color="primary"
-                  href="#outlined-buttons"
+                  href={"/showplaylist/" + t._id}
                 >
                   Solve
                 </Button>
