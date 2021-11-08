@@ -4,9 +4,9 @@ import User from '../../models/user.js'
 
 
 cloudinary.config({ 
-    cloud_name: 'doqxwd5vy', 
-    api_key: '172736955169323', 
-    api_secret: '_fUJkhyZUm8l9ymVvWASjhGBav8',
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.API_KEY, 
+    api_secret: process.env.API_SECRET,
     secure: true
 });
 
