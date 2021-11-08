@@ -28,7 +28,12 @@ const ContestSpace = () => {
       history.push("/auth");
       return;
     }
-    fetch(`${domain}/api/contests`)
+    let token = storage.token;
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Authorization": `Bearer ${token}`,
+    };
+    fetch(`${domain}/api/contests`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
         let tempcontests = [];
