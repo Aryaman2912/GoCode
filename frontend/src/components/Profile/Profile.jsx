@@ -53,7 +53,7 @@ const Profile = () => {
     try {
       formData.append("image", image, image.name);
       axios
-        .post("http://localhost:5000/profile/uploadPhoto", formData, {
+        .post(`${domain}/profile/uploadPhoto`, formData, {
           headers: headers,
         })
         .then((res) => {
