@@ -1,27 +1,5 @@
 import Profile from '../../models/profile.js'
-import User from '../../models/profile.js'
-import auth from '../../middleware/auth.js'
 
-// 'display' GET request
-// export const displayProblems = function(req, res){
-//     try{
-//         Profile.findOne({userId: req.userId}, function(error, profile){
-//             if(error){
-//                 res.json({status: "failure"});
-//             }
-
-//             else{
-//                 //console.log(profile);
-
-//                 res.send(profile.problems);
-//             }
-//         });
-//     }
-
-//     catch(error){
-//         res.status(500).json({message: error});
-//     }
-// };
 
 export const displayProblems = async(req, res) => {
     try{
@@ -36,7 +14,9 @@ export const displayProblems = async(req, res) => {
         problems.forEach(problem => {
             result.push([problem.problemID.id, problem.problemID.name])
         })
-        function multiDimensionalUnique(arr) {
+
+        
+        const multiDimensionalUnique = (arr)=> {
             let uniques = [];
             let itemsFound = {};
             for(let i = 0, l = arr.length; i < l; i++) {
