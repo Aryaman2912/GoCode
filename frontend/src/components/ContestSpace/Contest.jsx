@@ -142,7 +142,9 @@ export default function Contest({ data }) {
                   margin: "2rem ",
                 }}
               >
-                {current_time > new Date(t.Date).toISOString() ? (
+                {current_time > new Date(t.Date).toISOString() ||
+                JSON.parse(localStorage.getItem("profile"))["result"]["_id"] ===
+                  contest.hostId ? (
                   <Button
                     style={{
                       color: "white",
