@@ -120,7 +120,8 @@ export const addProblem = async (req, res) => {
                     status: "failure"
                 })
             } else {
-                if(req.userId !== contest.hostId) {
+                // console.log(req.userId, contest.hostId.toString())
+                if(req.userId !== contest.hostId.toString()) {
                     res.status(401).json({ message: "You are not authorized to add problem to this contest" });
                 } else {
                     const result = await GoCodeProblems.create(data);
