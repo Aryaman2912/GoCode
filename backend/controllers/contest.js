@@ -90,8 +90,8 @@ export const addProblem = async (req, res) => {
     let sampleOutput = await getInputsArray(req.body.sampleOutput);
     sampleInput = sampleInput.slice(0, -1)
     sampleOutput = sampleOutput.slice(0, -1)
-    let testInput = await getInputsArray(req.body.sampleInput);
-    let testOutput = await getInputsArray(req.body.sampleOutput);
+    let testInput = await getInputsArray(req.body.testInputs);
+    let testOutput = await getInputsArray(req.body.testOutputs);
     testInput = testInput.slice(0, -1)
     testOutput = testOutput.slice(0, -1)
 
