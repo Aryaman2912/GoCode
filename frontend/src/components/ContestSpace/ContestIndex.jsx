@@ -87,6 +87,27 @@ const ContestIndex = (props) => {
               borderRadius: "2rem",
             }}
           >
+            <Button
+                  style={{
+                    color: "white",
+                    padding: "1rem 2rem ",
+                    borderColor: "white",
+                    background: "#006633",
+                  }}
+                  variant="contained"
+                  
+                >
+                  <Row>
+                    <AddIcon />
+                    <Typography
+                      style={{
+                        marginLeft: "10px",
+                      }}
+                    >
+                      Add a Challenge
+                    </Typography>
+                  </Row>
+                </Button>
             <Grid container>
               <Grid item xs={12}>
                 <Link to={"/problem/" + problem._id}>
