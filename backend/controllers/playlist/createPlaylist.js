@@ -25,11 +25,11 @@ export const create = async function (req, res) {
     try {
         let playlist = await Playlists.create({ userId: req.userId, name: req.body.name, description: req.body.description, problems: req.body.problems, likes: 0 });
         res.status(200).json(playlist)
-        console.log("Playlist created successfully!");
+        // console.log("Playlist created successfully!");
     }
 
     catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({ "message": error });
     }
 }

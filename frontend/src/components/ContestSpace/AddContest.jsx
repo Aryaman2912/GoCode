@@ -24,8 +24,6 @@ import { DATE_OPTIONS } from "../../constants/dateOptions";
 import { tags } from "../../constants/tags";
 import { domain } from "../../constants/config";
 
-
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -154,27 +152,29 @@ const AddContest = (props) => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
-    axios.get(`${domain}/api/contests/` + props.match.params.id, {headers: headers})
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%");
+    axios
+      .get(`${domain}/api/contests/` + props.match.params.id, {
+        headers: headers,
+      })
       .then((data) => {
-        console.log(data.data.problems);
+        // console.log(data.data.problems);
         // fillProblems(data);
         // setcontestProblems([]);
         var pCount = 0;
         data.data.problems.forEach((problemID) => {
           let problemURL = `${domain}/api/problems?problemID=${problemID}`;
-          axios.get(problemURL, {headers: headers})
-            .then((problem) => {
-              console.log(problem.data)
-              contestProblems.push(problem.data);
-              pCount++;
-              if (pCount === data.data.problems.length) {
-                setcontestsOverview(data.data);
-                setLoading(false);
-              }
-            });
+          axios.get(problemURL, { headers: headers }).then((problem) => {
+            // console.log(problem.data)
+            contestProblems.push(problem.data);
+            pCount++;
+            if (pCount === data.data.problems.length) {
+              setcontestsOverview(data.data);
+              setLoading(false);
+            }
+          });
         });
         if (pCount === 0) {
           setcontestsOverview(data.data);
@@ -184,8 +184,8 @@ const AddContest = (props) => {
   }, []);
   // function fillProblems(data) {
   //   setcontestProblems([]);
-  //   console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
-  //   console.log(data);
+  //   // console.log("@@@@@@@@@@@@@@@@@@@@@@@@");
+  //   // console.log(data);
   //   data["problems"].forEach((problemID) => {
   //     let problemURL = `http://localhost:5000/api/problems?problemID=${problemID}`;
   //     fetch(problemURL)
@@ -200,22 +200,24 @@ const AddContest = (props) => {
     data["tags"] = selectedOptions;
     data["hidden"] = true;
     data["contestId"] = props.match.params.id;
-    console.log(data);
+    // console.log(data);
     const storage = JSON.parse(localStorage.getItem("profile"));
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     setloadingProblemSubmit(true);
     axios
-      .post(`${domain}/api/addproblem`, data, {headers: headers})
+      .post(`${domain}/api/addproblem`, data, { headers: headers })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         axios
-          .get(`${domain}/api/contests/` + props.match.params.id, {headers: headers})
+          .get(`${domain}/api/contests/` + props.match.params.id, {
+            headers: headers,
+          })
           .then((res) => {
-            console.log("##################");
+            // console.log("##################");
 
             let cDetails = Object.entries(res)[0][1];
 
@@ -231,8 +233,8 @@ const AddContest = (props) => {
               })
                 .then((problem) => problem.json())
                 .then((problem) => {
-                  console.log("!!!!!!!!!@@@@@@@@@@@@@@@@@@@");
-                  console.log(problem);
+                  // console.log("!!!!!!!!!@@@@@@@@@@@@@@@@@@@");
+                  // console.log(problem);
                   tcproblems.push(problem);
                   pCount++;
                   if (pCount === cDetails["problems"].length) {
@@ -262,7 +264,7 @@ const AddContest = (props) => {
   };
 
   const handleDropdownChange = (event) => {
-    console.log(event);
+    // console.log(event);
     let tagsArray = [];
     event.map((o) => tagsArray.push(o.value));
 
@@ -301,7 +303,7 @@ const AddContest = (props) => {
             >
               <Tab label="Overview" {...a11yProps(0)} />
               <Tab label="Challenges" {...a11yProps(1)} />
-              <Tab label="Settings" {...a11yProps(2)} />
+              <Tab label="LeaderBoard" {...a11yProps(2)} />
             </Tabs>
           </AppBar>
           <TabPanel
@@ -464,7 +466,7 @@ const AddContest = (props) => {
             }}
           >
             {contestProblems.map((problem, i) => {
-              console.log(problem);
+              // console.log(problem);
               return (
                 <Paper
                   style={{

@@ -6,7 +6,7 @@ import Users from '../../models/user.js'
 export const displayPlaylists = async function (req, res) {
     try {
         // const playlist = await Playlists.findOne({ userId: req.userId }).populate('userId');
-        // console.log(playlist)
+        // // console.log(playlist)
 
         // Playlists.find({}, function (error, all) {
         //     if (error) {
@@ -24,7 +24,7 @@ export const displayPlaylists = async function (req, res) {
 
         const playlists = await Playlists.find({}).populate('userId')
 
-        console.log(playlists)
+        // console.log(playlists)
         res.status(200).json(playlists)
 
     }

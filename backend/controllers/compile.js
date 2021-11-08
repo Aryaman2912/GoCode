@@ -10,11 +10,11 @@ const RESOLVER = {
 }
 
 
-export const problemCompilation = async(req, res) => {
+export const problemCompilation = async (req, res) => {
     let { code, language, userInput, problemID, submissionType } = req.body;
-    // console.log(problemID)
+    // // console.log(problemID)
     language = RESOLVER[language]
-    if(submissionType !== 'test' && submissionType !== 'submit') {
+    if (submissionType !== 'test' && submissionType !== 'submit') {
         res.status(404).send('Not found');
     }
 
@@ -26,33 +26,33 @@ export const problemCompilation = async(req, res) => {
         "stdin": ""
     }
 
-    if(submissionType === 'test') {
+    if (submissionType === 'test') {
         APIData['stdin'] = userInput
         const resp = await axios.post('https://api.jdoodle.com/v1/execute', APIData)
         res.send(resp.data);
     } else {
-        // console.log(req.userId)
-        GoCodeProblems.findById(problemID, async(err, problemDocument) => {
-            if(err) {
+        // // console.log(req.userId)
+        GoCodeProblems.findById(problemID, async (err, problemDocument) => {
+            if (err) {
                 res.status(404).send("Invalid request")
                 return
             }
-            // console.log(problemDocument)
+            // // console.log(problemDocument)
             const problem = problemDocument.toObject()
             let inputs = problem['input']
-            // console.log(inputs)
+            // // console.log(inputs)
             let outputs = problem['output']
 
-            if(problem['testInput'].length !== 0) {
+            if (problem['testInput'].length !== 0) {
                 inputs = inputs.concat(problem['testInput'])
                 outputs = outputs.concat(problem['testOutput'])
             }
 
-            // console.log(inputs)
-            // console.log(outputs)
+            // // console.log(inputs)
+            // // console.log(outputs)
             let promises = []
-             
-            for(let i = 0; i < inputs.length; i++) {
+
+            for (let i = 0; i < inputs.length; i++) {
                 inputs[i] = inputs[i].replace(/^\s*\n/gm, "")
                 outputs[i] = outputs[i].replace(/^\s*[\r\n]/gm, "")
                 APIData['stdin'] = inputs[i]
@@ -70,41 +70,41 @@ export const problemCompilation = async(req, res) => {
 
 
             const results = await Promise.all(promises)
-            for(let i = 0; i < inputs.length; i++) {
+            for (let i = 0; i < inputs.length; i++) {
                 let userOutput = results[i].data.output
                 userOutput = userOutput.replace(/^\s*[\r\n]/gm, "")
-                if(userOutput === outputs[i]) {
-                    // console.log("correct answer for this case case", outputs[i])
+                if (userOutput === outputs[i]) {
+                    // // console.log("correct answer for this case case", outputs[i])
                 } else {
-                    if(accepted) {
+                    if (accepted) {
                         accepted = false
                         submission['verdict'] = "Wrong answer"
-                        Profile.findOneAndUpdate({userId: req.userId}, 
-                            { $push: { problems: submission }},
+                        Profile.findOneAndUpdate({ userId: req.userId },
+                            { $push: { problems: submission } },
                             (err, success) => {
-                                if(err) {
-                                    console.log(err)
+                                if (err) {
+                                    // console.log(err)
                                 }
-                                // console.log(success)
+                                // // console.log(success)
                             }
                         )
-                        res.json({"Verdict": "Wrong answer"})
+                        res.json({ "Verdict": "Wrong answer" })
                         return
                     }
                 }
             }
-            
+
             submission['verdict'] = "accepted"
-            Profile.findOneAndUpdate({userId: req.userId}, 
-                { $push: { problems: submission }},
+            Profile.findOneAndUpdate({ userId: req.userId },
+                { $push: { problems: submission } },
                 (err, success) => {
-                    if(err) {
-                        console.log(err)
+                    if (err) {
+                        // console.log(err)
                     }
-                    // console.log(success)
+                    // // console.log(success)
                 }
             )
-            if(accepted) res.status(200).json({"Verdict": "Correct answer"})
+            if (accepted) res.status(200).json({ "Verdict": "Correct answer" })
         })
     }
-}   
+}

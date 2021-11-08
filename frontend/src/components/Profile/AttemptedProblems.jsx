@@ -19,13 +19,13 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
-    console.log(token);
+    // console.log(token);
     fetch(`${domain}/profile/problems`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
-        // console.log(data);
+        // // console.log(data);
         setProblems(data);
         setLoading(false);
       });

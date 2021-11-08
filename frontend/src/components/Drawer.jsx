@@ -172,7 +172,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
-  console.log("hgey i am working");
+  // console.log("hgey i am working");
   const history = useHistory();
   const dispatch = useDispatch();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -220,7 +220,7 @@ export default function MiniDrawer(props) {
   }, [location]);
 
   const handleMouseIn = () => {
-    console.log("called");
+    // console.log("called");
     setHover(true);
   };
 

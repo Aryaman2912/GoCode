@@ -44,8 +44,9 @@ const PlaylistSpace = () => {
     fetch(`${domain}/playlists`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
-        console.log('###############');
-        console.log(data)
+        data.reverse();
+        // console.log('###############');
+        // console.log(data)
         setPlaylists(data);
         fetch(`${domain}/api/problems`)
           .then((data) => data.json())
@@ -70,12 +71,12 @@ const PlaylistSpace = () => {
     // });
   }, []);
 
-  // console.log(contests);
+  // // console.log(contests);
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     const storage = JSON.parse(localStorage.getItem("profile"));
-    // console.log(storage)
+    // // console.log(storage)
     if (storage === null) {
       history.push("/auth");
     }
@@ -105,7 +106,7 @@ const PlaylistSpace = () => {
     data["userId"] = userId;
     data["name"] = data.playlistName;
     data["problems"] = selectedTags;
-    console.log(selectedTags);
+    // console.log(selectedTags);
     // data['duration'] = String(data['duration']) + " hrs"
     // delete data['time'];
     const storage = JSON.parse(localStorage.getItem("profile"));
@@ -118,11 +119,11 @@ const PlaylistSpace = () => {
       "Content-Type": "application/json;charset=UTF-8",
       Authorization: `Bearer ${token}`,
     };
-    console.log(data);
+    // console.log(data);
     axios
       .post(`${domain}/playlists/create`, data, { headers: headers })
       .then((res) => {
-        console.log(res.data._id);
+        // console.log(res.data._id);
         history.push("/showplaylist/" + res.data._id);
       })
       .catch((err) => console.log(err));
@@ -134,14 +135,12 @@ const PlaylistSpace = () => {
     color: "#347deb",
   };
   const handleDropdownChange = (event) => {
-    console.log(event);
+    // console.log(event);
     let tagsArray = [];
     event.map((o) => tagsArray.push(o.value));
 
     setSelectedTags(tagsArray);
   };
-
- 
 
   return (
     <>
@@ -162,7 +161,6 @@ const PlaylistSpace = () => {
           />
         </div>
       ) : (
-        
         <>
           <div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>

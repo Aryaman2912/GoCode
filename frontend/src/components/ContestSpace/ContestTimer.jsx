@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 export default function ContestTimer({ contest }) {
   const calculateTimeLeft = () => {
-    console.log(contest);
+    // console.log(contest);
     let year = new Date().getFullYear();
     let contest_closing_time = new Date(contest.Date);
     let intdur = parseFloat(contest.Duration);
@@ -11,7 +11,7 @@ export default function ContestTimer({ contest }) {
       contest_closing_time.getMinutes() + 60 * (intdur % 1)
     );
     let difference = +new Date(contest_closing_time) - +new Date();
-    console.log(`The difference is ${difference}`);
+    // console.log(`The difference is ${difference}`);
     let timeLeft = {};
 
     if (difference > 0) {

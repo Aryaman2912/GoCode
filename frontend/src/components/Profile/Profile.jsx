@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { domain } from '../../constants/config';
+import { domain } from "../../constants/config";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -23,13 +23,13 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
-    console.log(token);
+    // console.log(token);
     fetch(`${domain}/profile/`, { headers: headers })
       .then((data) => data.json())
       .then((data) => {
-        console.log(data.user);
+        // console.log(data.user);
         setProfile(data.user);
         setLoading(false);
         setUserImageLink(data.user.avatar);
@@ -37,7 +37,7 @@ const Profile = () => {
   }, [history]);
 
   const handleProfileImageUpdate = () => {
-    console.log(image);
+    // console.log(image);
     const storage = JSON.parse(localStorage.getItem("profile"));
     if (storage === null) {
       history.push("/auth");
@@ -46,7 +46,7 @@ const Profile = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     const formData = new FormData();
     // Just sending the data as body won't work for files.
@@ -57,7 +57,7 @@ const Profile = () => {
           headers: headers,
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setUserImageLink(res.data.uploadResult.url);
           // setProfile(data);
           // setLoading(false);
@@ -68,7 +68,7 @@ const Profile = () => {
   };
 
   const updateProfileImage = (e) => {
-    console.log(e.target.files[0]);
+    // console.log(e.target.files[0]);
     setImage(e.target.files[0]);
   };
 
@@ -97,7 +97,6 @@ const Profile = () => {
       ) : (
         <>
           <div>
-            {console.log(userProfile.name)}
             <Container>
               <Row>
                 <Col>

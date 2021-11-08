@@ -18,12 +18,12 @@ import { API } from "../../api/index";
 import axios from "axios";
 import { domain } from "../../constants/config";
 const ContestSpace = () => {
-  console.log(JSON.parse(localStorage.getItem("profile")));
+  // console.log(JSON.parse(localStorage.getItem("profile")));
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("profile"));
-    // console.log(storage)
+    // // console.log(storage)
     if (storage === null) {
       history.push("/auth");
       return;
@@ -31,7 +31,7 @@ const ContestSpace = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     fetch(`${domain}/api/contests`, { headers: headers })
       .then((data) => data.json())
@@ -47,12 +47,12 @@ const ContestSpace = () => {
       });
   }, []);
 
-  // console.log(contests);
+  // // console.log(contests);
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     const storage = JSON.parse(localStorage.getItem("profile"));
-    // console.log(storage)
+    // // console.log(storage)
     if (storage === null) {
       history.push("/auth");
       return;
@@ -82,7 +82,7 @@ const ContestSpace = () => {
   };
 
   const handleSwitchChange = (event) => {
-    console.log(state.checkedB);
+    // console.log(state.checkedB);
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
@@ -99,10 +99,10 @@ const ContestSpace = () => {
     let token = storage.token;
     const headers = {
       "Content-Type": "application/json;charset=UTF-8",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     axios
-      .post(`${domain}/api/addcontest`, data, {headers: headers})
+      .post(`${domain}/api/addcontest`, data, { headers: headers })
       .then((res) => history.push("/addcontest/" + res.data.result._id))
       .catch((err) => console.log(err));
   };

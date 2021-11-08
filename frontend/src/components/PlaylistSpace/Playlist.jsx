@@ -21,8 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Playlist({ data }) {
-
-  console.log(data)
+  // console.log(data)
   const classes = useStyles();
   const DATE_OPTIONS = {
     weekday: "short",
@@ -36,7 +35,7 @@ export default function Playlist({ data }) {
   return (
     <div className={classes.root}>
       {data.map((t, i) => {
-        console.log(t);
+        // console.log(t);
         return (
           <>
             <Paper

@@ -30,7 +30,7 @@ const ShowPlaylist = (props) => {
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("profile"));
-    // console.log(storage)
+    // // console.log(storage)
     if (storage === null) {
       history.push("/auth");
       return;
@@ -45,8 +45,8 @@ const ShowPlaylist = (props) => {
         headers: headers,
       })
       .then((res) => {
-        console.log("#############");
-        console.log(res.data, "The contest is as above");
+        // console.log("#############");
+        // console.log(res.data, "The contest is as above");
         setContest(res.data);
         let cDetails = Object.entries(res)[0][1];
 
@@ -76,7 +76,7 @@ const ShowPlaylist = (props) => {
   return (
     <div>
       {contestProblems.map((problem, i) => {
-        console.log(problem);
+        // console.log(problem);
         return (
           <Paper
             style={{

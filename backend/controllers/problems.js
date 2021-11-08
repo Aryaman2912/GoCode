@@ -5,7 +5,7 @@ const getProblemRouter = (req, res) => {
     const problemID = req.query.problemID;
     if (!problemID) {
         gocodeproblems.find({ 'hidden': 'false' }, (err, problems) => {
-            console.log(problems.name)
+            // console.log(problems.name)
             if (err) {
                 res.json({
                     status: "failure"

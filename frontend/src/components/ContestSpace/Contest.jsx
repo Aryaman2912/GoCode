@@ -26,15 +26,15 @@ export default function Contest({ data }) {
   var current_time = new Date().toISOString();
   const classes = useStyles();
   // const deleteContest = (contestId) => {
-  //   // console.log(contestId);
-  //   console.log(`http://localhost:5000/api/contests/${contestId}`);
+  //   // // console.log(contestId);
+  //   // console.log(`http://localhost:5000/api/contests/${contestId}`);
   //   axios.delete(`http://localhost:5000/api/contests/${contestId}`)
   //   .then((res) => {
   //     if(res.status === 200) {
   //       alert("Contest Deleted Successfully");
-  //       console.log(this);
+  //       // console.log(this);
   //     }
-  //     else console.log(res);
+  //     else // console.log(res);
   //   })
   // }
 
