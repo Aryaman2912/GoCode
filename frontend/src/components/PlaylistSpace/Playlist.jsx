@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import { domain, frontendDomain } from "../../constants/config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -144,6 +145,13 @@ export default function Playlist({ data }) {
                     margin: "0rem 1rem",
                   }}
                   variant="outlined"
+                  onClick={() => {
+                    navigator.clipboard
+                      .writeText(`${frontendDomain}/showplaylist/${t._id}`)
+                      .then(() => {
+                        alert("Copied link to clipboard");
+                      });
+                  }}
                 >
                   Share
                 </Button>

@@ -25,7 +25,6 @@ export default function ContestDeleteButton({ contest }) {
       .then((res) => {
         if (res.status === 200) {
           alert("Contest Deleted Successfully");
-          history.push("/problems");
           // console.log(this);
         } else console.log(res);
       });
