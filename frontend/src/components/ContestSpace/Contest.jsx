@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
@@ -10,6 +10,11 @@ import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ContestDeleteButton from "./ContestDeleteButton";
 import ContestParticipateButton from "./ContestParticipateButton";
 import { DATE_OPTIONS } from "../../constants/dateOptions";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -25,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Contest({ data }) {
   var current_time = new Date().toISOString();
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
   // const deleteContest = (contestId) => {
   //   // // console.log(contestId);
   //   // console.log(`http://localhost:5000/api/contests/${contestId}`);
@@ -157,17 +163,59 @@ export default function Contest({ data }) {
                     INFO
                   </Button>
                 ) : (
-                  <Button
-                    style={{
-                      color: "white",
-                      padding: "0rem 2rem ",
-                      borderColor: "white",
-                      margin: "0rem 1rem",
-                    }}
-                    variant="outlined"
-                  >
-                    INFO
-                  </Button>
+                  <>
+                    <Button
+                      style={{
+                        color: "white",
+                        padding: "0rem 2rem ",
+                        borderColor: "white",
+                        margin: "0rem 1rem",
+                      }}
+                      variant="outlined"
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    >
+                      INFO
+                    </Button>
+                    <Dialog
+                      open={open}
+                      onClose={() => {
+                        setOpen(false);
+                      }}
+                      aria-labelledby="form-dialog-title"
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "#F5F5F5",
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      <DialogTitle id="form-dialog-title">
+                        Contest Info
+                      </DialogTitle>
+                      <DialogContent
+                        style={{
+                          width: "35rem",
+                        }}
+                      >
+                        <DialogContentText>{t.Description}</DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={() => {
+                            setOpen(false);
+                          }}
+                          color="primary"
+                        >
+                          Cancel
+                        </Button>
+                        {/* <Button onClick={handleClose} color="primary">
+                       Subscribe
+                     </Button> */}
+                      </DialogActions>
+                    </Dialog>
+                  </>
                 )}
 
                 <ContestParticipateButton contest={t} />

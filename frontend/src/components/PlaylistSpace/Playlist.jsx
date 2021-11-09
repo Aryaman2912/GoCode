@@ -7,7 +7,9 @@ import Button from "@material-ui/core/Button";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import DescriptionIcon from "@material-ui/icons/Description";
 import { domain, frontendDomain } from "../../constants/config";
+import ShareIcon from "@material-ui/icons/Share";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Playlist({ data }) {
-  // console.log(data)
+  console.log(data);
   const classes = useStyles();
   const DATE_OPTIONS = {
     weekday: "short",
@@ -77,6 +79,24 @@ export default function Playlist({ data }) {
                   }}
                 >
                   Owner: {t.userId.name}
+                </Typography>
+              </Row>
+              <Row
+                style={{
+                  textTransform: "capitalize",
+                  margin: "1rem 0rem",
+                  color: "#C9C0BB",
+                }}
+              >
+                <DescriptionIcon />
+                <Typography
+                  variant="h7"
+                  style={{
+                    paddingLeft: "1rem",
+                    color: "#ADD8E6",
+                  }}
+                >
+                  Description: {t.description}
                 </Typography>
               </Row>
               {/* 
@@ -153,7 +173,16 @@ export default function Playlist({ data }) {
                       });
                   }}
                 >
-                  Share
+                  <Row>
+                    <ShareIcon />
+                    <Typography
+                      style={{
+                        paddingLeft: "0.5rem",
+                      }}
+                    >
+                      Share
+                    </Typography>
+                  </Row>
                 </Button>
 
                 <Button
@@ -161,7 +190,14 @@ export default function Playlist({ data }) {
                   color="primary"
                   href={"/showplaylist/" + t._id}
                 >
-                  Solve
+                  <Typography
+                    style={{
+                      paddingLeft: "0.5rem",
+                      paddingRight: "0.5rem",
+                    }}
+                  >
+                    Solve
+                  </Typography>
                 </Button>
               </Row>
             </Paper>
