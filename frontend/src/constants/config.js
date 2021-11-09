@@ -4,4 +4,4 @@ export const domain =
 
 export const frontendDomain =
     // "http://localhost:3000"
-    "https://upbeat-minsky-c3cd5b.netlify.app/"
+    "https://upbeat-minsky-c3cd5b.netlify.app"
