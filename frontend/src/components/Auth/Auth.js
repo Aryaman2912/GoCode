@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { GoogleLogin } from 'react-google-login';
-import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { Avatar, Button, Paper, Grid, Typography, Container, CircularProgress } from '@material-ui/core';
 import useStyles from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input';
@@ -16,6 +16,9 @@ const Auth = () => {
 
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
+  const [errorLogin, setErrorLogin] = useState(false);
+  const [errorStatements, setErrorStatements] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -33,9 +36,35 @@ const Auth = () => {
     e.preventDefault();
 
     if (isSignup) {
-      dispatch(signup(form, history));
+      setLoading(true);
+      dispatch(signup(form, history)).then((e) => {
+        console.log('yes@#####')
+
+        setLoading(false);
+
+
+
+
+      }).catch((er) => {
+        console.log('error')
+        setLoading(false);
+        alert('Some error Occured....');
+
+      });
     } else {
-      dispatch(signin(form, history));
+      setLoading(true);
+      dispatch(signin(form, history)).then((e) => {
+
+        console.log('yes@#####')
+
+        setLoading(false);
+
+      }).catch((er) => {
+        console.log('error')
+        setLoading(false);
+        alert('Some error Occured....');
+
+      });
     }
   };
 
@@ -48,7 +77,7 @@ const Auth = () => {
 
       history.push('/');
     } catch (error) {
-      // console.log(error);
+
     }
   };
 
@@ -80,7 +109,7 @@ const Auth = () => {
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-            {isSignup ? 'Sign Up' : 'Sign In'}
+            {loading ? <CircularProgress /> : isSignup ? 'Sign Up' : 'Sign In'}
           </Button>
           <GoogleLogin
             clientId="230273820459-r55a4ovaogkbmsnac01kaotucj0au6c0.apps.googleusercontent.com"

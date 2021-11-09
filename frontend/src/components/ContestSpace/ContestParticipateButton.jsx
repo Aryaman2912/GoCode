@@ -79,7 +79,13 @@ export default function ContestParticipateButton({ contest }) {
     );
   } else if (canEnroll) {
     return (
-      <Button variant="contained" color="primary" href="#outlined-buttons">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          alert(`You are successfully enrolled to ${contest.name}`);
+        }}
+      >
         Enroll
       </Button>
     );
