@@ -1,6 +1,6 @@
 export const domain =
     //"http://localhost:5000"
-    "https://gocode-nitk.herokuapp.com"
+    "https://gocode-nitk2021.onrender.com"
 
 export const frontendDomain =
     // "http://localhost:3000"
